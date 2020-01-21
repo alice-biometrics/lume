@@ -62,7 +62,7 @@ def main():
             "-v", "--version", action="store_true", help="show lume version number."
         )
         parser.add_argument(
-            "--all",
+            "-all",
             "--all-commands",
             action="store_true",
             dest="all_commands",
@@ -71,6 +71,7 @@ def main():
 
         for command in config.get_commands():
             parser.add_argument(
+                f"-{command}",
                 f"--{command}",
                 action="store_true",
                 dest=f"command_{command}",
@@ -94,7 +95,9 @@ def main():
                 ]
                 selected_actions += all_steps_actions
 
-            selected_actions = [action.replace("command_", "") for action in selected_actions]
+            selected_actions = [
+                action.replace("command_", "") for action in selected_actions
+            ]
 
             lume_use_case.execute(actions=selected_actions)
 
