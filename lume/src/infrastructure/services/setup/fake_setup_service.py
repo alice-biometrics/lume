@@ -16,7 +16,7 @@ class FakeSetupService(ISetupService):
     def execute(self):
 
         if not self.setup_config:
-            self.logger.log(WARNING, f"Empty config for command_setup")
+            self.logger.log(WARNING, f"Empty config for setup")
             return
 
         self.logger.log(INFO, f"setup: output: {self.setup_config.output}")

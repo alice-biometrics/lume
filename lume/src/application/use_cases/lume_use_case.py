@@ -36,7 +36,7 @@ class LumeUseCase:
         for action in actions:
             self.logger.log(INFO, f"Action: {action}")
 
-            if action == "command_setup":
+            if action == "setup":
                 self.setup_service.execute()
             else:
                 commands = (

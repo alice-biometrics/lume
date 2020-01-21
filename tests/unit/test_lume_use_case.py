@@ -4,7 +4,7 @@ from meiga import Result, Error
 
 from lume.config import Config
 from lume.src.application.use_cases.lume_use_case import LumeUseCase
-from lume.src.domain.services.interface_logger import WARNING
+from lume.src.domain.services.interface_logger import WARNING, INFO
 from lume.src.infrastructure.services.executor.fake_executor_service import (
     FakeExecutorService,
 )
@@ -13,7 +13,7 @@ from lume.src.infrastructure.services.setup.fake_setup_service import FakeSetupS
 
 
 @pytest.mark.unit
-@pytest.mark.parametrize("given_command", ["command_install", "command_setup"])
+@pytest.mark.parametrize("given_command", ["install", "setup"])
 def test_should_repr_as_expected_an_error_with_message(given_command):
 
     given_empty_config = Config()
@@ -33,4 +33,7 @@ def test_should_repr_as_expected_an_error_with_message(given_command):
     lume_use_case.execute([f"{given_command}"])
 
     first_logging_message = fake_logger.get_logging_messages()[0]
-    assert first_logging_message == (WARNING, f"Empty config for {given_command}")
+    second_logging_message = fake_logger.get_logging_messages()[1]
+
+    assert first_logging_message == (INFO, f"Action: {given_command}")
+    assert second_logging_message == (WARNING, f"Empty config for {given_command}")
