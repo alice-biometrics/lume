@@ -1,5 +1,5 @@
 from subprocess import Popen, PIPE
-from typing import List, Dict
+from typing import Dict
 
 from meiga import Result, Error, isSuccess
 
@@ -34,8 +34,9 @@ def get_and_log_process_std(process, logger):
 
 
 class PopenExecutorService(IExecutorService):
-
-    def __init__(self, logger: ILogger, use_communicate=True, raise_runtime_error=False):
+    def __init__(
+        self, logger: ILogger, use_communicate=True, raise_runtime_error=False
+    ):
         self.logger = logger
         self.use_communicate = use_communicate
         self.raise_runtime_error = raise_runtime_error
@@ -65,8 +66,6 @@ class PopenExecutorService(IExecutorService):
         return_code = process.poll()
 
         self.logger.log(INFO, f"\n{output[:-1]}")
-        self.logger.log(ERROR, f"\n{output[:-1]}")
-        self.logger.log(WARNING, f"\n{output[:-1]}")
 
         if return_code == 0:
             if err:
@@ -81,7 +80,11 @@ class PopenExecutorService(IExecutorService):
                 self.logger.log(ERROR, output)
 
             if self.raise_runtime_error:
-                raise RuntimeError("Command '{}' has failed with return_code '{}'".format(command, return_code))
+                raise RuntimeError(
+                    "Command '{}' has failed with return_code '{}'".format(
+                        command, return_code
+                    )
+                )
 
         # outputs.append(output)
         # errors.append(err)
