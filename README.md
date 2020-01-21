@@ -1,7 +1,7 @@
-lume 🧙 [![ci](https://github.com/alice-biometrics/lume/workflows/ci/badge.svg)](https://github.com/alice-biometrics/lume/actions) [![pypi](https://img.shields.io/pypi/dm/lume)](https://pypi.org/project/lume/)
+lume :fire: [![ci](https://github.com/alice-biometrics/lume/workflows/ci/badge.svg)](https://github.com/alice-biometrics/lume/actions) [![pypi](https://img.shields.io/pypi/dm/lume)](https://pypi.org/project/lume/)
 =====
 
-lume ... 
+Lume helps you with your daily dev operations and ease the CI & CD process.
 
 ## Installation :computer:
 
