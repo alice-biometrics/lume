@@ -1,5 +1,6 @@
 import argparse
 import os
+import sys
 import traceback
 
 import yaml
@@ -100,6 +101,7 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
+        sys.exit(0)
         pass
         # log = get_logger()
         # log.info("User interrupted")
