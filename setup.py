@@ -1,5 +1,6 @@
 import os
 
+import setuptools
 from setuptools import setup
 
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -27,6 +28,6 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
     ],
-    packages=["lume", "lume/src"],
+    packages=setuptools.find_packages(),
     zip_safe=False,
 )
