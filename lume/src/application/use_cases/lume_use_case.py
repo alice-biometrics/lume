@@ -34,6 +34,8 @@ class LumeUseCase:
     def execute(self, actions: List[str]):
 
         for action in actions:
+            self.logger.log(INFO, f"Action: {action}")
+
             if action == "command_setup":
                 self.setup_service.execute()
             else:
@@ -43,16 +45,16 @@ class LumeUseCase:
                     .unwrap_or([])
                 )
                 for command in commands:
-                    self.logger.log(INFO, f"lume *: {action} -> {command}")
+                    self.logger.log(INFO, f"{action} >> {command}")
                     self.executor_service.execute(command)
 
     def get_commands(self, action) -> Result[List[str], Error]:
-        if action == "command_install":
+        if action == "install":
             if not self.config.install:
                 return Failure(EmptyConfigError())
             commands = self.config.install.run
         else:
-            step = self.config.steps.get(action.replace("command_", ""))
+            step = self.config.steps.get(action)
             if not step:
                 return Failure(EmptyConfigError())
             commands = step.run

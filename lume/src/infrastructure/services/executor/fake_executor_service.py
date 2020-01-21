@@ -9,6 +9,6 @@ class FakeExecutorService(IExecutorService):
     def info(self) -> Dict:
         return {"name": self.__class__.__name__}
 
-    def execute(self, commands: List[str]) -> Result[bool, Error]:
+    def execute(self, command: str) -> Result[bool, Error]:
         print("executing")
         return isSuccess

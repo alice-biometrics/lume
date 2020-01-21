@@ -94,6 +94,8 @@ def main():
                 ]
                 selected_actions += all_steps_actions
 
+            selected_actions = [action.replace("command_", "") for action in selected_actions]
+
             lume_use_case.execute(actions=selected_actions)
 
 

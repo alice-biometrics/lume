@@ -5,7 +5,6 @@ from meiga import Result, Error, NotImplementedMethodError
 
 
 class IExecutorService:
-
     __metaclass__ = ABCMeta
 
     @abstractmethod
@@ -13,5 +12,5 @@ class IExecutorService:
         return {}
 
     @abstractmethod
-    def execute(self, commands: List[str]) -> Result[bool, Error]:
+    def execute(self, command: str) -> Result[bool, Error]:
         return NotImplementedMethodError
