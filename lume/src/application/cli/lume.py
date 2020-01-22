@@ -42,7 +42,7 @@ def on_failure(config_file):
 
 
 def main():
-    config_file = os.environ.get("LUME_CONFIG_FILENAME", "py-lume.yml")
+    config_file = os.environ.get("LUME_CONFIG_FILENAME", "lume.yml")
     config = (
         get_config(filename=config_file)
         .handle(on_failure=on_failure, failure_args=(config_file,))
