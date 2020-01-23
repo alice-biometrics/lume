@@ -45,8 +45,7 @@ def main():
     config_file = os.environ.get("LUME_CONFIG_FILENAME", "lume.yml")
     config = (
         get_config(filename=config_file)
-        .handle(on_failure=on_failure, failure_args=(config_file,))
-        .unwrap()
+        .unwrap_or_else(on_failure=on_failure, failure_args=(config_file,))
     )
 
     if config:

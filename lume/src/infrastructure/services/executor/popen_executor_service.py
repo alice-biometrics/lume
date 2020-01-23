@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
 from typing import Dict
 
-from meiga import Result, Error, isSuccess
+from meiga import Result, Error, isSuccess, isFailure
 
 from lume.src.domain.services.interface_executor_service import IExecutorService
 
@@ -85,6 +85,7 @@ class PopenExecutorService(IExecutorService):
                         command, return_code
                     )
                 )
+            return isFailure
 
         # outputs.append(output)
         # errors.append(err)

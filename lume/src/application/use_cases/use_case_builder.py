@@ -2,7 +2,7 @@ from lume.config import Config
 from lume.src.application.use_cases.lume_use_case import LumeUseCase
 from lume.src.infrastructure.services.executor.popen_executor_service import PopenExecutorService
 from lume.src.infrastructure.services.logger.emojis_logger import EmojisLogger
-from lume.src.infrastructure.services.setup.fake_setup_service import FakeSetupService
+from lume.src.infrastructure.services.setup.setup_service import SetupService
 
 
 class UseCaseBuilder:
@@ -11,7 +11,7 @@ class UseCaseBuilder:
 
         default_logger = EmojisLogger()
         default_executor_service = PopenExecutorService(logger=default_logger)
-        default_setup_service = FakeSetupService(
+        default_setup_service = SetupService(
             setup_config=config.setup, logger=default_logger
         )
 

@@ -38,8 +38,8 @@ class SetupItemFile(SetupItem):
         zip_ref = zipfile.ZipFile(path_zipfile, 'r')
         zip_ref.extractall(dst)
         zip_ref.close()
+        os.remove(path_zipfile)
 
-        remove(path_zipfile)
         if self.__contain_one_folder(dst):
             content = os.listdir(dst)
             name_path = content[0]

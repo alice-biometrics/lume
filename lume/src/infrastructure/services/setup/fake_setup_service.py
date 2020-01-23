@@ -1,5 +1,7 @@
 from typing import Dict
 
+from meiga import Success
+
 from lume.config import SetupConfig
 from lume.src.domain.services.interface_logger import ILogger, INFO, WARNING
 from lume.src.domain.services.interface_setup_service import ISetupService
@@ -17,9 +19,10 @@ class FakeSetupService(ISetupService):
 
         if not self.setup_config:
             self.logger.log(WARNING, f"Empty config for setup")
-            return
+            return Success()
 
         self.logger.log(INFO, f"setup: output: {self.setup_config.output}")
 
         for key, value in self.setup_config.deps.items():
             self.logger.log(INFO, f"{key} : {value}")
+        return Success()
