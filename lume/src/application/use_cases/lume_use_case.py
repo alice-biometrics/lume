@@ -5,7 +5,7 @@ from meiga.decorators import meiga
 
 from lume.config import Config
 from lume.src.domain.services.interface_executor_service import IExecutorService
-from lume.src.domain.services.interface_logger import ILogger, INFO, WARNING
+from lume.src.domain.services.interface_logger import ILogger, INFO, WARNING, ERROR
 from lume.src.domain.services.interface_setup_service import ISetupService
 
 
@@ -37,7 +37,10 @@ class LumeUseCase:
             self.logger.log(INFO, f"Action: {action}")
 
             if action == "setup":
-                self.setup_service.execute()
+                result = self.setup_service.execute()
+                if result.is_failure:
+                    self.logger.log(ERROR, f"Setup: {result.value}")
+                result.unwrap_or_throw()
             else:
                 commands = (
                     self.get_commands(action)
@@ -46,7 +49,7 @@ class LumeUseCase:
                 )
                 for command in commands:
                     self.logger.log(INFO, f"{action} >> {command}")
-                    self.executor_service.execute(command)
+                    self.executor_service.execute(command).unwrap_or_throw()
 
     def get_commands(self, action) -> Result[List[str], Error]:
         if action == "install":
