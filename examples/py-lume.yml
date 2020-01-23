@@ -28,7 +28,7 @@ steps:
     run:
     - black .
     - flake8 onboardingsandbox
-  doc:
+  test:
     run:
     - make html
     - mkdir -p ../output/doc/html

@@ -31,6 +31,3 @@ steps:
     run:
     - echo "Creating dir"
     - echo "Doc is nice"
-  test:
-    run:
-      - pytest

@@ -19,5 +19,5 @@ lume -h
 ```
 
 ```console
-LUME_CONFIG_FILENAME=examples/echo-lume.yaml; lume -h
+LUME_CONFIG_FILENAME=examples/echo-lume.yml; lume -h
 ```
