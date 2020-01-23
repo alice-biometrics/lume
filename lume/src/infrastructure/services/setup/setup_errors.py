@@ -24,4 +24,3 @@ class BlobNotFoundError(Error):
 class ItemTypeNotSupportedError(Error):
     def __init__(self, current_type, supported_types):
         self.message = f"Item type ({current_type}) is not supported. Try with ({supported_types})"
-

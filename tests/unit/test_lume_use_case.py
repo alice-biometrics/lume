@@ -1,7 +1,5 @@
 import pytest
 
-from meiga import Result, Error
-
 from lume.config import Config
 from lume.src.application.use_cases.lume_use_case import LumeUseCase
 from lume.src.domain.services.interface_logger import WARNING, INFO

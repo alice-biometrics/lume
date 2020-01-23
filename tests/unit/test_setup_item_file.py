@@ -71,4 +71,3 @@ def test_should_return_error_when_credentials_not_provided():
     assert result.is_failure
     assert isinstance(result.value, CrendentialsEnvError)
     shutil.rmtree("test_deps", ignore_errors=False, onerror=None)
-

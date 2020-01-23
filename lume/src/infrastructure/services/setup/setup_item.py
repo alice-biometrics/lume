@@ -16,4 +16,3 @@ class SetupItem(object):
     @abstractmethod
     def run(self, name: str, dependency_config: DependencyConfig, logger: ILogger) -> Result:
         raise NotImplementedError
-

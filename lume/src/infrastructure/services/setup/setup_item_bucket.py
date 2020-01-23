@@ -1,4 +1,5 @@
 import os
+from zipfile import BadZipFile
 
 from google.api_core.exceptions import NotFound
 from google.cloud import storage
@@ -7,7 +8,7 @@ from meiga import Failure, Success, Result
 from lume.config import DependencyConfig
 from lume.src.domain.services.interface_logger import ILogger, INFO
 from lume.src.infrastructure.services.setup.setup_errors import CrendentialsEnvError, CrendentialsFileError, \
-    BlobNotFoundError
+    BlobNotFoundError, BadZipFileError
 from lume.src.infrastructure.services.setup.setup_item import SetupItem
 from lume.src.infrastructure.services.setup.setup_utils import unzip_file
 
@@ -39,12 +40,10 @@ class SetupItemBucket(SetupItem):
         if dependency_config.unzip:
             try:
                 unzip_file(dependency_path, dependency_config.url)
-            except Exception as e:
-                return Failure(name)
+            except BadZipFile:
+                return Failure(BadZipFileError(name))
 
         return Success()
-
-
 
     @staticmethod
     def __download_bucket(storage_client: storage.Client, dst: str, url: str):

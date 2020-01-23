@@ -48,4 +48,3 @@ class SetupService(ISetupService):
     def set_base_path(path):
         if not os.path.exists(path):
             os.makedirs(path)
-
