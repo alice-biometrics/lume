@@ -3,12 +3,7 @@ from meiga import Error
 
 class CrendentialsEnvError(Error):
     def __init__(self, env_name):
-        self.message = f"Environment variable ({env_name}) is not defined"
-
-
-class CrendentialsFileError(Error):
-    def __init__(self, filepath):
-        self.message = f"File: ({filepath}) does not exits"
+        self.message = f"Environment variable ({env_name}) is not defined properly"
 
 
 class BadZipFileError(Error):
