@@ -2,13 +2,13 @@ import os
 from zipfile import BadZipFile
 
 from google.api_core.exceptions import NotFound
+from google.auth.exceptions import DefaultCredentialsError
 from google.cloud import storage
 from meiga import Failure, Success, Result
 
 from lume.config import DependencyConfig
 from lume.src.domain.services.interface_logger import ILogger, INFO
-from lume.src.infrastructure.services.setup.setup_errors import CrendentialsEnvError, CrendentialsFileError, \
-    BlobNotFoundError, BadZipFileError
+from lume.src.infrastructure.services.setup.setup_errors import CrendentialsEnvError, BlobNotFoundError, BadZipFileError
 from lume.src.infrastructure.services.setup.setup_item import SetupItem
 from lume.src.infrastructure.services.setup.setup_utils import unzip_file
 
@@ -24,11 +24,13 @@ class SetupItemBucket(SetupItem):
 
         if dependency_config.auth_required:
             credentials_path = os.environ.get(dependency_config.credentials_env)
-            if credentials_path is None:
-                return Failure(CrendentialsEnvError(dependency_config.credentials_env))
-            if not os.path.exists(credentials_path):
-                return Failure(CrendentialsFileError(credentials_path))
-            storage_client = storage.Client.from_service_account_json(credentials_path)
+            if credentials_path is None or not os.path.exists(credentials_path):
+                try:
+                    storage_client = storage.Client()
+                except DefaultCredentialsError:
+                    return Failure(CrendentialsEnvError(dependency_config.credentials_env))
+            else:
+                storage_client = storage.Client.from_service_account_json(credentials_path)
         else:
             storage_client = storage.Client()
 

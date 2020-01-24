@@ -4,8 +4,7 @@ import shutil
 
 from lume.config import DependencyConfig
 from lume.src.infrastructure.services.logger.emojis_logger import EmojisLogger
-from lume.src.infrastructure.services.setup.setup_errors import CrendentialsEnvError, BlobNotFoundError, \
-    CrendentialsFileError
+from lume.src.infrastructure.services.setup.setup_errors import CrendentialsEnvError, BlobNotFoundError
 from lume.src.infrastructure.services.setup.setup_item_bucket import SetupItemBucket
 
 
@@ -72,7 +71,7 @@ def test_should_return_error_when_credentials_path_not_exists():
     )
     result = file_setuper.run("test-item", dependency_config, EmojisLogger())
     assert result.is_failure
-    assert isinstance(result.value, CrendentialsFileError)
+    assert isinstance(result.value, CrendentialsEnvError)
     shutil.rmtree("test_deps", ignore_errors=False, onerror=None)
 
 
