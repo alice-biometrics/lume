@@ -8,6 +8,7 @@ from lume.src.infrastructure.services.setup.setup_errors import CrendentialsEnvE
 from lume.src.infrastructure.services.setup.setup_item_bucket import SetupItemBucket
 
 
+@pytest.mark.skip
 @pytest.mark.unit
 def test_should_download_a_valid_bucket_with_auth():
     file_setuper = SetupItemBucket(base_path="test_deps")
@@ -24,6 +25,7 @@ def test_should_download_a_valid_bucket_with_auth():
     shutil.rmtree("test_deps", ignore_errors=False, onerror=None)
 
 
+@pytest.mark.skip
 @pytest.mark.unit
 def test_should_return_error_when_wrong_bucket_name():
     file_setuper = SetupItemBucket(base_path="test_deps")
