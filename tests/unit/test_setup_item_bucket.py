@@ -4,7 +4,10 @@ import shutil
 
 from lume.config import DependencyConfig
 from lume.src.infrastructure.services.logger.emojis_logger import EmojisLogger
-from lume.src.infrastructure.services.setup.setup_errors import CrendentialsEnvError, BlobNotFoundError
+from lume.src.infrastructure.services.setup.setup_errors import (
+    CrendentialsEnvError,
+    BlobNotFoundError,
+)
 from lume.src.infrastructure.services.setup.setup_item_bucket import SetupItemBucket
 
 
@@ -17,7 +20,7 @@ def test_should_download_a_valid_bucket_with_auth():
         url="gs://aliceonboarding/-AmBH6e1JnNcFPej9Bcvp5EJRCI=.jpg",
         auth_required=True,
         credentials_env="GCS_CREDENTIALS",
-        unzip=False
+        unzip=False,
     )
     result = file_setuper.run("test-item", dependency_config, EmojisLogger())
     assert result.is_success
@@ -34,7 +37,7 @@ def test_should_return_error_when_wrong_bucket_name():
         url="gs://soyunbucket/-AmBH6e1JnNcFPej9Bcvp5EJRCI=.jpg",
         auth_required=True,
         credentials_env="GCS_CREDENTIALS",
-        unzip=False
+        unzip=False,
     )
     result = file_setuper.run("test-item", dependency_config, EmojisLogger())
     assert result.is_failure
@@ -50,7 +53,7 @@ def test_should_return_error_when_credentials_not_define():
         url="gs://aliceonboarding/-AmBH6e1JnNcFPej9Bcvp5EJRCI=.jpg",
         auth_required=True,
         credentials_env="SOME_CREDENTIAL",
-        unzip=False
+        unzip=False,
     )
     result = file_setuper.run("test-item", dependency_config, EmojisLogger())
     assert result.is_failure
@@ -67,7 +70,7 @@ def test_should_return_error_when_credentials_path_not_exists():
         url="gs://aliceonboarding/-AmBH6e1JnNcFPej9Bcvp5EJRCI=.jpg",
         auth_required=True,
         credentials_env="ERROR_CREDENTIALS",
-        unzip=False
+        unzip=False,
     )
     result = file_setuper.run("test-item", dependency_config, EmojisLogger())
     assert result.is_failure

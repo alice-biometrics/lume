@@ -14,7 +14,7 @@ class SetupItem(object):
     def __init__(self, config, dependencies_path):
         self.__assert_config(config)
         self.config = config
-        name = self.config.get('name')
+        name = self.config.get("name")
         self.path = os.path.join(dependencies_path, name)
         self.logger = get_logger()
 
@@ -33,5 +33,5 @@ class SetupItem(object):
 
     @staticmethod
     def __assert_config(config):
-        assert_value_in_config('name', config)
-        assert_value_in_config('url', config)
+        assert_value_in_config("name", config)
+        assert_value_in_config("url", config)

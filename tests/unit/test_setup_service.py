@@ -4,7 +4,9 @@ import os
 
 from lume.config import DependencyConfig, SetupConfig
 from lume.src.infrastructure.services.logger.emojis_logger import EmojisLogger
-from lume.src.infrastructure.services.setup.setup_errors import ItemTypeNotSupportedError
+from lume.src.infrastructure.services.setup.setup_errors import (
+    ItemTypeNotSupportedError,
+)
 from lume.src.infrastructure.services.setup.setup_service import SetupService
 
 
@@ -15,10 +17,11 @@ def test_should_download_dependency_properly():
         url="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
         auth_required=False,
         credentials_env=None,
-        unzip=False
+        unzip=False,
     )
-    setup_config = SetupConfig(deps={"test-item": dependency_config},
-                               output="test-deps")
+    setup_config = SetupConfig(
+        deps={"test-item": dependency_config}, output="test-deps"
+    )
     setup_service = SetupService(setup_config, EmojisLogger())
     result = setup_service.execute()
     assert result.is_success
@@ -33,10 +36,11 @@ def test_should_return_error_from_item_setuper():
         url="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
         auth_required=True,
         credentials_env="SOME_CREDENTIAL",
-        unzip=False
+        unzip=False,
     )
-    setup_config = SetupConfig(deps={"test-item": dependency_config},
-                               output="test-deps")
+    setup_config = SetupConfig(
+        deps={"test-item": dependency_config}, output="test-deps"
+    )
     setup_service = SetupService(setup_config, EmojisLogger())
     result = setup_service.execute()
     assert result.is_failure
@@ -50,10 +54,11 @@ def test_should_return_error_when_type_is_not_supported():
         url="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
         auth_required=False,
         credentials_env=None,
-        unzip=False
+        unzip=False,
     )
-    setup_config = SetupConfig(deps={"test-item": dependency_config},
-                               output="test-deps")
+    setup_config = SetupConfig(
+        deps={"test-item": dependency_config}, output="test-deps"
+    )
     setup_service = SetupService(setup_config, EmojisLogger())
     result = setup_service.execute()
     assert result.is_failure

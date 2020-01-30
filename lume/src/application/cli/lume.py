@@ -43,9 +43,8 @@ def on_failure(config_file):
 
 def main():
     config_file = os.environ.get("LUME_CONFIG_FILENAME", "lume.yml")
-    config = (
-        get_config(filename=config_file)
-        .unwrap_or_else(on_failure=on_failure, failure_args=(config_file,))
+    config = get_config(filename=config_file).unwrap_or_else(
+        on_failure=on_failure, failure_args=(config_file,)
     )
 
     if config:
@@ -105,11 +104,7 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        sys.exit(0)
-        pass
-        # log = get_logger()
-        # log.info("User interrupted")
-        # try:
-        #     sys.exit(0)
-        # except SystemExit:
-        #     os._exit(0)
+        try:
+            sys.exit(0)
+        except SystemExit:
+            os._exit(0)

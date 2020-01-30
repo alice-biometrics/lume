@@ -1,0 +1,20 @@
+install:
+  run:
+  - pip install meiga
+name: name
+setup:
+  deps:
+    dep1:
+      auth_required: true
+      credentials_env: env
+      type: file
+      unzip: true
+      url: url
+  output: deps
+steps:
+  build:
+    run:
+    - python setup_teardown.py
+  test:
+    run:
+    - pytest

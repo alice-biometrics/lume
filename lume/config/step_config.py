@@ -7,3 +7,4 @@ from typing import List
 @dataclass
 class StepConfig:
     run: List[str]
+    cwd: str = None

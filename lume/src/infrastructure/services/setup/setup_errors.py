@@ -8,7 +8,9 @@ class CrendentialsEnvError(Error):
 
 class BadZipFileError(Error):
     def __init__(self, resource_name):
-        self.message = f"Error decompressing ({resource_name}). Please ensure the url exists"
+        self.message = (
+            f"Error decompressing ({resource_name}). Please ensure the url exists"
+        )
 
 
 class BlobNotFoundError(Error):
@@ -18,4 +20,6 @@ class BlobNotFoundError(Error):
 
 class ItemTypeNotSupportedError(Error):
     def __init__(self, current_type, supported_types):
-        self.message = f"Item type ({current_type}) is not supported. Try with ({supported_types})"
+        self.message = (
+            f"Item type ({current_type}) is not supported. Try with ({supported_types})"
+        )

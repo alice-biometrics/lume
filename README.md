@@ -21,3 +21,10 @@ lume -h
 ```console
 LUME_CONFIG_FILENAME=examples/echo-lume.yml; lume -h
 ```
+
+
+## Development
+
+```
+pip install -r requirements/dev.txt
+```

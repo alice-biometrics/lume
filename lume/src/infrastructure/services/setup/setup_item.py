@@ -14,5 +14,7 @@ class SetupItem(object):
         self.base_path = base_path
 
     @abstractmethod
-    def run(self, name: str, dependency_config: DependencyConfig, logger: ILogger) -> Result:
+    def run(
+        self, name: str, dependency_config: DependencyConfig, logger: ILogger
+    ) -> Result:
         raise NotImplementedError

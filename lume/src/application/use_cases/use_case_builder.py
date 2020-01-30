@@ -1,6 +1,8 @@
 from lume.config import Config
 from lume.src.application.use_cases.lume_use_case import LumeUseCase
-from lume.src.infrastructure.services.executor.popen_executor_service import PopenExecutorService
+from lume.src.infrastructure.services.executor.popen_executor_service import (
+    PopenExecutorService,
+)
 from lume.src.infrastructure.services.logger.emojis_logger import EmojisLogger
 from lume.src.infrastructure.services.setup.setup_service import SetupService
 

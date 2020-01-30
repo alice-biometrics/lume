@@ -1,3 +1,4 @@
+import os
 from typing import List
 
 from meiga import Result, Error, Success, Failure
@@ -13,8 +14,22 @@ class EmptyConfigError(Error):
     pass
 
 
+class ActionNotFoundError(Error):
+    pass
+
+
+class CwdIsNotADirectoryError(Error):
+    pass
+
+
 def on_empty_config(self, action):
     self.logger.log(WARNING, f"Empty config for {action}")
+
+
+def on_error_with_cwd(self, action):
+    self.logger.log(
+        WARNING, f"Given execution directory (cwd) for {action} action is not valid"
+    )
 
 
 class LumeUseCase:
@@ -47,9 +62,23 @@ class LumeUseCase:
                     .handle(on_failure=on_empty_config, failure_args=(self, action))
                     .unwrap_or([])
                 )
+
+                result = self.get_cwd(action).handle(
+                    on_failure=on_error_with_cwd, failure_args=(self, action)
+                )
+
+                if result.is_failure:
+                    continue
+
+                cwd = result.unwrap()
                 for command in commands:
-                    self.logger.log(INFO, f"{action} >> {command}")
-                    self.executor_service.execute(command).unwrap_or_throw()
+                    message = (
+                        f"{action} >> {command}"
+                        if not cwd
+                        else f"{action} [cwd={cwd}] >> {command}"
+                    )
+                    self.logger.log(INFO, message)
+                    self.executor_service.execute(command, cwd).unwrap_or_throw()
 
     def get_commands(self, action) -> Result[List[str], Error]:
         if action == "install":
@@ -63,3 +92,16 @@ class LumeUseCase:
             commands = step.run
 
         return Success(commands)
+
+    def get_cwd(self, action) -> Result[str, Error]:
+
+        if not self.config.steps:
+            return Success(None)
+        step = self.config.steps.get(action)
+        if step:
+            cwd = step.cwd
+            if not os.path.isdir(cwd):
+                return Failure(CwdIsNotADirectoryError())
+            return Success(cwd)
+        else:
+            return Failure(ActionNotFoundError())

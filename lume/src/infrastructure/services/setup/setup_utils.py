@@ -4,9 +4,9 @@ import shutil
 
 
 def unzip_file(dst: str, url: str):
-    file_name = url.split('/')[-1]
+    file_name = url.split("/")[-1]
     path_zipfile = os.path.join(dst, file_name)
-    zip_ref = zipfile.ZipFile(path_zipfile, 'r')
+    zip_ref = zipfile.ZipFile(path_zipfile, "r")
     zip_ref.extractall(dst)
     zip_ref.close()
     os.remove(path_zipfile)

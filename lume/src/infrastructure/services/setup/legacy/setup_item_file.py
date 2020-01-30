@@ -15,27 +15,33 @@ class SetupItemFile(SetupItem):
         super(SetupItemFile, self).__init__(config, dependencies_path)
 
     def run(self):
-        dependency_name = self.config.get('name')
-        self.logger.info('{} - dependency {}'.format(self.__class__.__name__, dependency_name))
+        dependency_name = self.config.get("name")
+        self.logger.info(
+            "{} - dependency {}".format(self.__class__.__name__, dependency_name)
+        )
         if self.already_exists(self.path):
-            self.logger.info('{} - dependency {} already exists'.format(self.__class__.__name__, dependency_name))
+            self.logger.info(
+                "{} - dependency {} already exists".format(
+                    self.__class__.__name__, dependency_name
+                )
+            )
             return
         makedir(self.path)
-        url = self.config.get('url')
+        url = self.config.get("url")
         dst = self.path
         self.__download_file(url, dst)
 
-        unzip = self.config.get('unzip')
-        if unzip and unzip.lower() == 'true':
+        unzip = self.config.get("unzip")
+        if unzip and unzip.lower() == "true":
             self.__unzip_file(dst)
 
-        command = self.config.get('command')
+        command = self.config.get("command")
         self.run_setup_command(command, dst)
 
     def __unzip_file(self, dst):
-        file_name = self.config['url'].split('/')[-1]
+        file_name = self.config["url"].split("/")[-1]
         path_zipfile = os.path.join(dst, file_name)
-        zip_ref = zipfile.ZipFile(path_zipfile, 'r')
+        zip_ref = zipfile.ZipFile(path_zipfile, "r")
         zip_ref.extractall(dst)
         zip_ref.close()
         os.remove(path_zipfile)
@@ -47,11 +53,11 @@ class SetupItemFile(SetupItem):
             remove(os.path.join(dst, name_path))
 
     def __download_file(self, url, dst):
-        auth_required = self.config.get('auth_required')
-        if not auth_required or auth_required.lower() == 'false':
+        auth_required = self.config.get("auth_required")
+        if not auth_required or auth_required.lower() == "false":
             download_file(url, dst)
         else:
-            env = self.config.get('credentials_env')
+            env = self.config.get("credentials_env")
             if env:
                 user, password = get_credentials(env)
             else:

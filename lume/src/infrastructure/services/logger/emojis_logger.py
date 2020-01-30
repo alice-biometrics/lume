@@ -1,9 +1,11 @@
 import emoji
 from lume.src.domain.services.interface_logger import ILogger, INFO, WARNING, ERROR
 
-LOGGING_LEVEL = {INFO: emoji.emojize('👩‍💻 '),
-                 ERROR: emoji.emojize('❌ '),
-                 WARNING: emoji.emojize('🧐 ')}
+LOGGING_LEVEL = {
+    INFO: emoji.emojize("👩‍💻 "),
+    ERROR: emoji.emojize("❌ "),
+    WARNING: emoji.emojize("🧐 "),
+}
 
 
 class EmojisLogger(ILogger):

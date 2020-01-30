@@ -44,13 +44,10 @@ class PopenExecutorService(IExecutorService):
     def info(self) -> Dict:
         return {"name": self.__class__.__name__}
 
-    def execute(self, command: str) -> Result[bool, Error]:
-        cwd = "."
+    def execute(self, command: str, cwd: str) -> Result[bool, Error]:
 
-        # TODO review outputs, errors, return_codes
-        # outputs = []
-        # errors = []
-        # return_codes = []
+        if not cwd:
+            cwd = "."
 
         process = Popen(command, stdout=PIPE, stderr=PIPE, cwd=cwd, shell=True)
 
@@ -86,9 +83,5 @@ class PopenExecutorService(IExecutorService):
                     )
                 )
             return isFailure
-
-        # outputs.append(output)
-        # errors.append(err)
-        # return_codes.append(return_code)
 
         return isSuccess

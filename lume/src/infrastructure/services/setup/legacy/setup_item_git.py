@@ -9,17 +9,23 @@ class SetupItemGit(SetupItem):
         super(SetupItemGit, self).__init__(config, dependencies_path)
 
     def run(self):
-        dependency_name = self.config.get('name')
-        self.logger.info('{} - dependency {}'.format(self.__class__.__name__, dependency_name))
+        dependency_name = self.config.get("name")
+        self.logger.info(
+            "{} - dependency {}".format(self.__class__.__name__, dependency_name)
+        )
         if self.already_exists(self.path):
-            self.logger.info('{} - dependency {} already exists'.format(self.__class__.__name__, dependency_name))
+            self.logger.info(
+                "{} - dependency {} already exists".format(
+                    self.__class__.__name__, dependency_name
+                )
+            )
             return
         makedir(self.path)
-        url = self.config.get('url')
+        url = self.config.get("url")
         dst = self.path
-        tag = self.config.get('tag')
+        tag = self.config.get("tag")
         self.__clone_repository(url, dst, tag)
-        command = self.config.get('command')
+        command = self.config.get("command")
         SetupItem.run_setup_command(command, dst)
 
     @staticmethod

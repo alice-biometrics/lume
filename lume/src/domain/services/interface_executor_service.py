@@ -12,5 +12,5 @@ class IExecutorService:
         return {}
 
     @abstractmethod
-    def execute(self, command: str) -> Result[bool, Error]:
+    def execute(self, command: str, cwd: str) -> Result[bool, Error]:
         return NotImplementedMethodError

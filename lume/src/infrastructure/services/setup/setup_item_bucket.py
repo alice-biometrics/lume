@@ -8,17 +8,24 @@ from meiga import Failure, Success, Result
 
 from lume.config import DependencyConfig
 from lume.src.domain.services.interface_logger import ILogger, INFO
-from lume.src.infrastructure.services.setup.setup_errors import CrendentialsEnvError, BlobNotFoundError, BadZipFileError
+from lume.src.infrastructure.services.setup.setup_errors import (
+    CrendentialsEnvError,
+    BlobNotFoundError,
+    BadZipFileError,
+)
 from lume.src.infrastructure.services.setup.setup_item import SetupItem
 from lume.src.infrastructure.services.setup.setup_utils import unzip_file
 
 
 class SetupItemBucket(SetupItem):
-
-    def run(self, name: str, dependency_config: DependencyConfig, logger: ILogger) -> Result:
+    def run(
+        self, name: str, dependency_config: DependencyConfig, logger: ILogger
+    ) -> Result:
         dependency_path = os.path.join(self.base_path, name)
         if os.path.exists(dependency_path):
-            logger.log(INFO, f"{self.__class__.__name__} - dependency {name} already exists")
+            logger.log(
+                INFO, f"{self.__class__.__name__} - dependency {name} already exists"
+            )
             return Success()
         os.makedirs(dependency_path)
 
@@ -28,14 +35,20 @@ class SetupItemBucket(SetupItem):
                 try:
                     storage_client = storage.Client()
                 except DefaultCredentialsError:
-                    return Failure(CrendentialsEnvError(dependency_config.credentials_env))
+                    return Failure(
+                        CrendentialsEnvError(dependency_config.credentials_env)
+                    )
             else:
-                storage_client = storage.Client.from_service_account_json(credentials_path)
+                storage_client = storage.Client.from_service_account_json(
+                    credentials_path
+                )
         else:
             storage_client = storage.Client()
 
         try:
-            self.__download_bucket(storage_client, dependency_path, dependency_config.url)
+            self.__download_bucket(
+                storage_client, dependency_path, dependency_config.url
+            )
         except NotFound:
             return Failure(BlobNotFoundError(dependency_config.url))
 

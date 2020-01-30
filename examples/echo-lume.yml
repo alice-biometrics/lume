@@ -28,6 +28,7 @@ steps:
     run:
     - echo "Lint is awesome"
   doc:
+    cwd: examples
     run:
-    - echo "Creating dir"
+    - echo $(pwd)
     - echo "Doc is nice"
