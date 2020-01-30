@@ -9,6 +9,6 @@ steps:
   doc:
     cwd: examples
     run:
-    - mkdir output
+    - mkdir -p output
     - echo $(pwd)
     - echo "Doc is nice"

@@ -94,14 +94,21 @@ class LumeUseCase:
         return Success(commands)
 
     def get_cwd(self, action) -> Result[str, Error]:
-
-        if not self.config.steps:
-            return Success(None)
-        step = self.config.steps.get(action)
-        if step:
-            cwd = step.cwd
-            if not os.path.isdir(cwd):
+        if action == "install":
+            if not self.config.install:
+                return Success(None)
+            cwd = self.config.install.cwd
+            if cwd and not os.path.isdir(cwd):
                 return Failure(CwdIsNotADirectoryError())
             return Success(cwd)
         else:
-            return Failure(ActionNotFoundError())
+            if not self.config.steps:
+                return Success(None)
+            step = self.config.steps.get(action)
+            if step:
+                cwd = step.cwd
+                if cwd and not os.path.isdir(cwd):
+                    return Failure(CwdIsNotADirectoryError())
+                return Success(cwd)
+            else:
+                return Failure(ActionNotFoundError())
