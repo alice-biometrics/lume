@@ -19,7 +19,7 @@ lume -h
 ```
 
 ```console
-LUME_CONFIG_FILENAME=examples/echo-lume.yml; lume -h
+export LUME_CONFIG_FILENAME=examples/echo-lume.yml; lume -h
 ```
 
 
