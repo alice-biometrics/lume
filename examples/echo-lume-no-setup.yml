@@ -1,0 +1,14 @@
+name: onboarding-sandbox
+
+install:
+  run:
+  - echo "Installing\nyeah"
+  - echo "Doing things"
+
+steps:
+  doc:
+    cwd: examples
+    run:
+    - mkdir output
+    - echo $(pwd)
+    - echo "Doc is nice"

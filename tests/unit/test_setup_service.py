@@ -2,8 +2,9 @@ import shutil
 import pytest
 import os
 
-from lume.config import DependencyConfig, SetupConfig
+from lume.config import DependencyConfig, SetupConfig, Config
 from lume.src.infrastructure.services.logger.emojis_logger import EmojisLogger
+from lume.src.infrastructure.services.logger.fake_logger import FakeLogger
 from lume.src.infrastructure.services.setup.setup_errors import (
     ItemTypeNotSupportedError,
 )
@@ -64,3 +65,10 @@ def test_should_return_error_when_type_is_not_supported():
     assert result.is_failure
     assert isinstance(result.value, ItemTypeNotSupportedError)
     shutil.rmtree("test-deps", ignore_errors=False, onerror=None)
+
+
+@pytest.mark.unit
+def test_should_work_fine_even_none_setup_config_is_given():
+    given_empty_config = Config()
+    fake_logger = FakeLogger()
+    _ = SetupService(setup_config=given_empty_config.setup, logger=fake_logger)

@@ -15,6 +15,9 @@ from lume.src.infrastructure.services.setup.setup_item_file import SetupItemFile
 
 class SetupService(ISetupService):
     def __init__(self, setup_config: SetupConfig, logger: ILogger):
+        if not setup_config:
+            return
+
         self.setup_config = setup_config
         self.logger = logger
         self.set_base_path(setup_config.output)
