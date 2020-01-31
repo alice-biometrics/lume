@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from dataclasses_json import dataclass_json
 
@@ -11,10 +11,10 @@ from lume.config.step_config import StepConfig
 @dataclass_json
 @dataclass
 class Config:
-    name: str = None
-    install: InstallConfig = None
-    setup: SetupConfig = None
-    steps: Dict[str, StepConfig] = None
+    name: Optional[str] = None
+    install: Optional[InstallConfig] = None
+    setup: Optional[SetupConfig] = None
+    steps: Optional[Dict[str, StepConfig]] = None
 
     def get_steps(self) -> List[str]:
         return list(self.steps.keys())
