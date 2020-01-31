@@ -29,7 +29,7 @@ setup(
         "Programming Language :: Python :: 3",
     ],
     packages=setuptools.find_packages(),
-    package_data={"": ["lume/VERSION"]},
+    package_data={"lume": ["lume/VERSION"]},
     include_package_data=True,
     zip_safe=False,
 )
