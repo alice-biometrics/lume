@@ -5,7 +5,7 @@ from setuptools import setup
 
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
 PACKAGE_NAME = "lume"
-VERSION = open("VERSION", "r").read()
+VERSION = open("lume/VERSION", "r").read()
 
 # The text of the README file
 with open(os.path.join(CURRENT_DIR, "README.md")) as fid:
@@ -29,5 +29,6 @@ setup(
         "Programming Language :: Python :: 3",
     ],
     packages=setuptools.find_packages(),
+    data_files={"", "lume/VERSION"},
     zip_safe=False,
 )

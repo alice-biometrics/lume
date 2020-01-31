@@ -7,6 +7,7 @@ import yaml
 from meiga import Result, Error, Success, Failure
 from yaml.parser import ParserError
 
+from lume import __version__
 from lume.config import Config
 from lume.config.config_file_not_found_error import ConfigFileNotFoundError
 from lume.config.config_file_not_valid_error import ConfigFileNotValidError
@@ -51,7 +52,7 @@ def main():
         lume_use_case = UseCaseBuilder.lume(config=config)
 
         parser = argparse.ArgumentParser(
-            prog="lume 🔥 ",
+            prog="lume 🔥",
             description="Lume helps you with your daily dev operations and ease the CI & CD process.",
             formatter_class=argparse.RawDescriptionHelpFormatter,
         )
@@ -82,6 +83,11 @@ def main():
             parser.print_help()
         else:
             dict_args = vars(args)
+
+            if args.version:
+                print(f"lume 🔥 => {__version__}")
+                return
+
             selected_actions = [
                 action
                 for action, selected in dict_args.items()
