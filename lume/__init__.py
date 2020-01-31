@@ -1,1 +1,1 @@
-__version__ = open("lume/VERSION", "r").read()[:-1]
+__version__ = open("VERSION", "r").read()[:-1]
