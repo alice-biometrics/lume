@@ -10,4 +10,4 @@ LOGGING_LEVEL = {
 
 class EmojisLogger(ILogger):
     def log(self, logging_level, message):
-        print(f"{LOGGING_LEVEL[logging_level]}>> {message}")
+        print(f"{LOGGING_LEVEL[logging_level]}>> {message.rstrip()}")

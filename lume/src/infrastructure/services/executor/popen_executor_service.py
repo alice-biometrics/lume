@@ -62,7 +62,10 @@ class PopenExecutorService(IExecutorService):
             err = err.decode("utf-8")
         return_code = process.poll()
 
-        self.logger.log(INFO, f"\n{output[:-1]}")
+        output = output.rstrip()
+
+        if output != "":
+            self.logger.log(INFO, f"{output}")
 
         if return_code == 0:
             if err:
