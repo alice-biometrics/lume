@@ -29,6 +29,7 @@ setup(
         "Programming Language :: Python :: 3",
     ],
     packages=setuptools.find_packages(),
-    data_files={"", "lume/VERSION"},
+    package_data={"": ["lume/VERSION"]},
+    include_package_data=True,
     zip_safe=False,
 )
