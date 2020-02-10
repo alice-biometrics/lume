@@ -28,7 +28,7 @@ def get_config(filename: str = r"lume.yml") -> Result[Config, Error]:
     try:
         with open(filename) as file:
             lume_dict = yaml.load(file, Loader=yaml.FullLoader)
-            config = Config.from_dict(lume_dict)
+            config = Config(lume_dict)
             return Success(config)
     except ParserError as e:
         message = f"Error loading {filename} file: {repr(e.__class__)} {e} | {traceback.format_exc()}"
@@ -95,7 +95,7 @@ def main():
             ]
             if args.all_commands:
                 all_steps_actions = [
-                    action for action in dict_args.keys() if "command_" in action
+                    action for action in dict_args.keys() if "command_" in action and action != "command_install"
                 ]
                 selected_actions += all_steps_actions
 
