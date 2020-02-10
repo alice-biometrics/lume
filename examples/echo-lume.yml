@@ -5,21 +5,21 @@ install:
   - echo "Installing\nyeah"
   - echo "Doing things"
 
-setup:
-  output: deps
-  deps:
-    gcs-credentials:
-      type: file
-      url: https://intranet.gradiant.org/nexus/repository/raw-dataset-biometrics/facerecognition-rest-assets/facerecognition-rest-assets.zip
-      name: facerecognition-rest-assets
-      auth_required: true
-      credentials_env: NEXUS_CREDENTIALS
-      unzip: true
 steps:
   clean:
     run:
     - echo "Cleaning thing1"
     - echo "Cleaning thing2"
+  setup:
+    output: deps
+    deps:
+      gcs-credentials:
+        type: file
+        url: https://intranet.gradiant.org/nexus/repository/raw-dataset-biometrics/facerecognition-rest-assets/facerecognition-rest-assets.zip
+        name: facerecognition-rest-assets
+        auth_required: true
+        credentials_env: NEXUS_CREDENTIALS
+        unzip: true
   build:
     run:
     - echo "Creating dir"
