@@ -38,7 +38,7 @@ def get_config(filename: str = r"lume.yml") -> Result[Config, Error]:
 def on_failure(config_file):
     print(f"Cannot load lume configuration from: {config_file}")
     print(
-        f"If you don't are using lume in the same directory as a lume.yml file, please use LUME_CONFIG_FILENAME env var to configure it"
+        f"If you aren't using lume in the same directory as a lume.yml file, please use LUME_CONFIG_FILENAME env var to configure it"
     )
 
 
