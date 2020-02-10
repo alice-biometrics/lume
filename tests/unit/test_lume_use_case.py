@@ -18,7 +18,7 @@ def test_should_repr_as_expected_an_error_with_message(given_command):
     fake_executor_service = FakeExecutorService()
     fake_logger = FakeLogger()
     fake_setup_service = FakeSetupService(
-        setup_config=given_empty_config.setup, logger=fake_logger
+        setup_config=given_empty_config.steps.get("setup"), logger=fake_logger
     )
 
     lume_use_case = LumeUseCase(
