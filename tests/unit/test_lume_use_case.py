@@ -33,5 +33,5 @@ def test_should_repr_as_expected_an_error_with_message(given_command):
     first_logging_message = fake_logger.get_logging_messages()[0]
     second_logging_message = fake_logger.get_logging_messages()[1]
 
-    assert first_logging_message == (HIGHLIGHT, f"Action: {given_command}")
+    assert first_logging_message == (HIGHLIGHT, f"Step: {given_command}")
     assert second_logging_message == (WARNING, f"Empty config for {given_command}")
