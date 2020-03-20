@@ -32,3 +32,11 @@ steps:
     run:
     - echo $(pwd)
     - echo "Doc is nice"
+  loop:
+    cwd: examples
+    run:
+    -  for((i=1;i<=20000;i+=1)); do echo "Welcome $i times"; done
+  test:
+    run:
+    - pytest
+
