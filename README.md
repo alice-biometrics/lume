@@ -69,7 +69,7 @@ optional arguments:
 If you want to save your lume file in another folder or change the name, you can do it with the Environment Variable `LUME_CONFIG_FILENAME`.
 
 ```console
-export LUME_CONFIG_FILENAME=configs/deploy-lume.yml; lume -h
+>> export LUME_CONFIG_FILENAME=configs/deploy-lume.yml; lume -h
 ```
 
 #### Run Defined Steps
@@ -79,41 +79,64 @@ Lume automatically parses your `lume.yml` file allowing you to call it.
 To run install:
 
 ```
-lume -install
+>> lume -install
 🔥 Action: install
 👩‍💻 >> install >> echo "Installing..."
+👩‍💻 >> Installing...
 ```
 
+To run all the steps:
+
+```
+lume -all
+🔥 Action: clean
+👩‍💻 >> clean >> echo "Cleaning..."
+👩‍💻 >> Cleaning...
+🔥 Action: build
+👩‍💻 >> build >> echo "Building..."
+👩‍💻 >> Building...
+🔥 Action: test
+👩‍💻 >> test >> echo "Testing..."
+👩‍💻 >> Testing...
+```
+
+Of course, you can run every step individually:
+
+```
+>> lume -clean
+🔥 Action: clean
+👩‍💻 >> clean >> echo "Cleaning..."
+👩‍💻 >> Cleaning...
+```
+
+Or several steps:
+
+```
+>> lume -build -test
+🔥 Action: build
+👩‍💻 >> build >> echo "Building..."
+👩‍💻 >> Building...
+🔥 Action: test
+👩‍💻 >> test >> echo "Testing..."
+👩‍💻 >> Testing...
+```
 
 #### Advanced Configurations
 
-```yml
-name: lume-sample
+Lume allows you to define several commands per Step:
 
-install:
-  run:
-  - echo "Installing..."
-
+```
 steps:
   clean:
     run:
     - echo "Cleaning dep1"
     - echo "Cleaning dep2"
-  setup:
-    output: deps
-    deps:
-      name: lume-sample
+```
+Additionally, lume implements a special step to manage dependencies such us resources.
 
-install:
-  run:
-  - echo "Installing\nyeah"
-  - echo "Doing things"
-
+```yml
 steps:
-  clean:
-    run:
-    - echo "Cleaning thing1"
-    - echo "Cleaning thing2"
+  
   setup:
     output: deps
     deps:
@@ -147,17 +170,6 @@ steps:
     cwd: examples
     run:
     -  for((i=1;i<=20000;i+=1)); do echo "Welcome $i times"; done
-```
-
-#### Custom Lume configuration file
-
-
-
-
-## Development
-
-```
-pip install -r requirements/dev.txt
 ```
 
 ## Acknowledgements :raised_hands:
