@@ -8,6 +8,8 @@ A Python-based handy automation tool. Lume helps you with your daily dev operati
 ## Table of Contents
 - [Installation :computer:](#installation-computer)
 - [Getting Started :chart_with_upwards_trend:](#getting-started-chart_with_upwards_trend)
+  * [Configuration File](#configuration-file)
+  * [Help](#help)
 - [Acknowledgements :raised_hands:](#acknowledgements-raised_hands)
 - [Contact :mailbox_with_mail:](#contact-mailbox_with_mail)
 
@@ -21,19 +23,114 @@ pip install lume
 
 **lume** is a simple way to organize installation, setup, code compilation, test, etc..
 
+#### Configuration File
 
+If you want to use lume in your project, just add a `lume.yml` in your root.
 
-### Help
+```yml
+name: lume-sample
+
+install:
+  run:
+  - echo "Installing..."
+
+steps:
+  clean:
+    run:
+    - echo "Cleaning..."
+  build:
+    run:
+    - echo "Building..."
+  test:
+    run:
+    - echo "Testing..."
+```
+
+You can use `help` to know what lume is able to do for you:
 
 ```console
-lume -h
+>> lume -h
+
+```
+
+If you want to save your lume file in another folder or change the name, you can do it with the Environment Variable `LUME_CONFIG_FILENAME`.
+
+```console
+export LUME_CONFIG_FILENAME=configs/deploy-lume.yml; lume -h
+```
+
+#### Run steps 
+
+
+
+
+#### Advance Configurations
+
+```yml
+name: lume-sample
+
+install:
+  run:
+  - echo "Installing..."
+
+steps:
+  clean:
+    run:
+    - echo "Cleaning dep1"
+    - echo "Cleaning dep2"
+  setup:
+    output: deps
+    deps:
+      name: lume-sample
+
+install:
+  run:
+  - echo "Installing\nyeah"
+  - echo "Doing things"
+
+steps:
+  clean:
+    run:
+    - echo "Cleaning thing1"
+    - echo "Cleaning thing2"
+  setup:
+    output: deps
+    deps:
+      images:
+        type: file
+        url: https://path/images.zip
+        name: images
+        auth_required: true
+        credentials_env: ENVVAR_CREDENTIALS
+        unzip: true
+      resources:
+        type: bucket
+        url: gs://alice-biometrics/resources.zip
+        name: resources
+        auth_required: true
+        credentials_env: GOOGLE_APPLICATION_CREDENTIALS
+        unzip: true
+  build:
+    run:
+    - echo "Creating dir"
+    - echo "Building..."
+  lint:
+    run:
+    - echo "Checking code..."
+  doc:
+    cwd: examples
+    run:
+    - echo $(pwd)
+    - echo "Doc is nice"
+  loop:
+    cwd: examples
+    run:
+    -  for((i=1;i<=20000;i+=1)); do echo "Welcome $i times"; done
 ```
 
 #### Custom Lume configuration file
 
-```console
-export LUME_CONFIG_FILENAME=examples/echo-lume.yml; lume -h
-```
+
 
 
 ## Development
