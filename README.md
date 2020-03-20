@@ -8,13 +8,7 @@ A Python-based handy automation tool. Lume helps you with your daily dev operati
 ## Table of Contents
 - [Installation :computer:](#installation-computer)
 - [Getting Started :chart_with_upwards_trend:](#getting-started-chart_with_upwards_trend)
-  * [Example](#example)
-  * [Features](#features)
-    - [Result](#result)
-    - [Functions](#functions)
-    - [Properties](#properties)
-    - [Alias](#alias)
-- [Acknowledgements :raised_hands:](#advance-raised-hands)
+- [Acknowledgements :raised_hands:](#acknowledgements-raised-hands)
 - [Contact :mailbox_with_mail:](#contact-mailbox_with_mail)
 
 ## Installation :computer:
@@ -25,12 +19,17 @@ pip install lume
 
 ## Getting Started :chart_with_upwards_trend:	
 
-**lume** is a framework that give us a .....
+**lume** is a simple way to organize installation, setup, code compilation, test, etc..
 
+
+
+### Help
 
 ```console
 lume -h
 ```
+
+#### Custom Lume configuration file
 
 ```console
 export LUME_CONFIG_FILENAME=examples/echo-lume.yml; lume -h
