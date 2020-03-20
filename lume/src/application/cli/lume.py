@@ -4,7 +4,7 @@ import sys
 import traceback
 
 import yaml
-from meiga import Result, Error, Success, Failure
+from meiga import Result, Error, Success, Failure, isSuccess
 from yaml.parser import ParserError
 
 from lume import __version__
@@ -43,6 +43,7 @@ def on_failure(config_file):
 
 
 def main():
+    result = isSuccess
     config_file = os.environ.get("LUME_CONFIG_FILENAME", "lume.yml")
     config = get_config(filename=config_file).unwrap_or_else(
         on_failure=on_failure, failure_args=(config_file,)
@@ -95,22 +96,18 @@ def main():
             ]
             if args.all_commands:
                 all_steps_actions = [
-                    action for action in dict_args.keys() if "command_" in action and action != "command_install"
+                    action
+                    for action in dict_args.keys()
+                    if "command_" in action and action != "command_install"
                 ]
                 selected_actions += all_steps_actions
 
             selected_actions = [
                 action.replace("command_", "") for action in selected_actions
             ]
+            result = lume_use_case.execute(steps=selected_actions)
 
-            lume_use_case.execute(actions=selected_actions)
-
-
-if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        try:
-            sys.exit(0)
-        except SystemExit:
-            os._exit(0)
+    if result.is_success:
+        sys.exit(0)
+    else:
+        sys.exit(1)

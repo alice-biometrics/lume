@@ -1,0 +1,16 @@
+name: lume-sample
+
+install:
+  run:
+  - echo "Installing..."
+
+steps:
+  clean:
+    run:
+    - echo "Cleaning..."
+  build:
+    run:
+    - echo "Building..."
+  test:
+    run:
+    - echo "Testing..."

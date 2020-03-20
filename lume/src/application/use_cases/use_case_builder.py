@@ -13,8 +13,9 @@ class UseCaseBuilder:
 
         default_logger = EmojisLogger()
         default_executor_service = PopenExecutorService(logger=default_logger)
+        setup_config = config.steps["setup"] if "setup" in config.steps else None
         default_setup_service = SetupService(
-            setup_config=config.steps["setup"], logger=default_logger
+            setup_config=setup_config, logger=default_logger
         )
 
         return LumeUseCase(

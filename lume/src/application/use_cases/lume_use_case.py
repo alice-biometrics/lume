@@ -1,12 +1,18 @@
 import os
 from typing import List
 
-from meiga import Result, Error, Success, Failure
+from meiga import Result, Error, Success, Failure, isSuccess
 from meiga.decorators import meiga
 
 from lume.config import Config
 from lume.src.domain.services.interface_executor_service import IExecutorService
-from lume.src.domain.services.interface_logger import ILogger, INFO, WARNING, ERROR
+from lume.src.domain.services.interface_logger import (
+    ILogger,
+    INFO,
+    WARNING,
+    ERROR,
+    HIGHLIGHT,
+)
 from lume.src.domain.services.interface_setup_service import ISetupService
 
 
@@ -46,39 +52,39 @@ class LumeUseCase:
         self.logger = logger
 
     @meiga
-    def execute(self, actions: List[str]):
+    def execute(self, steps: List[str]):
 
-        for action in actions:
-            self.logger.log(INFO, f"Action: {action}")
+        for step in steps:
+            self.logger.log(HIGHLIGHT, f"Step: {step}")
 
-            if action == "setup":
+            if step == "setup":
                 result = self.setup_service.execute()
                 if result.is_failure:
                     self.logger.log(ERROR, f"Setup: {result.value}")
-                result.unwrap_or_throw()
+                result.unwrap_or_return()
             else:
                 commands = (
-                    self.get_commands(action)
-                    .handle(on_failure=on_empty_config, failure_args=(self, action))
+                    self.get_commands(step)
+                    .handle(on_failure=on_empty_config, failure_args=(self, step))
                     .unwrap_or([])
                 )
 
-                result = self.get_cwd(action).handle(
-                    on_failure=on_error_with_cwd, failure_args=(self, action)
+                cwd = (
+                    self.get_cwd(step)
+                    .handle(on_failure=on_error_with_cwd, failure_args=(self, step))
+                    .unwrap_or_return()
                 )
 
-                if result.is_failure:
-                    continue
-
-                cwd = result.unwrap()
                 for command in commands:
                     message = (
-                        f"{action} >> {command}"
+                        f"{step} >> {command}"
                         if not cwd
-                        else f"{action} [cwd={cwd}] >> {command}"
+                        else f"{step} [cwd={cwd}] >> {command}"
                     )
                     self.logger.log(INFO, message)
-                    self.executor_service.execute(command, cwd).unwrap_or_throw()
+                    self.executor_service.execute(command, cwd).unwrap_or_return()
+
+        return isSuccess
 
     def get_commands(self, action) -> Result[List[str], Error]:
         if action == "install":
