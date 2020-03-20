@@ -8,6 +8,7 @@ WARN = WARNING
 INFO = 20
 DEBUG = 10
 NOTSET = 0
+HIGHLIGHT = 100
 
 
 class ILogger:
