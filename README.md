@@ -8,7 +8,7 @@ A Python-based handy automation tool. Lume helps you with your daily dev operati
 ## Table of Contents
 - [Installation :computer:](#installation-computer)
 - [Getting Started :chart_with_upwards_trend:](#getting-started-chart_with_upwards_trend)
-- [Acknowledgements :raised_hands:](#acknowledgements-raised-hands)
+- [Acknowledgements :raised_hands:](#acknowledgements-raised_hands)
 - [Contact :mailbox_with_mail:](#contact-mailbox_with_mail)
 
 ## Installation :computer:
