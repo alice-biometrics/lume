@@ -78,7 +78,7 @@ Lume automatically parses your `lume.yml` file allowing you to call it.
 
 To run install:
 
-```
+```console
 >> lume -install
 🔥 Step: install
 👩‍💻 >> install >> echo "Installing..."
@@ -87,7 +87,7 @@ To run install:
 
 To run all the steps:
 
-```
+```console
 lume -all
 🔥 Step: clean
 👩‍💻 >> clean >> echo "Cleaning..."
@@ -102,7 +102,7 @@ lume -all
 
 Of course, you can run every step individually:
 
-```
+```console
 >> lume -clean
 🔥 Step: clean
 👩‍💻 >> clean >> echo "Cleaning..."
@@ -111,7 +111,7 @@ Of course, you can run every step individually:
 
 Or several steps:
 
-```
+```console
 >> lume -build -test
 🔥 Action: build
 👩‍💻 >> build >> echo "Building..."
@@ -125,7 +125,7 @@ Or several steps:
 
 Lume allows you to define several commands per Step:
 
-```
+```yml
 steps:
   clean:
     run:
