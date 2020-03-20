@@ -9,7 +9,8 @@ A Python-based handy automation tool. Lume helps you with your daily dev operati
 - [Installation :computer:](#installation-computer)
 - [Getting Started :chart_with_upwards_trend:](#getting-started-chart_with_upwards_trend)
   * [Configuration File](#configuration-file)
-  * [Help](#help)
+  * [Run Defined Steps](#run-defined-steps)
+  * [Advanced Configurations](#advanced-configurations)
 - [Acknowledgements :raised_hands:](#acknowledgements-raised_hands)
 - [Contact :mailbox_with_mail:](#contact-mailbox_with_mail)
 
@@ -59,12 +60,12 @@ If you want to save your lume file in another folder or change the name, you can
 export LUME_CONFIG_FILENAME=configs/deploy-lume.yml; lume -h
 ```
 
-#### Run steps 
+#### Run Defined Steps
 
 
 
 
-#### Advance Configurations
+#### Advanced Configurations
 
 ```yml
 name: lume-sample
