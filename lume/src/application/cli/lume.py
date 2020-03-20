@@ -105,7 +105,7 @@ def main():
             selected_actions = [
                 action.replace("command_", "") for action in selected_actions
             ]
-            result = lume_use_case.execute(actions=selected_actions)
+            result = lume_use_case.execute(steps=selected_actions)
 
     if result.is_success:
         sys.exit(0)

@@ -80,7 +80,7 @@ To run install:
 
 ```
 >> lume -install
-🔥 Action: install
+🔥 Step: install
 👩‍💻 >> install >> echo "Installing..."
 👩‍💻 >> Installing...
 ```
@@ -89,13 +89,13 @@ To run all the steps:
 
 ```
 lume -all
-🔥 Action: clean
+🔥 Step: clean
 👩‍💻 >> clean >> echo "Cleaning..."
 👩‍💻 >> Cleaning...
-🔥 Action: build
+🔥 Step: build
 👩‍💻 >> build >> echo "Building..."
 👩‍💻 >> Building...
-🔥 Action: test
+🔥 Step: test
 👩‍💻 >> test >> echo "Testing..."
 👩‍💻 >> Testing...
 ```
@@ -104,7 +104,7 @@ Of course, you can run every step individually:
 
 ```
 >> lume -clean
-🔥 Action: clean
+🔥 Step: clean
 👩‍💻 >> clean >> echo "Cleaning..."
 👩‍💻 >> Cleaning...
 ```
