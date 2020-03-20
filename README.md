@@ -51,6 +51,18 @@ You can use `help` to know what lume is able to do for you:
 
 ```console
 >> lume -h
+usage: lume 🔥 [-h] [-v] [-all] [-clean] [-build] [-test] [-install]
+
+Lume helps you with your daily dev operations and ease the CI & CD process.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show lume version number.
+  -all, --all-commands  run all commands
+  -clean, --clean       clean
+  -build, --build       build
+  -test, --test         test
+  -install, --install   install
 
 ```
 
@@ -62,7 +74,15 @@ export LUME_CONFIG_FILENAME=configs/deploy-lume.yml; lume -h
 
 #### Run Defined Steps
 
+Lume automatically parses your `lume.yml` file allowing you to call it.
 
+To run install:
+
+```
+lume -install
+🔥 Action: install
+👩‍💻 >> install >> echo "Installing..."
+```
 
 
 #### Advanced Configurations
