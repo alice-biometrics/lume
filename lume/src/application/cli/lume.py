@@ -112,7 +112,7 @@ def main():
     if result.is_success:
         exit_code = 0
 
-    if config.settings["show_exit_code"]:
+    if config and config.settings["show_exit_code"]:
         print(f"exit_code: {exit_code}")
 
     sys.exit(exit_code)

@@ -77,7 +77,7 @@ optional arguments:
 If you want to save your lume file in another folder or change the name, you can do it with the Environment Variable `LUME_CONFIG_FILENAME`.
 
 ```console
->> export LUME_CONFIG_FILENAME=configs/deploy-lume.yml; lume -h
+>> export LUME_CONFIG_FILENAME=examples/lume-sample.yml; lume -h
 ```
 
 #### Run Defined Steps
@@ -89,23 +89,29 @@ To run install:
 ```console
 >> lume -install
 🔥 Step: install
-👩‍💻 >> install >> echo "Installing..."
-👩‍💻 >> Installing...
+👩‍💻 install >> echo "Installing..."
+ Installing...
 ```
 
 To run all the steps:
 
 ```console
-lume -all
+>> lume -all
 🔥 Step: clean
-👩‍💻 >> clean >> echo "Cleaning..."
-👩‍💻 >> Cleaning...
+👩‍💻 clean >> echo "Cleaning..."
+ Cleaning...
 🔥 Step: build
-👩‍💻 >> build >> echo "Building..."
-👩‍💻 >> Building...
+👩‍💻 build >> echo "Building..."
+ Building...
 🔥 Step: test
-👩‍💻 >> test >> echo "Testing..."
-👩‍💻 >> Testing...
+👩‍💻 test >> echo "Testing (Unit)..."
+ Testing (Unit)...
+👩‍💻 test >> echo "Testing (Integration)..."
+ Testing (Integration)...
+🔥 Step: error
+👩‍💻 error [cwd=examples] >> echo "This is an error" >>/dev/stderr
+🧐 This is an error
+
 ```
 
 Of course, you can run every step individually:
@@ -113,20 +119,22 @@ Of course, you can run every step individually:
 ```console
 >> lume -clean
 🔥 Step: clean
-👩‍💻 >> clean >> echo "Cleaning..."
-👩‍💻 >> Cleaning...
+👩‍💻 clean >> echo "Cleaning..."
+ Cleaning...
 ```
 
 Or several steps:
 
 ```console
 >> lume -build -test
-🔥 Action: build
-👩‍💻 >> build >> echo "Building..."
-👩‍💻 >> Building...
-🔥 Action: test
-👩‍💻 >> test >> echo "Testing..."
-👩‍💻 >> Testing...
+🔥 Step: build
+👩‍💻 build >> echo "Building..."
+ Building...
+🔥 Step: test
+👩‍💻 test >> echo "Testing (Unit)..."
+ Testing (Unit)...
+👩‍💻 test >> echo "Testing (Integration)..."
+
 ```
 
 #### Advanced Configurations

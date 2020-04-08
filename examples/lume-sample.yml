@@ -15,7 +15,8 @@ steps:
       - echo "Building..."
   test:
     run:
-      - pytest
+      - echo "Testing (Unit)..."
+      - echo "Testing (Integration)..."
   error:
     cwd: examples
     run:
