@@ -8,10 +8,16 @@ class Config:
     def __init__(self, yaml_dict: Dict = None):
         if yaml_dict is None:
             self.name = None
+            self.settings = {"show_exit_code": False}
             self.install = None
             self.steps = {}
         else:
             self.name = yaml_dict.get("name")
+            self.settings = {
+                "show_exit_code": yaml_dict.get("settings", {}).get(
+                    "show_exit_code", False
+                )
+            }
             self.install = InstallConfig.from_dict(yaml_dict.get("install"))
             self.steps = {}
             for step_name, step in yaml_dict["steps"].items():

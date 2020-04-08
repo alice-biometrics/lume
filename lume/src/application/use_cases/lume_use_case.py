@@ -8,12 +8,14 @@ from lume.config import Config
 from lume.src.domain.services.interface_executor_service import IExecutorService
 from lume.src.domain.services.interface_logger import (
     ILogger,
-    INFO,
     WARNING,
     ERROR,
     HIGHLIGHT,
+    COMMAND,
 )
 from lume.src.domain.services.interface_setup_service import ISetupService
+
+from lume.src.infrastructure.services.logger.colors import Colors
 
 
 class EmptyConfigError(Error):
@@ -76,15 +78,19 @@ class LumeUseCase:
                 )
 
                 for command in commands:
-                    message = (
-                        f"{step} >> {command}"
-                        if not cwd
-                        else f"{step} [cwd={cwd}] >> {command}"
-                    )
-                    self.logger.log(INFO, message)
+                    message = self.get_colored_command_message(command, cwd, step)
+                    self.logger.log(COMMAND, message)
                     self.executor_service.execute(command, cwd).unwrap_or_return()
 
         return isSuccess
+
+    def get_colored_command_message(self, command, cwd, step):
+        message = (
+            f"{Colors.OKBLUE}{step}{Colors.ENDC} {Colors.BOLD}>> {command}{Colors.ENDC}"
+            if not cwd
+            else f"{Colors.OKBLUE}{step}{Colors.ENDC} {Colors.HEADER}[cwd={cwd}]{Colors.ENDC} {Colors.BOLD}>> {command}{Colors.ENDC}"
+        )
+        return message
 
     def get_commands(self, action) -> Result[List[str], Error]:
         if action == "install":

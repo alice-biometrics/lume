@@ -3,6 +3,7 @@ from abc import ABCMeta, abstractmethod
 CRITICAL = 50
 FATAL = CRITICAL
 ERROR = 40
+COMMAND = 60
 WARNING = 30
 WARN = WARNING
 INFO = 20

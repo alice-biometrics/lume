@@ -3,7 +3,7 @@ from typing import Dict
 
 from meiga import Result, Error, isSuccess, isFailure
 from lume.src.domain.services.interface_executor_service import IExecutorService
-from lume.src.domain.services.interface_logger import ILogger, ERROR, INFO
+from lume.src.domain.services.interface_logger import ILogger, ERROR, INFO, WARNING
 
 
 class PopenExecutorService(IExecutorService):
@@ -30,8 +30,14 @@ class PopenExecutorService(IExecutorService):
                 if log_output != "":
                     self.logger.log(INFO, f"{log_output}")
 
+        output_err = process.stderr.readline()
+        if output_err:
+            logging_level = ERROR if return_code != 0 else WARNING
+            log_output = output_err.rstrip().decode("utf-8")
+            if log_output != "":
+                self.logger.log(logging_level, f"{log_output}")
+
         if return_code != 0:
-            self.logger.log(ERROR, f"Error running '>> {command}'")
             return isFailure
 
         return isSuccess
