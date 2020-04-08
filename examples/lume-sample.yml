@@ -1,5 +1,7 @@
 name: lume-sample
 
+show_exit_code: True
+
 install:
   run:
   - echo "Installing..."
@@ -7,10 +9,15 @@ install:
 steps:
   clean:
     run:
-    - echo "Cleaning..."
+      - echo "Cleaning..."
   build:
     run:
-    - echo "Building..."
+      - echo "Building..."
   test:
     run:
-    - echo "Testing..."
+      - pytest
+  error:
+    cwd: examples
+    run:
+      - echo "This is an error" >>/dev/stderr
+

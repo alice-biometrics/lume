@@ -44,6 +44,7 @@ def on_failure(config_file):
 
 def main():
     result = isSuccess
+
     config_file = os.environ.get("LUME_CONFIG_FILENAME", "lume.yml")
     config = get_config(filename=config_file).unwrap_or_else(
         on_failure=on_failure, failure_args=(config_file,)
@@ -107,7 +108,11 @@ def main():
             ]
             result = lume_use_case.execute(steps=selected_actions)
 
+    exit_code = 1
     if result.is_success:
-        sys.exit(0)
-    else:
-        sys.exit(1)
+        exit_code = 0
+
+    if config.settings["show_exit_code"]:
+        print(f"exit_code: {exit_code}")
+
+    sys.exit(exit_code)

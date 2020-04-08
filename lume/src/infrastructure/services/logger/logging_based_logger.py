@@ -10,6 +10,7 @@ from lume.src.domain.services.interface_logger import (
     DEBUG,
     CRITICAL,
     FATAL,
+    COMMAND,
 )
 
 
@@ -28,7 +29,7 @@ class LoggingBasedLogger(ILogger):
         self.logger = logging.getLogger(logger_name)
 
     def log(self, logging_level, message):
-        if logging_level == INFO:
+        if logging_level == INFO or logging_level == COMMAND:
             self.logger.info(message)
         elif logging_level == DEBUG:
             self.logger.debug(message)

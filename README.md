@@ -47,6 +47,14 @@ steps:
     - echo "Testing..."
 ```
 
+Add `show_exit_code: True` in settings if you want lume to print the program exit code.
+
+```yml
+
+settings:
+  show_exit_code: True
+```
+
 You can use `help` to know what lume is able to do for you:
 
 ```console
