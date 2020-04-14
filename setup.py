@@ -11,6 +11,9 @@ VERSION = open("lume/VERSION", "r").read()
 with open(os.path.join(CURRENT_DIR, "README.md")) as fid:
     README = fid.read()
 
+with open("requirements/requirements.txt") as f:
+    required = f.read().splitlines()
+
 setup(
     name=PACKAGE_NAME,
     version=VERSION,
@@ -22,6 +25,7 @@ setup(
     author="ALiCE Biometrics",
     author_email="support@alicebiometrics.com",
     license="MIT",
+    install_requires=required,
     entry_points={"console_scripts": ["lume = lume.src.application.cli.lume:main"]},
     classifiers=[
         "License :: OSI Approved :: MIT License",
