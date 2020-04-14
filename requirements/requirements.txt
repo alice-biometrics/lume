@@ -1,0 +1,7 @@
+meiga>=1.2.4
+dataclasses>=0.7;python_version<"3.7"
+dataclasses-json>=0.3.6
+backports-datetime-fromisoformat>=1.0.0;python_version<"3.7"
+pyyaml
+emoji
+google-cloud-storage>=1.25.0
