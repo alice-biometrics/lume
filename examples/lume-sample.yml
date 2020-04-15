@@ -3,8 +3,7 @@ name: lume-sample
 show_exit_code: True
 
 install:
-  run:
-  - echo "Installing..."
+  run: echo "Installing..."
 
 steps:
   clean:
