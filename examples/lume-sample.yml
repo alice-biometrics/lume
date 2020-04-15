@@ -21,4 +21,13 @@ steps:
     cwd: examples
     run:
       - echo "This is an error" >>/dev/stderr
+  envs-example:
+    envs:
+      MY_MANAGER: LUME
+      LUME_CONFIG_FILENAME: loco
+    run:
+      - echo "${MY_MANAGER}"
+      - echo "${LUME_CONFIG_FILENAME}"
+
+
 

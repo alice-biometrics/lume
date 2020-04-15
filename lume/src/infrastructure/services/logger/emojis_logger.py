@@ -6,6 +6,8 @@ from lume.src.domain.services.interface_logger import (
     ERROR,
     HIGHLIGHT,
     COMMAND,
+    ENVAR,
+    ENVAR_WARNING,
 )
 from lume.src.infrastructure.services.logger.colors import Colors
 
@@ -15,6 +17,8 @@ LOGGING_LEVEL = {
     INFO: "",
     ERROR: emoji.emojize("💩"),
     WARNING: emoji.emojize("🧐"),
+    ENVAR: emoji.emojize("➕"),
+    ENVAR_WARNING: emoji.emojize("➕"),
 }
 
 
@@ -29,7 +33,7 @@ class EmojisLogger(ILogger):
         end = ""
         if logging_level == ERROR:
             start = Colors.FAIL
-        elif logging_level == WARNING:
+        elif logging_level == WARNING or logging_level == ENVAR_WARNING:
             start = Colors.WARNING
         elif logging_level == HIGHLIGHT:
             start = Colors.OKBLUE

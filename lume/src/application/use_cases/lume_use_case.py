@@ -12,6 +12,8 @@ from lume.src.domain.services.interface_logger import (
     ERROR,
     HIGHLIGHT,
     COMMAND,
+    ENVAR,
+    ENVAR_WARNING,
 )
 from lume.src.domain.services.interface_setup_service import ISetupService
 
@@ -99,11 +101,26 @@ class LumeUseCase:
             commands = self.config.install.run
         else:
             step = self.config.steps.get(action)
+            self.setup_env(step)
             if not step:
                 return Failure(EmptyConfigError())
             commands = step.run
 
         return Success(commands)
+
+    def setup_env(self, step):
+        if not step.envs:
+            return
+        for envar, value in step.envs.items():
+            env_original_value = os.environ.get(envar)
+            os.environ[envar] = value
+            if env_original_value:
+                self.logger.log(
+                    ENVAR_WARNING,
+                    f"envvar: overwrite {envar}={value} (Original {envar}={env_original_value})",
+                )
+            else:
+                self.logger.log(ENVAR, f"envvar: set {envar}={value}")
 
     def get_cwd(self, action) -> Result[str, Error]:
         if action == "install":
