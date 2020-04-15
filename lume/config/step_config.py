@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from dataclasses_json import dataclass_json
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 
 @dataclass_json
@@ -8,3 +8,4 @@ from typing import List, Optional
 class StepConfig:
     run: List[str]
     cwd: Optional[str] = None
+    envs: Optional[Dict[str, str]] = None

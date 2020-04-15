@@ -65,3 +65,9 @@ jobs:
         pip install -e .
         pip install pytest
         pytest
+    - name: End2end test
+      env:
+        LUME_CONFIG_FILENAME: examples/lume-sample.yml
+      run: |
+        lume -all
+
