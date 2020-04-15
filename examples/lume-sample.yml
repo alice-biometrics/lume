@@ -8,11 +8,9 @@ install:
 
 steps:
   clean:
-    run:
-      - echo "Cleaning..."
+    run: echo "Cleaning..."
   build:
-    run:
-      - echo "Building..."
+    run: echo "Building..."
   test:
     run:
       - echo "Testing (Unit)..."
@@ -24,10 +22,16 @@ steps:
   envs-example:
     envs:
       MY_MANAGER: LUME
-      LUME_CONFIG_FILENAME: loco
+      LUME_CONFIG_FILENAME: filename
     run:
       - echo "${MY_MANAGER}"
       - echo "${LUME_CONFIG_FILENAME}"
+  setup-teardown:
+    setup: echo "Setup"
+    teardown: echo "Teardown"
+    run:
+      - echo "Run"
+
 
 
 

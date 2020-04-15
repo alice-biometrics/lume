@@ -1,7 +1,7 @@
 import os
 from typing import List
 
-from meiga import Result, Error, Success, Failure, isSuccess
+from meiga import Result, Error, Success, Failure, isSuccess, isFailure
 from meiga.decorators import meiga
 
 from lume.config import Config
@@ -67,6 +67,10 @@ class LumeUseCase:
                     self.logger.log(ERROR, f"Setup: {result.value}")
                 result.unwrap_or_return()
             else:
+
+                setup_commands = self.get_setup_commands(step).unwrap_or([])
+                teardown_commands = self.get_teardown_commands(step).unwrap_or([])
+
                 commands = (
                     self.get_commands(step)
                     .handle(on_failure=on_empty_config, failure_args=(self, step))
@@ -79,19 +83,41 @@ class LumeUseCase:
                     .unwrap_or_return()
                 )
 
+                for setup_command in setup_commands:
+                    message = self.get_colored_command_message(
+                        setup_command, cwd, step, prefix="setup"
+                    )
+                    self.logger.log(COMMAND, message)
+                    self.executor_service.execute(setup_command, cwd).unwrap_or_return()
+
                 for command in commands:
                     message = self.get_colored_command_message(command, cwd, step)
                     self.logger.log(COMMAND, message)
-                    self.executor_service.execute(command, cwd).unwrap_or_return()
+                    self.executor_service.execute(command, cwd).handle(
+                        on_failure=self.run_teardown,
+                        failure_args=(teardown_commands, cwd, step),
+                    ).unwrap_or_return()
+
+                self.run_teardown(teardown_commands, cwd, step)
 
         return isSuccess
 
-    def get_colored_command_message(self, command, cwd, step):
+    def run_teardown(self, teardown_commands, cwd, step):
+        for teardown_command in teardown_commands:
+            message = self.get_colored_command_message(
+                teardown_command, cwd, step, prefix="teardown"
+            )
+            self.logger.log(COMMAND, message)
+            self.executor_service.execute(teardown_command, cwd).unwrap_or_return()
+
+    def get_colored_command_message(self, command, cwd, step, prefix=None):
         message = (
             f"{Colors.OKBLUE}{step}{Colors.ENDC} {Colors.BOLD}>> {command}{Colors.ENDC}"
             if not cwd
             else f"{Colors.OKBLUE}{step}{Colors.ENDC} {Colors.HEADER}[cwd={cwd}]{Colors.ENDC} {Colors.BOLD}>> {command}{Colors.ENDC}"
         )
+        if prefix:
+            message = f"{Colors.WARNING}{prefix}{Colors.ENDC} | {message}"
         return message
 
     def get_commands(self, action) -> Result[List[str], Error]:
@@ -107,6 +133,32 @@ class LumeUseCase:
             commands = step.run
 
         return Success(commands)
+
+    def get_setup_commands(self, action) -> Result[List[str], Error]:
+        if action == "install":
+            return isFailure
+        else:
+            step = self.config.steps.get(action)
+            if not step:
+                return Failure(EmptyConfigError())
+            setup_commands = step.setup
+            if not setup_commands:
+                return isFailure
+
+        return Success(setup_commands)
+
+    def get_teardown_commands(self, action) -> Result[List[str], Error]:
+        if action == "install":
+            return isFailure
+        else:
+            step = self.config.steps.get(action)
+            if not step:
+                return Failure(EmptyConfigError())
+            teardown_commands = step.teardown
+            if not teardown_commands:
+                return isFailure
+
+        return Success(teardown_commands)
 
     def setup_env(self, step):
         if not step.envs:
