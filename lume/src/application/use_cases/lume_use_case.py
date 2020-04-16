@@ -1,11 +1,13 @@
 import os
-from typing import List
+from typing import List, Tuple
 
 from meiga import Result, Error, Success, Failure, isSuccess, isFailure
 from meiga.decorators import meiga
 
 from lume.config import Config
 from lume.src.domain.services.interface_executor_service import IExecutorService
+from lume.src.domain.services.interface_killer_service import IKillerService
+
 from lume.src.domain.services.interface_logger import (
     ILogger,
     WARNING,
@@ -16,8 +18,7 @@ from lume.src.domain.services.interface_logger import (
     ENVAR_WARNING,
 )
 from lume.src.domain.services.interface_setup_service import ISetupService
-
-from lume.src.infrastructure.services.logger.colors import Colors
+from lume.src.application.use_cases.messages import get_colored_command_message
 
 
 class EmptyConfigError(Error):
@@ -42,16 +43,23 @@ def on_error_with_cwd(self, action):
     )
 
 
+SETUP_DETACH_DEFAULT_LOG_FILENAME = "setup_detach.log"
+
+
 class LumeUseCase:
     def __init__(
         self,
         config: Config,
         executor_service: IExecutorService,
+        detach_executor_service: IExecutorService,
+        detach_killer_service: IKillerService,
         setup_service: ISetupService,
         logger: ILogger,
     ):
         self.config = config
         self.executor_service = executor_service
+        self.detach_executor_service = detach_executor_service
+        self.detach_killer_service = detach_killer_service
         self.setup_service = setup_service
         self.logger = logger
 
@@ -68,57 +76,80 @@ class LumeUseCase:
                 result.unwrap_or_return()
             else:
 
-                setup_commands = self.get_setup_commands(step).unwrap_or([])
-                teardown_commands = self.get_teardown_commands(step).unwrap_or([])
-
-                commands = (
-                    self.get_commands(step)
-                    .handle(on_failure=on_empty_config, failure_args=(self, step))
-                    .unwrap_or([])
-                )
-
                 cwd = (
                     self.get_cwd(step)
                     .handle(on_failure=on_error_with_cwd, failure_args=(self, step))
                     .unwrap_or_return()
                 )
 
-                for setup_command in setup_commands:
-                    message = self.get_colored_command_message(
-                        setup_command, cwd, step, prefix="setup"
-                    )
-                    self.logger.log(COMMAND, message)
-                    self.executor_service.execute(setup_command, cwd).unwrap_or_return()
-
-                for command in commands:
-                    message = self.get_colored_command_message(command, cwd, step)
-                    self.logger.log(COMMAND, message)
-                    self.executor_service.execute(command, cwd).handle(
-                        on_failure=self.run_teardown,
-                        failure_args=(teardown_commands, cwd, step),
-                    ).unwrap_or_return()
-
-                self.run_teardown(teardown_commands, cwd, step)
+                processes = self.run_setup_detach(step, cwd).unwrap_or([])
+                self.run_setup(step, cwd).unwrap_or_return()
+                self.run_commands(step, cwd, processes).unwrap_or_return()
+                self.run_teardown_detach(processes)
+                self.run_teardown(cwd, step)
 
         return isSuccess
 
-    def run_teardown(self, teardown_commands, cwd, step):
+    @meiga
+    def run_setup(self, step, cwd) -> Result:
+        setup_commands = self.get_setup_commands(step).unwrap_or([])
+        for setup_command in setup_commands:
+            message = get_colored_command_message(
+                setup_command, cwd, step, prefix="setup"
+            )
+            self.logger.log(COMMAND, message)
+            self.executor_service.execute(setup_command, cwd).unwrap_or_return()
+        return isSuccess
+
+    @meiga
+    def run_setup_detach(self, step, cwd) -> Result[List, Error]:
+        setup_detach_commands, log_filename = self.get_setup_detach_commands(
+            step
+        ).unwrap_or(([], SETUP_DETACH_DEFAULT_LOG_FILENAME))
+        processes = []
+        for setup_detach_command in setup_detach_commands:
+            message = get_colored_command_message(
+                setup_detach_command, cwd, step, prefix=f"setup-detach"
+            )
+            self.logger.log(COMMAND, message)
+            process = self.detach_executor_service.execute(
+                setup_detach_command, cwd, log_filename
+            ).unwrap()
+            if process:
+                processes.append(process)
+
+        return Success(processes)
+
+    def run_teardown_detach(self, processes):
+        for process in processes:
+            self.detach_killer_service.execute(process)
+
+    @meiga
+    def run_commands(self, step, cwd, processes) -> Result:
+        commands = (
+            self.get_commands(step)
+            .handle(on_failure=on_empty_config, failure_args=(self, step))
+            .unwrap_or([])
+        )
+        for command in commands:
+            message = get_colored_command_message(command, cwd, step)
+            self.logger.log(COMMAND, message)
+            self.executor_service.execute(command, cwd).handle(
+                on_failure=self.run_teardown_detach, failure_args=processes
+            ).handle(
+                on_failure=self.run_teardown, failure_args=(cwd, step)
+            ).unwrap_or_return()
+
+        return isSuccess
+
+    def run_teardown(self, cwd, step):
+        teardown_commands = self.get_teardown_commands(step).unwrap_or([])
         for teardown_command in teardown_commands:
-            message = self.get_colored_command_message(
+            message = get_colored_command_message(
                 teardown_command, cwd, step, prefix="teardown"
             )
             self.logger.log(COMMAND, message)
             self.executor_service.execute(teardown_command, cwd)
-
-    def get_colored_command_message(self, command, cwd, step, prefix=None):
-        message = (
-            f"{Colors.OKBLUE}{step}{Colors.ENDC} {Colors.BOLD}>> {command}{Colors.ENDC}"
-            if not cwd
-            else f"{Colors.OKBLUE}{step}{Colors.ENDC} {Colors.HEADER}[cwd={cwd}]{Colors.ENDC} {Colors.BOLD}>> {command}{Colors.ENDC}"
-        )
-        if prefix:
-            message = f"{Colors.WARNING}{prefix}{Colors.ENDC} | {message}"
-        return message
 
     def get_commands(self, action) -> Result[List[str], Error]:
         if action == "install":
@@ -146,6 +177,24 @@ class LumeUseCase:
                 return isFailure
 
         return Success(setup_commands)
+
+    def get_setup_detach_commands(self, action) -> Result[Tuple[List[str], str], Error]:
+        if action == "install":
+            return isFailure
+        else:
+            step = self.config.steps.get(action)
+            if not step:
+                return Failure(EmptyConfigError())
+            setup_detach = step.setup_detach
+            if not setup_detach.get("run"):
+                return isFailure
+
+        return Success(
+            (
+                setup_detach.get("run"),
+                setup_detach.get("log_filename", SETUP_DETACH_DEFAULT_LOG_FILENAME),
+            )
+        )
 
     def get_teardown_commands(self, action) -> Result[List[str], Error]:
         if action == "install":

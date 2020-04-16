@@ -6,6 +6,9 @@ from lume.src.domain.services.interface_logger import WARNING, HIGHLIGHT
 from lume.src.infrastructure.services.executor.fake_executor_service import (
     FakeExecutorService,
 )
+from lume.src.infrastructure.services.killer.fake_killer_service import (
+    FakeKillerService,
+)
 from lume.src.infrastructure.services.logger.fake_logger import FakeLogger
 from lume.src.infrastructure.services.setup.fake_setup_service import FakeSetupService
 
@@ -16,6 +19,8 @@ def test_should_repr_as_expected_an_error_with_message(given_command):
 
     given_empty_config = Config()
     fake_executor_service = FakeExecutorService()
+    fake_detach_executor_service = FakeExecutorService()
+    fake_detach_killer_service = FakeKillerService()
     fake_logger = FakeLogger()
     fake_setup_service = FakeSetupService(
         setup_config=given_empty_config.steps.get("setup"), logger=fake_logger
@@ -24,6 +29,8 @@ def test_should_repr_as_expected_an_error_with_message(given_command):
     lume_use_case = LumeUseCase(
         config=given_empty_config,
         executor_service=fake_executor_service,
+        detach_executor_service=fake_detach_executor_service,
+        detach_killer_service=fake_detach_killer_service,
         setup_service=fake_setup_service,
         logger=fake_logger,
     )

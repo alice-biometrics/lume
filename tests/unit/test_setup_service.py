@@ -71,4 +71,6 @@ def test_should_return_error_when_type_is_not_supported():
 def test_should_work_fine_even_none_setup_config_is_given():
     given_empty_config = Config()
     fake_logger = FakeLogger()
-    _ = SetupService(setup_config=given_empty_config.steps.get("config"), logger=fake_logger)
+    _ = SetupService(
+        setup_config=given_empty_config.steps.get("config"), logger=fake_logger
+    )

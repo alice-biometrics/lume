@@ -33,6 +33,17 @@ steps:
     setup: echo ${SETUP_MSG}
     teardown: echo ${TEADOWN_MSG}
     run: echo ${RUN_MSG}
+  hola:
+    envs:
+      SETUP_MSG: Setup
+      TEADOWN_MSG: Teardown
+      RUN_MSG: Run
+    setup_detach:
+      log_filename: setup_detach.log
+      run: echo ${SETUP_MSG}-detach
+    setup: echo ${SETUP_MSG}
+    teardown: echo ${TEADOWN_MSG}
+    run: echo ${RUN_MSG}
 
 
 
