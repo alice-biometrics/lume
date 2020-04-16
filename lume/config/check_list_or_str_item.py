@@ -1,7 +1,7 @@
-def check_list_or_str_item(kdict, key, required=False):
+def check_list_or_str_item(kdict, key, required=False, suffix=""):
     kvalue = kdict.get(key)
     if not kvalue and required:
-        raise TypeError(f"StepConfig must contains {key} variable")
+        raise TypeError(f"StepConfig must contains {key}{suffix} variable")
 
     if isinstance(kvalue, str):
         value = [kvalue]
@@ -10,7 +10,7 @@ def check_list_or_str_item(kdict, key, required=False):
     else:
         if required:
             raise TypeError(
-                f"StepConfig must contains {key} variable (Only list and str is supported)"
+                f"StepConfig must contains {key}{suffix} variable (Only list and str is supported)"
             )
         else:
             value = None
