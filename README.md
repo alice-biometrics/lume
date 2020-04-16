@@ -10,7 +10,12 @@ A Python-based handy automation tool. Lume helps you with your daily dev operati
 - [Getting Started :chart_with_upwards_trend:](#getting-started-chart_with_upwards_trend)
   * [Configuration File](#configuration-file)
   * [Run Defined Steps](#run-defined-steps)
-  * [Advanced Configurations](#advanced-configurations)
+- [Features :metal:](#features-metal)
+  * [Several commands per Step](#several-commands-per-step)
+  * [Setup Step](#setup-step)
+  * [Setup and Teardown](#setup-and-teardown)
+  * [Set environment variables](#set-environment-variables)
+  * [Detach Setup](#detach-setup)
 - [Acknowledgements :raised_hands:](#acknowledgements-raised_hands)
 - [Contact :mailbox_with_mail:](#contact-mailbox_with_mail)
 
@@ -133,10 +138,10 @@ Or several steps:
 
 ```
 
-#### Advanced Configurations
+## Features
 
 
-##### Several commands per Step
+#### Several commands per Step
 
 Lume allows you to define several commands per Step:
 
@@ -148,7 +153,7 @@ steps:
     - echo "Cleaning dep2"
 ```
 
-##### Setup Step
+#### Setup Step
 
 Lume implements a special step to manage dependencies such us resources.
 
@@ -190,7 +195,7 @@ steps:
     -  for((i=1;i<=20000;i+=1)); do echo "Welcome $i times"; done
 ```
 
-##### Setup & Teardown
+##### Setup and Teardown
 
 ```yml
 name: lume-sample
@@ -207,7 +212,7 @@ steps:
     teardown: echo "Teardown"
 ```
 
-##### Set environment variables
+#### Set environment variables
 
 ```yml
 name: lume-sample
@@ -246,7 +251,7 @@ The output for this step will be:
 
 Note that if you define a *envvar*, it will be overwrote during the step.
 
-##### Detach Setup & Teardown
+#### Detach Setup
 
 With `setup_detach` option, you can execute a detached command (e.g a service). Then, after the main `run` command, this proccess will be automatically killed.
 
@@ -267,7 +272,6 @@ steps:
       run: python -m taskmanager # service
     run: pytest
 ```
-
 
 
 ## Acknowledgements :raised_hands:
