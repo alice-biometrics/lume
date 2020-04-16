@@ -100,7 +100,7 @@ class LumeUseCase:
                 return
             for envar, value in step.envs.items():
                 env_original_value = os.environ.get(envar)
-                os.environ[envar] = value
+                os.environ[envar] = str(value)
                 if env_original_value:
                     self.logger.log(
                         ENVAR_WARNING,

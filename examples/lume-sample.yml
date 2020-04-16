@@ -20,6 +20,7 @@ steps:
       - echo "This is an error" >>/dev/stderr
   envs-example:
     envs:
+      TEST: True
       MY_MANAGER: LUME
       LUME_CONFIG_FILENAME: filename
     run:
