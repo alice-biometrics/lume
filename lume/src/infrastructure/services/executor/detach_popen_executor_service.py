@@ -21,7 +21,7 @@ class DetachPopenExecutorService(IExecutorService):
             cwd = "."
 
         log = open(log_filename, "w")
-        process = Popen(command, stdout=log, stderr=log, cwd=cwd, shell=True)
+        process = Popen("exec " + command, stdout=log, stderr=log, cwd=cwd, shell=True)
 
         self.logger.log(INFO, f"Open process (pid={process.pid}) >> {log_filename}")
 
