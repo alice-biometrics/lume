@@ -186,7 +186,7 @@ class LumeUseCase:
             if not step:
                 return Failure(EmptyConfigError())
             setup_detach = step.setup_detach
-            if not setup_detach.get("run"):
+            if not setup_detach or not setup_detach.get("run"):
                 return isFailure
 
         return Success(
