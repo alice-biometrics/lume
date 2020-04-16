@@ -108,7 +108,7 @@ class LumeUseCase:
                 teardown_command, cwd, step, prefix="teardown"
             )
             self.logger.log(COMMAND, message)
-            self.executor_service.execute(teardown_command, cwd).unwrap_or_return()
+            self.executor_service.execute(teardown_command, cwd)
 
     def get_colored_command_message(self, command, cwd, step, prefix=None):
         message = (

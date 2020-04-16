@@ -26,10 +26,13 @@ steps:
       - echo "${MY_MANAGER}"
       - echo "${LUME_CONFIG_FILENAME}"
   setup-teardown:
-    setup: echo "Setup"
-    teardown: echo "Teardown"
-    run:
-      - echo "Run"
+    envs:
+      SETUP_MSG: Setup
+      TEADOWN_MSG: Teardown
+      RUN_MSG: Run
+    setup: echo ${SETUP_MSG}
+    teardown: echo ${TEADOWN_MSG}
+    run: echo ${RUN_MSG}
 
 
 
