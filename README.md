@@ -32,19 +32,15 @@ If you want to use lume in your project, just add a `lume.yml` in your root.
 name: lume-sample
 
 install:
-  run:
-  - echo "Installing..."
+  run: echo "Installing..."
 
 steps:
   clean:
-    run:
-    - echo "Cleaning..."
+    run: echo "Cleaning folder1"
   build:
-    run:
-    - echo "Building..."
+    run: echo "Building..."
   test:
-    run:
-    - echo "Testing..."
+    run: echo "Testing..."
 ```
 
 Add `show_exit_code: True` in settings if you want lume to print the program exit code.
@@ -139,6 +135,9 @@ Or several steps:
 
 #### Advanced Configurations
 
+
+##### Several commands per Step
+
 Lume allows you to define several commands per Step:
 
 ```yml
@@ -148,7 +147,10 @@ steps:
     - echo "Cleaning dep1"
     - echo "Cleaning dep2"
 ```
-Additionally, lume implements a special step to manage dependencies such us resources.
+
+##### Setup Step
+
+Lume implements a special step to manage dependencies such us resources.
 
 ```yml
 steps:
@@ -187,6 +189,86 @@ steps:
     run:
     -  for((i=1;i<=20000;i+=1)); do echo "Welcome $i times"; done
 ```
+
+##### Setup & Teardown
+
+```yml
+name: lume-sample
+
+show_exit_code: True
+
+install:
+  run: echo "Installing..."
+
+steps:
+  my-step:
+    setup: echo "Setup"
+    run: echo "Run"
+    teardown: echo "Teardown"
+```
+
+##### Set environment variables
+
+```yml
+name: lume-sample
+
+show_exit_code: True
+
+install:
+  run: echo "Installing..."
+
+steps:
+  my-step:
+    envs:
+      SETUP_MSG: Setup
+      TEADOWN_MSG: Teardown
+      ANDROID_HOME: /my/custom/path
+    setup: echo ${SETUP_MSG}
+    run: echo ${ANDROID_HOME}
+    teardown: echo ${TEADOWN_MSG}
+```
+
+The output for this step will be:
+
+```console
+>> lume -my-step
+🔥 Step: my-step
+➕ envvar: set SETUP_MSG=Setup
+➕ envvar: set TEADOWN_MSG=Teardown
+➕ envvar: overwrite ANDROID_HOME=/my/custom/path (Original ANDROID_HOME=/Library/Android/Home)
+👩‍💻 setup | my-step >> echo ${SETUP_MSG}
+ Setup
+👩‍💻 my-step >> echo ${ANDROID_HOME}
+ /my/custom/path
+👩‍💻 teardown | my-step >> echo ${TEADOWN_MSG}
+ Teardown
+```
+
+Note that if you define a *envvar*, it will be overwrote during the step.
+
+##### Detach Setup & Teardown
+
+With `setup_detach` option, you can execute a detached command (e.g a service). Then, after the main `run` command, this proccess will be automatically killed.
+
+This is very useful to test services locally:
+
+```yml
+name: lume-sample
+
+show_exit_code: True
+
+install:
+  run: echo "Installing..."
+
+steps:
+  my-step:
+    setup_detach:
+      log_filename: taskmanager.log
+      run: python -m taskmanager # service
+    run: pytest
+```
+
+
 
 ## Acknowledgements :raised_hands:
 
