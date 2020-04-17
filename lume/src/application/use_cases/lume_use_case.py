@@ -81,7 +81,6 @@ class LumeUseCase:
                     .handle(on_failure=on_error_with_cwd, failure_args=(self, step))
                     .unwrap_or_return()
                 )
-
                 self.setup_env(step)
                 processes = self.run_setup_detach(step, cwd).unwrap_or([])
                 self.run_setup(step, cwd).unwrap_or_return()
@@ -136,12 +135,12 @@ class LumeUseCase:
             ).unwrap()
             if process:
                 processes.append(process)
-
         return Success(processes)
 
     def run_teardown_detach(self, processes):
-        for process in processes:
-            self.detach_killer_service.execute(process)
+        if processes:
+            for process in processes:
+                self.detach_killer_service.execute(process)
 
     @meiga
     def run_commands(self, step, cwd, processes) -> Result:
