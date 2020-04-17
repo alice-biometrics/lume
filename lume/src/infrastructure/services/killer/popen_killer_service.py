@@ -15,7 +15,6 @@ class PopenKillerService(IKillerService):
         return {"name": self.__class__.__name__}
 
     def execute(self, process) -> Result[bool, Error]:
-
         if process and isinstance(process, Popen):
             message = get_colored_command_message(
                 f"Killing {process.pid}", None, "auto", "teardown_detach"
