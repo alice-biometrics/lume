@@ -45,6 +45,16 @@ steps:
     setup: echo ${SETUP_MSG}
     teardown: echo ${TEADOWN_MSG}
     run: echo ${RUN_MSG}
+  wait-example-seconds:
+    wait_seconds: 2
+    run: echo "Done"
+  wait-example-http:
+    wait_http_200: https://www.google.com
+    run: echo "Done"
+  wait-example-both:
+    wait_seconds: 2
+    wait_http_200: https://www.google.com
+    run: echo "Done"
 
 
 

@@ -1,4 +1,6 @@
 import os
+import time
+import requests
 from typing import List, Tuple
 
 from meiga import Result, Error, Success, Failure, isSuccess, isFailure
@@ -16,6 +18,8 @@ from lume.src.domain.services.interface_logger import (
     COMMAND,
     ENVAR,
     ENVAR_WARNING,
+    WAITING,
+    INFO,
 )
 from lume.src.domain.services.interface_setup_service import ISetupService
 from lume.src.application.use_cases.messages import get_colored_command_message
@@ -75,7 +79,6 @@ class LumeUseCase:
                     self.logger.log(ERROR, f"Setup: {result.value}")
                 result.unwrap_or_return()
             else:
-
                 cwd = (
                     self.get_cwd(step)
                     .handle(on_failure=on_error_with_cwd, failure_args=(self, step))
@@ -142,8 +145,30 @@ class LumeUseCase:
             for process in processes:
                 self.detach_killer_service.execute(process)
 
+    def wait_if_necessary(self, action):
+        if action == "install":
+            return
+        else:
+            step = self.config.steps.get(action)
+            if not step.wait_seconds and not step.wait_http_200:
+                return
+            if step.wait_seconds:
+                self.logger.log(WAITING, f"Waiting {step.wait_seconds} seconds")
+                time.sleep(step.wait_seconds)
+
+            if step.wait_http_200:
+                self.logger.log(WAITING, f"Waiting for 200 -> {step.wait_http_200}")
+                for i in range(5):
+                    response = requests.get(step.wait_http_200)
+                    self.logger.log(INFO, f"  Attempt {i+1} -> {response.status_code}")
+                    if response.status_code == 200:
+                        break
+                    time.sleep(1)
+        return
+
     @meiga
     def run_commands(self, step, cwd, processes) -> Result:
+        self.wait_if_necessary(step)
         commands = (
             self.get_commands(step)
             .handle(on_failure=on_empty_config, failure_args=(self, step))
