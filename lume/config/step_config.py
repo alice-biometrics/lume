@@ -11,6 +11,8 @@ class StepConfig:
     setup: Optional[List[str]] = None
     teardown: Optional[List[str]] = None
     setup_detach: Optional[Dict] = None
+    wait_seconds: Optional[str] = None
+    wait_http_200: Optional[str] = None
 
     @staticmethod
     def from_dict(kdict):
@@ -29,4 +31,6 @@ class StepConfig:
             setup=setup,
             teardown=teardown,
             setup_detach=setup_detach,
+            wait_seconds=kdict.get("wait_seconds"),
+            wait_http_200=kdict.get("wait_http_200"),
         )

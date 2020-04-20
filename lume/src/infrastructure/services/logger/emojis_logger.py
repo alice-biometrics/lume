@@ -8,6 +8,7 @@ from lume.src.domain.services.interface_logger import (
     COMMAND,
     ENVAR,
     ENVAR_WARNING,
+    WAITING,
 )
 from lume.src.infrastructure.services.logger.colors import Colors
 
@@ -19,6 +20,7 @@ LOGGING_LEVEL = {
     WARNING: emoji.emojize("🧐"),
     ENVAR: emoji.emojize("➕"),
     ENVAR_WARNING: emoji.emojize("➕"),
+    WAITING: emoji.emojize("🕐"),
 }
 
 
