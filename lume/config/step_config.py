@@ -10,7 +10,6 @@ from lume.config.check_list_or_str_item import check_list_or_str_item
 
 
 def read_env_from_file(filename):
-    print(filename)
     if not filename or not os.path.isfile(filename):
         return {}
     try:
