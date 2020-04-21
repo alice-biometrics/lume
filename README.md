@@ -16,6 +16,7 @@ A Python-based handy automation tool. Lume helps you with your daily dev operati
   * [Setup and Teardown](#setup-and-teardown)
   * [Set environment variables](#set-environment-variables)
   * [Detach Setup](#detach-setup)
+  * [Wait](#wait)
 - [Acknowledgements :raised_hands:](#acknowledgements-raised_hands)
 - [Contact :mailbox_with_mail:](#contact-mailbox_with_mail)
 
@@ -251,6 +252,20 @@ The output for this step will be:
 
 Note that if you define a *envvar*, it will be overwrote during the step.
 
+
+You can also define variable from external (e.g [examples/env.yml](examples/env.yml) )
+
+```yml
+steps:
+  envs-file-example:
+    envs_file: examples/env.yml
+    run:
+      - echo "${MY_MANAGER}"
+      - echo "${LUME_CONFIG_FILENAME}"
+```
+
+
+
 #### Detach Setup
 
 With `setup_detach` option, you can execute a detached command (e.g a service). Then, after the main `run` command, this proccess will be automatically killed.
@@ -273,6 +288,44 @@ steps:
     run: pytest
 ```
 
+#### Wait
+
+
+Wait few seconds with `wait_seconds`:
+
+```
+steps:
+  wait-example-seconds:
+    wait_seconds: 2
+    run: echo "Done"
+```
+
+Wait for a 200 calling a HTTP url:
+
+```
+steps:
+  wait-example-http:
+    wait_http_200: https://www.google.com
+    run: echo "Done"
+```
+
+You can configure the following parameters via env:
+
+* LUME_WAIT_HTTP_200_NUM_MAX_ATTEMPTS
+* LUME_WAIT_HTTP_200_WAIT_SECONDS_RETRY
+
+e.g
+
+
+```
+steps:
+  wait-example-http:
+    envs: 
+       LUME_WAIT_HTTP_200_NUM_MAX_ATTEMPTS: 10
+       LUME_WAIT_HTTP_200_WAIT_SECONDS_RETRY: 0.5
+    wait_http_200: https://www.google.com
+    run: echo "Done"
+```
 
 ## Acknowledgements :raised_hands:
 

@@ -26,6 +26,11 @@ steps:
     run:
       - echo "${MY_MANAGER}"
       - echo "${LUME_CONFIG_FILENAME}"
+  envs-file-example:
+    envs_file: examples/env.yml
+    run:
+      - echo "${MY_MANAGER}"
+      - echo "${LUME_CONFIG_FILENAME}"
   setup-teardown-example:
     envs:
       SETUP_MSG: Setup
@@ -53,6 +58,12 @@ steps:
     run: echo "Done"
   wait-example-both:
     wait_seconds: 2
+    wait_http_200: https://www.google.com
+    run: echo "Done"
+  wait-example-http-set:
+    envs:
+      LUME_WAIT_HTTP_200_NUM_MAX_ATTEMPTS: 2
+      LUME_WAIT_HTTP_200_WAIT_SECONDS_RETRY: 0.2
     wait_http_200: https://www.google.com
     run: echo "Done"
 

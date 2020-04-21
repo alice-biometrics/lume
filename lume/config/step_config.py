@@ -1,6 +1,24 @@
+import os
+
+import yaml
 from dataclasses import dataclass
 from typing import List, Optional, Dict
+
+from yaml.parser import ParserError
+
 from lume.config.check_list_or_str_item import check_list_or_str_item
+
+
+def read_env_from_file(filename):
+    print(filename)
+    if not filename or not os.path.isfile(filename):
+        return {}
+    try:
+        with open(filename) as file:
+            envs = yaml.load(file, Loader=yaml.FullLoader)
+            return envs
+    except ParserError:
+        return {}
 
 
 @dataclass
@@ -24,10 +42,14 @@ class StepConfig:
             setup_detach["run"] = check_list_or_str_item(
                 setup_detach, "run", required=True, suffix=" (setup_detach)"
             )
+        envs = kdict.get("envs", {})
+        envs_from_file = read_env_from_file(kdict.get("envs_file"))
+        envs.update(envs_from_file)
+
         return StepConfig(
             run=run,
             cwd=kdict.get("cwd"),
-            envs=kdict.get("envs"),
+            envs=envs,
             setup=setup,
             teardown=teardown,
             setup_detach=setup_detach,

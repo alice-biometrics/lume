@@ -158,12 +158,19 @@ class LumeUseCase:
 
             if step.wait_http_200:
                 self.logger.log(WAITING, f"Waiting for 200 -> {step.wait_http_200}")
-                for i in range(5):
+                wait_seconds_retry = float(
+                    os.environ.get("LUME_WAIT_HTTP_200_WAIT_SECONDS_RETRY", 1)
+                )
+                num_max_attempts = int(
+                    os.environ.get("LUME_WAIT_HTTP_200_NUM_MAX_ATTEMPTS", 15)
+                )
+
+                for i in range(num_max_attempts):
                     response = requests.get(step.wait_http_200)
                     self.logger.log(INFO, f"  Attempt {i+1} -> {response.status_code}")
                     if response.status_code == 200:
                         break
-                    time.sleep(1)
+                    time.sleep(wait_seconds_retry)
         return
 
     @meiga
