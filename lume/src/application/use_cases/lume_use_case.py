@@ -172,7 +172,7 @@ class LumeUseCase:
                         response = requests.get(step.wait_http_200)
                         num_attempts += 1
                         status = response.status_code
-                        status_message = f"{status}\033[F"
+                        status_message = f"{status}        \033[F"
                         if status == 200:
                             is_ok = True
                             break
