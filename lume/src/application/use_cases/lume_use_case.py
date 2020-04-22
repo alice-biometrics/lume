@@ -166,10 +166,16 @@ class LumeUseCase:
                 )
 
                 for i in range(num_max_attempts):
-                    response = requests.get(step.wait_http_200)
-                    self.logger.log(INFO, f"  Attempt {i+1} -> {response.status_code}")
-                    if response.status_code == 200:
-                        break
+                    status = None
+                    try:
+                        response = requests.get(step.wait_http_200)
+                        status = response.status_code
+                        if status == 200:
+                            break
+                    except:  # noqa E722
+                        status = "Connection Error"
+
+                    self.logger.log(INFO, f"  Attempt {i+1} -> {status}\033[F")
                     time.sleep(wait_seconds_retry)
         return
 
