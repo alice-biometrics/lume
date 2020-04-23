@@ -162,15 +162,15 @@ class LumeUseCase:
                     os.environ.get("LUME_WAIT_HTTP_200_WAIT_SECONDS_RETRY", 1)
                 )
                 num_max_attempts = int(
-                    os.environ.get("LUME_WAIT_HTTP_200_NUM_MAX_ATTEMPTS", 15)
+                    os.environ.get("LUME_WAIT_HTTP_200_NUM_MAX_ATTEMPTS", 20)
                 )
 
                 is_ok = False
                 num_attempts = 0
                 for i in range(num_max_attempts):
+                    num_attempts += 1
                     try:
                         response = requests.get(step.wait_http_200)
-                        num_attempts += 1
                         status = response.status_code
                         status_message = f"{status}        \033[F"
                         if status == 200:
@@ -179,17 +179,21 @@ class LumeUseCase:
                     except:  # noqa E722
                         status_message = "Connection Error\033[F"
 
-                    self.logger.log(INFO, f"  Attempt {i+1} -> {status_message}")
+                    self.logger.log(
+                        INFO, f"  Attempt {num_attempts} -> {status_message}"
+                    )
                     time.sleep(wait_seconds_retry)
+
+                time_elapsed = round((wait_seconds_retry * num_attempts), 2)
                 if is_ok:
                     self.logger.log(
                         INFO,
-                        f"  Received a 200 after {num_attempts} attempts in ~{wait_seconds_retry*num_attempts} seconds",
+                        f"  Received a 200 after {num_attempts} attempts in ~{time_elapsed} seconds",
                     )
                 else:
                     self.logger.log(
                         WARNING,
-                        f"  Not received any 200 after {num_attempts} attempts in ~{wait_seconds_retry*num_attempts} seconds",
+                        f"  Not received any 200 after {num_attempts} attempts in ~{time_elapsed} seconds",
                     )
 
         return
