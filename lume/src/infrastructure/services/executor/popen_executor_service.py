@@ -30,12 +30,12 @@ class PopenExecutorService(IExecutorService):
                 if log_output != "":
                     self.logger.log(INFO, f"{log_output}")
 
-        output_err = process.stderr.readline()
-        if output_err:
-            logging_level = ERROR if return_code != 0 else WARNING
-            log_output = output_err.rstrip().decode("utf-8")
-            if log_output != "":
-                self.logger.log(logging_level, f"{log_output}")
+        for output_err in iter(process.stderr.readline, b""):
+            if output_err:
+                logging_level = ERROR if return_code != 0 else WARNING
+                log_output = output_err.rstrip().decode("utf-8")
+                if log_output != "":
+                    self.logger.log(logging_level, f"{log_output}")
 
         if return_code != 0:
             return isFailure

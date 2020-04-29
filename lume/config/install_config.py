@@ -10,6 +10,6 @@ class InstallConfig:
 
     @staticmethod
     def from_dict(kdict):
-        run = check_list_or_str_item(kdict, "run", required=True)
+        run = check_list_or_str_item(kdict, "run")
 
-        return InstallConfig(run=run, cwd=kdict.get("cwd"))
+        return InstallConfig(run=run if run else [], cwd=kdict.get("cwd"))
