@@ -18,7 +18,12 @@ class Config:
                     "show_exit_code", False
                 )
             }
-            self.install = InstallConfig.from_dict(yaml_dict.get("install"))
+
+            if yaml_dict.get("install"):
+                self.install = InstallConfig.from_dict(yaml_dict.get("install"))
+            else:
+                self.install = InstallConfig(run=[])
+
             self.steps = {}
             for step_name, step in yaml_dict["steps"].items():
                 if step_name == "setup":
