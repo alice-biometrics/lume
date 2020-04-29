@@ -85,8 +85,16 @@ class LumeUseCase:
                     .unwrap_or_return()
                 )
                 self.setup_env(step)
-                processes = self.run_setup_detach(step, cwd).unwrap_or([])
-                self.run_setup(step, cwd).unwrap_or_return()
+                processes = (
+                    self.run_setup_detach(step, cwd)
+                    .handle(on_failure=self.run_teardown, failure_args=(cwd, step))
+                    .unwrap_or([])
+                )
+                self.run_setup(step, cwd).handle(
+                    on_failure=self.run_teardown_detach, failure_args=processes
+                ).handle(
+                    on_failure=self.run_teardown, failure_args=(cwd, step)
+                ).unwrap_or_return()
                 self.run_commands(step, cwd, processes).unwrap_or_return()
                 self.run_teardown_detach(processes)
                 self.run_teardown(cwd, step)
