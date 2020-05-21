@@ -16,7 +16,7 @@ on:
 
 
 jobs:
-  build:
+  ci:
 
     strategy:
       max-parallel: 4
@@ -70,4 +70,11 @@ jobs:
         LUME_CONFIG_FILENAME: examples/lume-sample.yml
       run: |
         lume -all
+
+    - name: No binary installation
+      run: |
+        python setup.py sdist
+        pip wheel --no-binary lume -w /tmp/ext dist/lume-*.tar.gz
+
+
 
