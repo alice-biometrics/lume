@@ -1,1 +1,3 @@
 include lume/VERSION
+include requirements/requirements.txt
+include LICENSE
