@@ -73,6 +73,7 @@ jobs:
 
     - name: No binary installation
       run: |
+        pip install wheel
         python setup.py sdist
         pip wheel --no-binary lume -w /tmp/ext dist/lume-*.tar.gz
 
