@@ -7,6 +7,7 @@ from typing import List, Optional, Dict
 from yaml.parser import ParserError
 
 from lume.config.check_list_or_str_item import check_list_or_str_item
+from lume.config.check_os_list_or_str_item import check_os_list_or_str_item
 
 
 def read_env_from_file(filename):
@@ -33,9 +34,9 @@ class StepConfig:
 
     @staticmethod
     def from_dict(kdict):
-        run = check_list_or_str_item(kdict, "run", required=True)
-        setup = check_list_or_str_item(kdict, "setup", required=False)
-        teardown = check_list_or_str_item(kdict, "teardown", required=False)
+        run = check_os_list_or_str_item(kdict, "run", required=True)
+        setup = check_os_list_or_str_item(kdict, "setup", required=False)
+        teardown = check_os_list_or_str_item(kdict, "teardown", required=False)
         setup_detach = kdict.get("setup_detach")
         if setup_detach:
             setup_detach["run"] = check_list_or_str_item(

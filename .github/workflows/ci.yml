@@ -69,12 +69,12 @@ jobs:
       env:
         LUME_CONFIG_FILENAME: examples/lume-sample.yml
       run: |
-        lume -all
+        lume -install -all
     - name: End2end test (OS Command Specific)
       env:
         LUME_CONFIG_FILENAME: examples/lume-sample-os-command-specific.yml
       run: |
-        lume -all
+        lume -install -all
 
     - name: Check Installation (--no-binary)
       run: |
