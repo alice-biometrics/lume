@@ -25,7 +25,7 @@ class SetupItemFile(SetupItem):
                 INFO, f"{self.__class__.__name__} - dependency {name} already exists"
             )
             return Success()
-        os.makedirs(dependency_path)
+        os.makedirs(dependency_path, exist_ok=True)
 
         if not dependency_config.auth_required:
             auth = None

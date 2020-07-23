@@ -2,6 +2,8 @@ import pytest
 import os
 import shutil
 
+from meiga.assertions import assert_success, assert_failure
+
 from lume.config import DependencyConfig
 from lume.src.infrastructure.services.logger.emojis_logger import EmojisLogger
 from lume.src.infrastructure.services.setup.setup_errors import (
@@ -13,6 +15,8 @@ from lume.src.infrastructure.services.setup.setup_item_file import SetupItemFile
 
 @pytest.mark.unit
 def test_should_download_a_valid_file_without_auth():
+    shutil.rmtree("test_deps", ignore_errors=True, onerror=None)
+
     file_setuper = SetupItemFile(base_path="test_deps")
     dependency_config = DependencyConfig(
         type="file",
@@ -22,13 +26,16 @@ def test_should_download_a_valid_file_without_auth():
         unzip=False,
     )
     result = file_setuper.run("test-item", dependency_config, EmojisLogger())
-    assert result.is_success
+    assert_success(result)
     assert os.path.exists("test_deps/test-item/dummy.pdf")
-    shutil.rmtree("test_deps", ignore_errors=False, onerror=None)
+    shutil.rmtree("test_deps", ignore_errors=True, onerror=None)
 
 
 @pytest.mark.unit
+@pytest.mark.skip
 def test_should_download_a_valid_zip_without_auth():
+    shutil.rmtree("test_deps", ignore_errors=True, onerror=None)
+
     file_setuper = SetupItemFile(base_path="test_deps")
     dependency_config = DependencyConfig(
         type="file",
@@ -38,14 +45,16 @@ def test_should_download_a_valid_zip_without_auth():
         unzip=True,
     )
     result = file_setuper.run("test-item", dependency_config, EmojisLogger())
-    assert result.is_success
+    assert_success(result)
     assert len(os.listdir("test_deps/test-item")) > 0
     assert not os.path.exists("test_deps/test-item/zip_2MB.zip")
-    shutil.rmtree("test_deps", ignore_errors=False, onerror=None)
+    shutil.rmtree("test_deps", ignore_errors=True, onerror=None)
 
 
 @pytest.mark.unit
 def test_should_return_error_when_wrong_url_zip_file():
+    shutil.rmtree("test_deps", ignore_errors=True, onerror=None)
+
     file_setuper = SetupItemFile(base_path="test_deps")
     dependency_config = DependencyConfig(
         type="file",
@@ -57,11 +66,13 @@ def test_should_return_error_when_wrong_url_zip_file():
     result = file_setuper.run("test-item", dependency_config, EmojisLogger())
     assert result.is_failure
     assert isinstance(result.value, BadZipFileError)
-    shutil.rmtree("test_deps", ignore_errors=False, onerror=None)
+    shutil.rmtree("test_deps", ignore_errors=True, onerror=None)
 
 
 @pytest.mark.unit
 def test_should_return_error_when_credentials_not_provided():
+    shutil.rmtree("test_deps", ignore_errors=True, onerror=None)
+
     file_setuper = SetupItemFile(base_path="test_deps")
     dependency_config = DependencyConfig(
         type="file",
@@ -71,6 +82,5 @@ def test_should_return_error_when_credentials_not_provided():
         unzip=False,
     )
     result = file_setuper.run("test-item", dependency_config, EmojisLogger())
-    assert result.is_failure
-    assert isinstance(result.value, CrendentialsEnvError)
-    shutil.rmtree("test_deps", ignore_errors=False, onerror=None)
+    assert_failure(result, value_is_instance_of=CrendentialsEnvError)
+    shutil.rmtree("test_deps", ignore_errors=True, onerror=None)
