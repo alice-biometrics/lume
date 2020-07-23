@@ -9,7 +9,7 @@ install:
       - echo "Installing MacOS..."
       - echo "Updating Brew..."
     windows: echo "Installing Windows..."
-    all: echo "Installed :fire:"
+    all: echo "Installed"
 
 steps:
   clean:

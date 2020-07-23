@@ -21,7 +21,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        os: [macOS-latest, ubuntu-latest, windows-latest]
+        os: [macOS-latest, ubuntu-latest]
         python-version: [3.6, 3.7, 3.8]
     runs-on: ${{matrix.os}}
 
@@ -61,6 +61,7 @@ jobs:
         black .
         flake8 .
     - name: Test with pytest
+
       run: |
         pip install -e .
         pip install pytest
