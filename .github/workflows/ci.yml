@@ -70,12 +70,15 @@ jobs:
         LUME_CONFIG_FILENAME: examples/lume-sample.yml
       run: |
         lume -all
+    - name: End2end test (OS Command Specific)
+      env:
+        LUME_CONFIG_FILENAME: examples/lume-sample-os-command-specific.yml
+      run: |
+        lume -all
 
     - name: Check Installation (--no-binary)
       run: |
         pip install wheel
         python setup.py sdist
         pip wheel --no-binary lume -w /tmp/ext dist/lume-*.tar.gz
-
-
 
