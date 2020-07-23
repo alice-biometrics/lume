@@ -70,7 +70,7 @@ jobs:
         LUME_CONFIG_FILENAME: examples/lume-sample.yml
       run: |
         lume -install -all
-    - name: End2end test (OS Command Specific)
+    - name: End2end test (OS-Specific Commands)
       env:
         LUME_CONFIG_FILENAME: examples/lume-sample-os-command-specific.yml
       run: |
