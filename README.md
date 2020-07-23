@@ -141,6 +141,41 @@ Or several steps:
 
 ## Features
 
+#### OS-specific commands
+
+Installing dependencies
+```yml
+install:
+  run:
+    ubuntu:
+       - sudo apt update
+       - sudo apt install myprogram
+     macos:
+       - brew install myprogram
+     all:
+      - echo "Installed :fire:"
+```
+
+Or for example, compiling a library with differents flags
+
+```yaml
+steps:
+  build:
+    setup:
+      linux: echo "Linux Setup..."
+      macos: echo "MacOS Setup..."
+      windows: echo "Windows Setup..."
+    teardown:
+      linux: echo "Linux Teardown..."
+      macos: echo "MacOS Teardown..."
+      windows: echo "Windows Teardown..."
+    run:
+      linux: echo "Building with Linux Compiler..."
+      macos: echo "Building with MacOS Compiler..."
+      windows: echo "Building with Windows Compiler..."
+      all: echo "Checking Compiled Library..."
+```
+
 
 #### Several commands per Step
 

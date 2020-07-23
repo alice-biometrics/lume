@@ -1,0 +1,34 @@
+name: lume-sample-os-command-specific
+
+show_exit_code: True
+
+install:
+  run:
+    linux: echo "Installing Ubuntu..."
+    macos:
+      - echo "Installing MacOS..."
+      - echo "Updating Brew..."
+    windows: echo "Installing Windows..."
+    all: echo "Installed"
+
+steps:
+  clean:
+    run: echo "Cleaning..."
+  build:
+    setup:
+      linux: echo "Linux Setup..."
+      macos: echo "MacOS Setup..."
+      windows: echo "Windows Setup..."
+    teardown:
+      linux: echo "Linux Teardown..."
+      macos: echo "MacOS Teardown..."
+      windows: echo "Windows Teardown..."
+    run:
+      linux: echo "Building with Linux Compiler..."
+      macos: echo "Building with MacOS Compiler..."
+      windows: echo "Building with Windows Compiler..."
+      all: echo "Checking Compiled Library..."
+  test:
+    run:
+      - echo "Testing (Unit)..."
+      - echo "Testing (Integration)..."

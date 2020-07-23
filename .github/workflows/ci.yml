@@ -61,6 +61,7 @@ jobs:
         black .
         flake8 .
     - name: Test with pytest
+
       run: |
         pip install -e .
         pip install pytest
@@ -69,13 +70,16 @@ jobs:
       env:
         LUME_CONFIG_FILENAME: examples/lume-sample.yml
       run: |
-        lume -all
+        lume -install -all
+    - name: End2end test (OS-Specific Commands)
+      env:
+        LUME_CONFIG_FILENAME: examples/lume-sample-os-command-specific.yml
+      run: |
+        lume -install -all
 
     - name: Check Installation (--no-binary)
       run: |
         pip install wheel
         python setup.py sdist
         pip wheel --no-binary lume -w /tmp/ext dist/lume-*.tar.gz
-
-
 

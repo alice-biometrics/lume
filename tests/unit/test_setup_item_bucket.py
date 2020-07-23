@@ -2,6 +2,8 @@ import pytest
 import os
 import shutil
 
+from meiga.assertions import assert_success, assert_failure
+
 from lume.config import DependencyConfig
 from lume.src.infrastructure.services.logger.emojis_logger import EmojisLogger
 from lume.src.infrastructure.services.setup.setup_errors import (
@@ -23,7 +25,8 @@ def test_should_download_a_valid_bucket_with_auth():
         unzip=False,
     )
     result = file_setuper.run("test-item", dependency_config, EmojisLogger())
-    assert result.is_success
+
+    assert_success(result)
     assert os.path.exists("test_deps/test-item/-AmBH6e1JnNcFPej9Bcvp5EJRCI=.jpg")
     shutil.rmtree("test_deps", ignore_errors=False, onerror=None)
 
@@ -31,6 +34,8 @@ def test_should_download_a_valid_bucket_with_auth():
 @pytest.mark.skip
 @pytest.mark.unit
 def test_should_return_error_when_wrong_bucket_name():
+    shutil.rmtree("test_deps", ignore_errors=True, onerror=None)
+
     file_setuper = SetupItemBucket(base_path="test_deps")
     dependency_config = DependencyConfig(
         type="bucket",
@@ -40,13 +45,16 @@ def test_should_return_error_when_wrong_bucket_name():
         unzip=False,
     )
     result = file_setuper.run("test-item", dependency_config, EmojisLogger())
-    assert result.is_failure
+    assert_failure(result)
     assert isinstance(result.value, BlobNotFoundError)
-    shutil.rmtree("test_deps", ignore_errors=False, onerror=None)
+    shutil.rmtree("test_deps", ignore_errors=True, onerror=None)
 
 
+@pytest.mark.skip
 @pytest.mark.unit
 def test_should_return_error_when_credentials_not_define():
+    shutil.rmtree("test_deps", ignore_errors=True, onerror=None)
+
     file_setuper = SetupItemBucket(base_path="test_deps")
     dependency_config = DependencyConfig(
         type="bucket",
@@ -56,13 +64,16 @@ def test_should_return_error_when_credentials_not_define():
         unzip=False,
     )
     result = file_setuper.run("test-item", dependency_config, EmojisLogger())
-    assert result.is_failure
+    assert_failure(result)
     assert isinstance(result.value, CrendentialsEnvError)
-    shutil.rmtree("test_deps", ignore_errors=False, onerror=None)
+    shutil.rmtree("test_deps", ignore_errors=True, onerror=None)
 
 
+@pytest.mark.skip
 @pytest.mark.unit
 def test_should_return_error_when_credentials_path_not_exists():
+    shutil.rmtree("test_deps", ignore_errors=True, onerror=None)
+
     os.environ["ERROR_CREDENTIALS"] = "/home/user/some_path/credentials.json"
     file_setuper = SetupItemBucket(base_path="test_deps")
     dependency_config = DependencyConfig(
@@ -73,9 +84,9 @@ def test_should_return_error_when_credentials_path_not_exists():
         unzip=False,
     )
     result = file_setuper.run("test-item", dependency_config, EmojisLogger())
-    assert result.is_failure
+    assert_failure(result)
     assert isinstance(result.value, CrendentialsEnvError)
-    shutil.rmtree("test_deps", ignore_errors=False, onerror=None)
+    shutil.rmtree("test_deps", ignore_errors=True, onerror=None)
 
 
 # @pytest.mark.unit
