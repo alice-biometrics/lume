@@ -18,9 +18,7 @@ def concat(l1, l2):
         l1 = []
     elif l2 is None:
         l2 = []
-
-    s = set(l1 + l2)
-
+    s = l1 + l2
     return s
 
 
@@ -36,4 +34,5 @@ def check_os_list_or_str_item(kdict, key, required=False, suffix=""):
         value = concat(platform_commands, all_commands)
     else:
         value = check_list_or_str_item(kdict, key)
+
     return value

@@ -4,7 +4,9 @@ show_exit_code: True
 
 install:
   run:
-    linux: echo "Installing Ubuntu..."
+    linux:
+      - echo "Installing Ubuntu..."
+      - echo "Updating repository..."
     macos:
       - echo "Installing MacOS..."
       - echo "Updating Brew..."
