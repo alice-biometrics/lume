@@ -28,7 +28,7 @@ pip install lume
 
 ## Getting Started :chart_with_upwards_trend:	
 
-**lume** is a simple way to organize installation, setup, code compilation, test, etc..
+**lume** is a simple way to organize your daily software development operations (installation, setup, code compilation, test, etc..)
 
 #### Configuration File
 
@@ -49,7 +49,7 @@ steps:
     run: echo "Testing..."
 ```
 
-Add `show_exit_code: True` in settings if you want lume to print the program exit code.
+If you want lume to print the program exit code, just type `show_exit_code: True` in `settings` in the `lume.yml`
 
 ```yml
 
@@ -57,7 +57,7 @@ settings:
   show_exit_code: True
 ```
 
-You can use `help` to know what lume is able to do for you:
+Use `help` to know `lume` available commands. `lume` is dynamic, so the steps we are defining will be shown here automatically.
 
 ```console
 >> lume -h
@@ -76,7 +76,7 @@ optional arguments:
 
 ```
 
-If you want to save your lume file in another folder or change the name, you can do it with the Environment Variable `LUME_CONFIG_FILENAME`.
+In case you want to change the name of the lume configuration file or just store in another folder, please use `LUME_CONFIG_FILENAME` environment variable.
 
 ```console
 >> export LUME_CONFIG_FILENAME=examples/lume-sample.yml; lume -h
@@ -84,22 +84,38 @@ If you want to save your lume file in another folder or change the name, you can
 
 #### Run Defined Steps
 
-Lume automatically parses your `lume.yml` file allowing you to call it.
-
 To run install:
 
 ```console
 >> lume -install
-🔥 Step: install
-👩‍💻 install >> echo "Installing..."
- Installing...
 ```
 
 To run all the steps:
 
 ```console
 >> lume -all
-🔥 Step: clean
+```
+
+Of course, you can run every step individually:
+
+```console
+>> lume -clean
+```
+
+Or several steps:
+
+```console
+>> lume -build -test
+```
+
+Here is an example of the log output that would have lume using several commands definded previously on [Configuration File](#configuration-file):
+
+```console
+>> lume -install -all
+🔥 Step: install
+👩‍💻 install >> echo "Installing..."
+ Installing...
+ 🔥 Step: clean
 👩‍💻 clean >> echo "Cleaning..."
  Cleaning...
 🔥 Step: build
@@ -113,41 +129,21 @@ To run all the steps:
 🔥 Step: error
 👩‍💻 error [cwd=examples] >> echo "This is an error" >>/dev/stderr
 🧐 This is an error
-
-```
-
-Of course, you can run every step individually:
-
-```console
->> lume -clean
-🔥 Step: clean
-👩‍💻 clean >> echo "Cleaning..."
- Cleaning...
-```
-
-Or several steps:
-
-```console
->> lume -build -test
-🔥 Step: build
-👩‍💻 build >> echo "Building..."
- Building...
-🔥 Step: test
-👩‍💻 test >> echo "Testing (Unit)..."
- Testing (Unit)...
-👩‍💻 test >> echo "Testing (Integration)..."
-
 ```
 
 ## Features
 
 #### OS-specific commands
 
-Installing dependencies
+
+Define your os-specific command adding new fields on `run` commands with specific os keys (`linux`, `macos` and `windows`)
+
+Use it when installing dependencies:
+
 ```yml
 install:
   run:
-    ubuntu:
+    linux:
        - sudo apt update
        - sudo apt install myprogram
      macos:
@@ -156,7 +152,7 @@ install:
       - echo "Installed :fire:"
 ```
 
-Or for example, compiling a library with differents flags
+Or maybe for compiling a library with differents flags depending on the `OS`.
 
 ```yaml
 steps:
@@ -179,7 +175,7 @@ steps:
 
 #### Several commands per Step
 
-Lume allows you to define several commands per Step:
+Use the hyphen in order to define several commands per Step:
 
 ```yml
 steps:
@@ -191,7 +187,7 @@ steps:
 
 #### Setup Step
 
-Lume implements a special step to manage dependencies such us resources.
+Use `setup` step to manage to download and unzip dependencies form external resources (e.g `ftp` servers, `buckets`, etc..)
 
 ```yml
 steps:
@@ -233,6 +229,8 @@ steps:
 
 ##### Setup and Teardown
 
+Define `setup` commands to execute operations that will be executed before `run` commands. Use `teardown` comands to define command to be executed after `run`.
+
 ```yml
 name: lume-sample
 
@@ -269,7 +267,7 @@ steps:
     teardown: echo ${TEADOWN_MSG}
 ```
 
-The output for this step will be:
+The output for this step will be somthing like the following:
 
 ```console
 >> lume -my-step
@@ -285,8 +283,7 @@ The output for this step will be:
  Teardown
 ```
 
-Note that if you define a *envvar*, it will be overwrote during the step.
-
+Note that if you previously defined an *envvar*, it will be overwrote during the step.
 
 You can also define variable from external (e.g [examples/env.yml](examples/env.yml) )
 
