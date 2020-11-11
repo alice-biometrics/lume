@@ -347,7 +347,7 @@ steps:
 You can configure the following parameters via env:
 
 * `LUME_WAIT_HTTP_200_NUM_MAX_ATTEMPTS`
-* LUME_WAIT_HTTP_200_WAIT_SECONDS_RETRY`
+* `LUME_WAIT_HTTP_200_WAIT_SECONDS_RETRY`
 
 e.g
 
