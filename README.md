@@ -328,7 +328,7 @@ steps:
 
 Wait few seconds with `wait_seconds`:
 
-```
+```yml
 steps:
   wait-example-seconds:
     wait_seconds: 2
@@ -337,7 +337,7 @@ steps:
 
 Wait for a 200 calling a HTTP url:
 
-```
+```yml
 steps:
   wait-example-http:
     wait_http_200: https://www.google.com
@@ -346,13 +346,13 @@ steps:
 
 You can configure the following parameters via env:
 
-* LUME_WAIT_HTTP_200_NUM_MAX_ATTEMPTS
-* LUME_WAIT_HTTP_200_WAIT_SECONDS_RETRY
+* `LUME_WAIT_HTTP_200_NUM_MAX_ATTEMPTS`
+* LUME_WAIT_HTTP_200_WAIT_SECONDS_RETRY`
 
 e.g
 
 
-```
+```yml
 steps:
   wait-example-http:
     envs: 
