@@ -33,6 +33,25 @@ def test_should_download_a_valid_bucket_with_auth():
 
 @pytest.mark.skip
 @pytest.mark.unit
+def test_should_download_a_valid_bucket_with_auth_and_overwrite():
+    file_setuper = SetupItemBucket(base_path="test_deps")
+    dependency_config = DependencyConfig(
+        type="bucket",
+        url="gs://aliceonboarding/-AmBH6e1JnNcFPej9Bcvp5EJRCI=.jpg",
+        auth_required=True,
+        credentials_env="GCS_CREDENTIALS",
+        unzip=False,
+        overwrite=True
+    )
+    result = file_setuper.run("test-item", dependency_config, EmojisLogger())
+
+    assert_success(result)
+    assert os.path.exists("test_deps/test-item/-AmBH6e1JnNcFPej9Bcvp5EJRCI=.jpg")
+    shutil.rmtree("test_deps", ignore_errors=False, onerror=None)
+
+
+@pytest.mark.skip
+@pytest.mark.unit
 def test_should_return_error_when_wrong_bucket_name():
     shutil.rmtree("test_deps", ignore_errors=True, onerror=None)
 

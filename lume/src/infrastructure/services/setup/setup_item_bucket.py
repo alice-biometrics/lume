@@ -22,12 +22,17 @@ class SetupItemBucket(SetupItem):
         self, name: str, dependency_config: DependencyConfig, logger: ILogger
     ) -> Result:
         dependency_path = os.path.join(self.base_path, name)
-        if os.path.exists(dependency_path):
+        if not os.path.exists(dependency_path):
+            os.makedirs(dependency_path)
+        elif dependency_config.overwrite:
             logger.log(
-                INFO, f"{self.__class__.__name__} - dependency {name} already exists"
+                INFO, f"{self.__class__.__name__} - dependency {name} already exists. Overwriting..."
+            )
+        else:
+            logger.log(
+                INFO, f"{self.__class__.__name__} - dependency {name} already exists. Skipping..."
             )
             return Success()
-        os.makedirs(dependency_path)
 
         if dependency_config.auth_required:
             credentials_path = os.environ.get(dependency_config.credentials_env)
