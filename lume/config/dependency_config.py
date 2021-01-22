@@ -10,3 +10,4 @@ class DependencyConfig:
     auth_required: bool
     credentials_env: str
     unzip: bool
+    overwrite: bool = False
