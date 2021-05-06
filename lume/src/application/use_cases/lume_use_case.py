@@ -138,7 +138,7 @@ class LumeUseCase:
         processes = []
         for setup_detach_command in setup_detach_commands:
             message = get_colored_command_message(
-                setup_detach_command, cwd, step, prefix=f"setup-detach"
+                setup_detach_command, cwd, step, prefix="setup-detach"
             )
             self.logger.log(COMMAND, message)
             process = self.detach_executor_service.execute(
@@ -184,6 +184,8 @@ class LumeUseCase:
                         if status == 200:
                             is_ok = True
                             break
+                        else:
+                            status_message = f"Unexpected return code -> {status} | {response.text} \033[F"
                     except:  # noqa E722
                         status_message = "Connection Error\033[F"
 
