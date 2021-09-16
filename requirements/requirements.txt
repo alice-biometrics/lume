@@ -4,4 +4,5 @@ dataclasses-json>=0.3.6
 backports-datetime-fromisoformat>=1.0.0;python_version<"3.7"
 pyyaml==5.4.1
 emoji==1.4.2
-google-cloud-storage>=1.25.0<=1.42.0
+google-cloud-storage<=1.41.1,>=1.25.0
+google-api-core<=1.31.1
