@@ -6,4 +6,4 @@ hypothesis==4.34.0
 pre-commit==1.18.3
 twine==1.13.0
 pytest-clarity==0.2.0a1
-google-cloud-storage==1.25.0
+google-cloud-storage>=1.25.0<=1.42.0
