@@ -4,14 +4,14 @@ from zipfile import BadZipFile
 from google.api_core.exceptions import NotFound
 from google.auth.exceptions import DefaultCredentialsError
 from google.cloud import storage
-from meiga import Failure, Success, Result
+from meiga import Failure, Result, Success
 
 from lume.config import DependencyConfig
-from lume.src.domain.services.interface_logger import ILogger, INFO
+from lume.src.domain.services.interface_logger import INFO, ILogger
 from lume.src.infrastructure.services.setup.setup_errors import (
-    CrendentialsEnvError,
-    BlobNotFoundError,
     BadZipFileError,
+    BlobNotFoundError,
+    CrendentialsEnvError,
 )
 from lume.src.infrastructure.services.setup.setup_item import SetupItem
 from lume.src.infrastructure.services.setup.setup_utils import unzip_file
@@ -26,11 +26,13 @@ class SetupItemBucket(SetupItem):
             os.makedirs(dependency_path)
         elif dependency_config.overwrite:
             logger.log(
-                INFO, f"{self.__class__.__name__} - dependency {name} already exists. Overwriting..."
+                INFO,
+                f"{self.__class__.__name__} - dependency {name} already exists. Overwriting...",
             )
         else:
             logger.log(
-                INFO, f"{self.__class__.__name__} - dependency {name} already exists. Skipping..."
+                INFO,
+                f"{self.__class__.__name__} - dependency {name} already exists. Skipping...",
             )
             return Success()
 

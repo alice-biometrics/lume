@@ -136,7 +136,7 @@ Here is an example of the log output that would have lume using several commands
 #### OS-specific commands
 
 
-Define your os-specific command adding new fields on `run` commands with specific os keys (`linux`, `macos` and `windows`)
+Define your os-specific command adding new fields on `run` commands with specific os keys (`linux`, `macos`, `macos-arm` and `windows`)
 
 Use it when installing dependencies:
 
@@ -147,6 +147,8 @@ install:
        - sudo apt update
        - sudo apt install myprogram
      macos:
+       - brew install myprogram
+     macos-arm:
        - brew install myprogram
      all:
       - echo "Installed :fire:"

@@ -10,6 +10,9 @@ install:
     macos:
       - echo "Installing MacOS..."
       - echo "Updating Brew..."
+    macos-arm:
+      - echo "Installing MacOS M1..."
+      - echo "Updating Brew M1..."
     windows: echo "Installing Windows..."
     all: echo "Installed"
 

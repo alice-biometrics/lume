@@ -1,14 +1,14 @@
-import pytest
 import os
 import shutil
 
-from meiga.assertions import assert_success, assert_failure
+import pytest
+from meiga.assertions import assert_failure, assert_success
 
 from lume.config import DependencyConfig
 from lume.src.infrastructure.services.logger.emojis_logger import EmojisLogger
 from lume.src.infrastructure.services.setup.setup_errors import (
-    CrendentialsEnvError,
     BlobNotFoundError,
+    CrendentialsEnvError,
 )
 from lume.src.infrastructure.services.setup.setup_item_bucket import SetupItemBucket
 
@@ -41,7 +41,7 @@ def test_should_download_a_valid_bucket_with_auth_and_overwrite():
         auth_required=True,
         credentials_env="GCS_CREDENTIALS",
         unzip=False,
-        overwrite=True
+        overwrite=True,
     )
     result = file_setuper.run("test-item", dependency_config, EmojisLogger())
 
