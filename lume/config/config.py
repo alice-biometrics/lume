@@ -39,9 +39,9 @@ class Config:
                 else:
                     self.steps[step_name] = StepConfig.from_dict(step)
                     self.steps[step_name].add_shared_env(shared_envs)
-
+                    
             self.add_other_steps(yaml_dict, shared_envs)
-
+            
     def get_steps(self) -> List[str]:
         return list(self.steps.keys())
 
