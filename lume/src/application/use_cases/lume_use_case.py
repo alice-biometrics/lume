@@ -1,28 +1,27 @@
 import os
 import time
-import requests
 from typing import List, Tuple
 
-from meiga import Result, Error, Success, Failure, isSuccess, isFailure
+import requests
+from meiga import Error, Failure, Result, Success, isFailure, isSuccess
 from meiga.decorators import meiga
 
 from lume.config import Config
+from lume.src.application.use_cases.messages import get_colored_command_message
 from lume.src.domain.services.interface_executor_service import IExecutorService
 from lume.src.domain.services.interface_killer_service import IKillerService
-
 from lume.src.domain.services.interface_logger import (
-    ILogger,
-    WARNING,
-    ERROR,
-    HIGHLIGHT,
     COMMAND,
     ENVAR,
     ENVAR_WARNING,
-    WAITING,
+    ERROR,
+    HIGHLIGHT,
     INFO,
+    WAITING,
+    WARNING,
+    ILogger,
 )
 from lume.src.domain.services.interface_setup_service import ISetupService
-from lume.src.application.use_cases.messages import get_colored_command_message
 
 
 class EmptyConfigError(Error):
@@ -103,18 +102,25 @@ class LumeUseCase:
 
     def setup_env(self, action):
         if action == "install":
-            return
+            step = self.config.install
         else:
             step = self.config.steps.get(action)
-            if not step.envs:
-                return
-            for envar, value in step.envs.items():
-                env_original_value = os.environ.get(envar)
-                os.environ[envar] = str(value)
-                if env_original_value:
+
+        if step is None or not step.envs:
+            return
+        for envar, value in step.envs.items():
+            env_original_value = os.environ.get(envar)
+            os.environ[envar] = str(value)
+            if env_original_value:
+                self.logger.log(
+                    ENVAR_WARNING,
+                    f"envvar: overwrite {envar}={value} (Original {envar}={env_original_value})",
+                )
+            else:
+                if envar in step.overwrote_envs:
                     self.logger.log(
                         ENVAR_WARNING,
-                        f"envvar: overwrite {envar}={value} (Original {envar}={env_original_value})",
+                        f"envvar: overwrite {envar}={value} (Also available on shared envs on lume.yml)",
                     )
                 else:
                     self.logger.log(ENVAR, f"envvar: set {envar}={value}")

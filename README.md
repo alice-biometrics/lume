@@ -5,21 +5,6 @@ lume :fire:  [![version](https://img.shields.io/github/release/alice-biometrics/
 
 A Python-based handy automation tool. Lume helps you with your daily dev operations and ease the CI & CD process. 
 
-## Table of Contents
-- [Installation :computer:](#installation-computer)
-- [Getting Started :chart_with_upwards_trend:](#getting-started-chart_with_upwards_trend)
-  * [Configuration File](#configuration-file)
-  * [Run Defined Steps](#run-defined-steps)
-- [Features :metal:](#features-metal)
-  * [Several commands per Step](#several-commands-per-step)
-  * [Setup Step](#setup-step)
-  * [Setup and Teardown](#setup-and-teardown)
-  * [Set environment variables](#set-environment-variables)
-  * [Detach Setup](#detach-setup)
-  * [Wait](#wait)
-- [Acknowledgements :raised_hands:](#acknowledgements-raised_hands)
-- [Contact :mailbox_with_mail:](#contact-mailbox_with_mail)
-
 ## Installation :computer:
 
 ~~~
@@ -135,7 +120,6 @@ Here is an example of the log output that would have lume using several commands
 
 #### OS-specific commands
 
-
 Define your os-specific command adding new fields on `run` commands with specific os keys (`linux`, `macos`, `macos-arm` and `windows`)
 
 Use it when installing dependencies:
@@ -185,6 +169,16 @@ steps:
     run:
     - echo "Cleaning dep1"
     - echo "Cleaning dep2"
+```
+
+Or just use `|`:
+
+```yml
+steps:
+  clean:
+    run: |
+      echo "Cleaning dep1"
+      echo "Cleaning dep2"
 ```
 
 #### Setup Step
@@ -250,10 +244,38 @@ steps:
 
 #### Set environment variables
 
+`lume` allows the definition of shared envs or specific envs for every step.
+
+###### Shared envs
+
+Define your shared environment variables with `envs`
+
 ```yml
 name: lume-sample
 
-show_exit_code: True
+envs:
+   MY_ENV: MY_VALUE
+steps:
+  my-step:
+    run: echo ${MY_ENV}
+```
+
+Also, you can use a file to specify you environment variables:
+
+```yml
+name: lume-sample
+
+env_file: path/to/my/env/file
+
+steps:
+  my-step:
+    run: echo ${MY_ENV}
+```
+
+###### Step envs
+
+```yml
+name: lume-sample
 
 install:
   run: echo "Installing..."
@@ -261,41 +283,29 @@ install:
 steps:
   my-step:
     envs:
-      SETUP_MSG: Setup
-      TEADOWN_MSG: Teardown
-      ANDROID_HOME: /my/custom/path
-    setup: echo ${SETUP_MSG}
-    run: echo ${ANDROID_HOME}
-    teardown: echo ${TEADOWN_MSG}
+      MY_ENV: MY_VALUE
+    run: echo ${MY_ENV}
 ```
 
-The output for this step will be somthing like the following:
+The output for this step will be something like the following:
 
 ```console
 >> lume -my-step
 🔥 Step: my-step
-➕ envvar: set SETUP_MSG=Setup
-➕ envvar: set TEADOWN_MSG=Teardown
-➕ envvar: overwrite ANDROID_HOME=/my/custom/path (Original ANDROID_HOME=/Library/Android/Home)
-👩‍💻 setup | my-step >> echo ${SETUP_MSG}
- Setup
-👩‍💻 my-step >> echo ${ANDROID_HOME}
- /my/custom/path
-👩‍💻 teardown | my-step >> echo ${TEADOWN_MSG}
- Teardown
+➕ envvar: set MY_ENV=MY_VALUE
+👩‍💻 my-step >> echo ${MY_ENV}
+    MY_VALUE
 ```
 
 Note that if you previously defined an *envvar*, it will be overwrote during the step.
 
-You can also define variable from external (e.g [examples/env.yml](examples/env.yml) )
+You can also define variable from external filename (e.g [examples/env.yml](examples/env.yml) )
 
 ```yml
 steps:
   envs-file-example:
     envs_file: examples/env.yml
-    run:
-      - echo "${MY_MANAGER}"
-      - echo "${LUME_CONFIG_FILENAME}"
+    run: echo "${MY_ENV}"
 ```
 
 
