@@ -158,6 +158,36 @@ steps:
       all: echo "Checking Compiled Library..."
 ```
 
+#### Use several lume file
+
+Imagine you have multiple steps and you want to split them in several files. 
+You can do it using the `other_steps` option. Just add the following code to your root `lume.yml`
+
+```yaml
+steps:
+  build:
+    run: echo "Building..."
+
+other_steps:
+  other: examples/other-steps.yml
+```
+
+Being `other-steps.yml` something like the following:
+
+```yaml
+steps:
+  step-1:
+    run: echo "Other Step 1..."
+  step-2:
+    run: echo "Other Step 1..."
+```
+
+To call use the name (in this case `other`) plus the step name (e.g `step-1`)
+
+```bash
+$ lume -other:step-1
+```
+
 
 #### Several commands per Step
 

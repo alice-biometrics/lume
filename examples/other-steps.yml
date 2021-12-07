@@ -1,0 +1,5 @@
+steps:
+  step-1:
+    run: echo "Other Step 1..."
+  step-2:
+    run: echo "Other Step 1..."
