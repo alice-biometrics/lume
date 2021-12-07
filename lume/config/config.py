@@ -1,4 +1,5 @@
 from typing import Dict, List
+
 from lume.config.install_config import InstallConfig
 from lume.config.setup_config import SetupConfig
 from lume.config.step_config import StepConfig
@@ -19,6 +20,8 @@ class Config:
                 )
             }
 
+            shared_envs = yaml_dict.get("envs", {})
+
             if yaml_dict.get("install"):
                 self.install = InstallConfig.from_dict(yaml_dict.get("install"))
             else:
@@ -30,6 +33,7 @@ class Config:
                     self.steps[step_name] = SetupConfig.from_dict(step)
                 else:
                     self.steps[step_name] = StepConfig.from_dict(step)
+                    self.steps[step_name].add_shared_env(shared_envs)
 
     def get_steps(self) -> List[str]:
         return list(self.steps.keys())
