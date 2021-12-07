@@ -106,7 +106,7 @@ class LumeUseCase:
         else:
             step = self.config.steps.get(action)
 
-        if not step.envs:
+        if step is None or not step.envs:
             return
         for envar, value in step.envs.items():
             env_original_value = os.environ.get(envar)
