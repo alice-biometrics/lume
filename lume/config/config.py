@@ -2,7 +2,7 @@ from typing import Dict, List
 
 from lume.config.install_config import InstallConfig
 from lume.config.setup_config import SetupConfig
-from lume.config.step_config import StepConfig
+from lume.config.step_config import StepConfig, read_env_from_file
 
 
 class Config:
@@ -21,6 +21,8 @@ class Config:
             }
 
             shared_envs = yaml_dict.get("envs", {})
+            envs_from_file = read_env_from_file(yaml_dict.get("envs_file"))
+            shared_envs.update(envs_from_file)
 
             if yaml_dict.get("install"):
                 self.install = InstallConfig.from_dict(yaml_dict.get("install"))

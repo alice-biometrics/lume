@@ -5,9 +5,12 @@ show_exit_code: True
 envs:
   TEST: SHARED_VALUE
 
-install:
-  run: echo "Installing... ${TEST}"
+envs_file: examples/env.yml
 
+install:
+  run: |
+    echo "Installing... ${TEST}"
+    echo "hola"
 steps:
   clean:
     run: echo "Cleaning..."
@@ -76,6 +79,7 @@ steps:
     wait_http_200: https://www.google.com
     run: echo "Done"
 
-
+other_steps:
+  other: examples/other-step.yml
 
 
