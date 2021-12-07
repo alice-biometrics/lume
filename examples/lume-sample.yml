@@ -80,6 +80,6 @@ steps:
     run: echo "Done"
 
 other_steps:
-  other: examples/other-step.yml
+  other: examples/other-steps.yml
 
 
