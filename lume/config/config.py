@@ -26,6 +26,7 @@ class Config:
                 self.install = InstallConfig.from_dict(yaml_dict.get("install"))
             else:
                 self.install = InstallConfig(run=[])
+            self.install.add_shared_env(shared_envs)
 
             self.steps = {}
             for step_name, step in yaml_dict["steps"].items():

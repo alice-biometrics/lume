@@ -102,27 +102,28 @@ class LumeUseCase:
 
     def setup_env(self, action):
         if action == "install":
-            return
+            step = self.config.install
         else:
             step = self.config.steps.get(action)
-            if not step.envs:
-                return
-            for envar, value in step.envs.items():
-                env_original_value = os.environ.get(envar)
-                os.environ[envar] = str(value)
-                if env_original_value:
+
+        if not step.envs:
+            return
+        for envar, value in step.envs.items():
+            env_original_value = os.environ.get(envar)
+            os.environ[envar] = str(value)
+            if env_original_value:
+                self.logger.log(
+                    ENVAR_WARNING,
+                    f"envvar: overwrite {envar}={value} (Original {envar}={env_original_value})",
+                )
+            else:
+                if envar in step.overwrote_envs:
                     self.logger.log(
                         ENVAR_WARNING,
-                        f"envvar: overwrite {envar}={value} (Original {envar}={env_original_value})",
+                        f"envvar: overwrite {envar}={value} (Also available on shared envs on lume.yml)",
                     )
                 else:
-                    if envar in step.overwrote_envs:
-                        self.logger.log(
-                            ENVAR_WARNING,
-                            f"envvar: overwrite {envar}={value} (Also available on shared envs on lume.yml)",
-                        )
-                    else:
-                        self.logger.log(ENVAR, f"envvar: set {envar}={value}")
+                    self.logger.log(ENVAR, f"envvar: set {envar}={value}")
 
     @meiga
     def run_setup(self, step, cwd) -> Result:

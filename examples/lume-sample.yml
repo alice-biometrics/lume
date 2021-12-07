@@ -6,7 +6,7 @@ envs:
   TEST: SHARED_VALUE
 
 install:
-  run: echo "Installing..."
+  run: echo "Installing... ${TEST}"
 
 steps:
   clean:
