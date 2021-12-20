@@ -14,13 +14,13 @@ from lume.src.infrastructure.services.logger.colors import Colors
 
 LOGGING_LEVEL = {
     HIGHLIGHT: emoji.emojize("🔥"),
-    COMMAND: emoji.emojize("👩‍💻"),
+    COMMAND: emoji.emojize("💻"),
     INFO: "",
     ERROR: emoji.emojize("💩"),
     WARNING: emoji.emojize("🧐"),
-    ENVAR: emoji.emojize("➕"),
-    ENVAR_WARNING: emoji.emojize("➕"),
-    WAITING: emoji.emojize("🕐"),
+    ENVAR: emoji.emojize("🔸"),
+    ENVAR_WARNING: emoji.emojize("🔸"),
+    WAITING: emoji.emojize("⏱ "),
 }
 
 

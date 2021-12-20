@@ -114,16 +114,16 @@ class LumeUseCase:
             if env_original_value:
                 self.logger.log(
                     ENVAR_WARNING,
-                    f"envvar: overwrite {envar}={value} (Original {envar}={env_original_value})",
+                    f"env: overwrite {envar}={value} (Original {envar}={env_original_value})",
                 )
             else:
                 if envar in step.overwrote_envs:
                     self.logger.log(
                         ENVAR_WARNING,
-                        f"envvar: overwrite {envar}={value} (Also available on shared envs on lume.yml)",
+                        f"env: overwrite {envar}={value} (Also available on shared envs on lume.yml)",
                     )
                 else:
-                    self.logger.log(ENVAR, f"envvar: set {envar}={value}")
+                    self.logger.log(ENVAR, f"env: set {envar}={value}")
 
     @meiga
     def run_setup(self, step, cwd) -> Result:
