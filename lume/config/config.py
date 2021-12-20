@@ -39,9 +39,9 @@ class Config:
                 else:
                     self.steps[step_name] = StepConfig.from_dict(step)
                     self.steps[step_name].add_shared_env(shared_envs)
-                    
+
             self.add_other_steps(yaml_dict, shared_envs)
-            
+
     def get_steps(self) -> List[str]:
         return list(self.steps.keys())
 
@@ -55,9 +55,12 @@ class Config:
     def add_other_steps(self, yaml_dict, shared_envs):
         other_steps = yaml_dict.get("other_steps", dict())
         for key, filename in other_steps.items():
-            print(f"{key}: {filename}")
             with open(filename) as file:
                 yaml_dict = yaml.load(file, Loader=yaml.FullLoader)
+                other_shared_envs = yaml_dict.get("envs", {})
+                envs_from_file = read_env_from_file(yaml_dict.get("envs_file"))
+                other_shared_envs.update(envs_from_file)
+                shared_envs.update(other_shared_envs)
                 for step_name, step in yaml_dict["steps"].items():
                     step_name = f"{key}:{step_name}"
                     self.steps[step_name] = StepConfig.from_dict(step)

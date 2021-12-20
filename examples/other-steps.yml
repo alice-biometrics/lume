@@ -1,5 +1,12 @@
+envs:
+  TEST: SHARED_OTHER_VALUE
+  STEP_1_NAME: Step 1
+  STEP_2_NAME: Step 2
+
+envs_file: examples/other.env.yml
+
 steps:
   step-1:
-    run: echo "Other Step 1..."
+    run: echo "Running $STEP_1_NAME"
   step-2:
-    run: echo "Other Step 1..."
+    run: echo "Running $STEP_2_NAME"
