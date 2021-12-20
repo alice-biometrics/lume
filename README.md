@@ -98,21 +98,21 @@ Here is an example of the log output that would have lume using several commands
 ```console
 >> lume -install -all
 🔥 Step: install
-👩‍💻 install >> echo "Installing..."
+💻 install >> echo "Installing..."
  Installing...
  🔥 Step: clean
-👩‍💻 clean >> echo "Cleaning..."
+💻 clean >> echo "Cleaning..."
  Cleaning...
 🔥 Step: build
-👩‍💻 build >> echo "Building..."
+💻 build >> echo "Building..."
  Building...
 🔥 Step: test
-👩‍💻 test >> echo "Testing (Unit)..."
+💻 test >> echo "Testing (Unit)..."
  Testing (Unit)...
-👩‍💻 test >> echo "Testing (Integration)..."
+💻 test >> echo "Testing (Integration)..."
  Testing (Integration)...
 🔥 Step: error
-👩‍💻 error [cwd=examples] >> echo "This is an error" >>/dev/stderr
+💻 error [cwd=examples] >> echo "This is an error" >>/dev/stderr
 🧐 This is an error
 ```
 
@@ -188,6 +188,18 @@ To call use the name (in this case `other`) plus the step name (e.g `step-1`)
 $ lume -other:step-1
 ```
 
+You can setup some additional and specific env vars for these steps:
+
+```yaml
+envs:
+  MY_OTHER_ENV: MY_VALUE
+
+steps:
+  step-1:
+    run: echo "Other Step 1..."
+  step-2:
+    run: echo "Other Step 1..."
+```
 
 #### Several commands per Step
 
@@ -322,12 +334,12 @@ The output for this step will be something like the following:
 ```console
 >> lume -my-step
 🔥 Step: my-step
-➕ envvar: set MY_ENV=MY_VALUE
-👩‍💻 my-step >> echo ${MY_ENV}
+🔸 env: set MY_ENV=MY_VALUE
+💻 my-step >> echo ${MY_ENV}
     MY_VALUE
 ```
 
-Note that if you previously defined an *envvar*, it will be overwrote during the step.
+Note that if you previously defined an *env*, it will be overwrote during the step.
 
 You can also define variable from external filename (e.g [examples/env.yml](examples/env.yml) )
 
