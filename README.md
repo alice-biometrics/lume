@@ -3,7 +3,8 @@ lume :fire:  [![version](https://img.shields.io/github/release/alice-biometrics/
 
 <img src="https://github.com/alice-biometrics/custom-emojis/blob/master/images/alice_header.png" width=auto>
 
-A Python-based handy automation tool. Lume helps you with your daily dev operations and ease the CI & CD process. 
+A handy Python-based automation tool. 
+`lume` helps you sort your commands, allows you to abstract from the development environment and facilitates CI and CD workflows. 
 
 ## Installation :computer:
 
