@@ -4,6 +4,7 @@ show_exit_code: True
 
 install:
   run:
+    all-pre: echo "All install this requirements..."
     linux:
       - echo "Installing Ubuntu..."
       - echo "Updating repository..."
@@ -14,7 +15,8 @@ install:
       - echo "Installing MacOS M1..."
       - echo "Updating Brew M1..."
     windows: echo "Installing Windows..."
-    all: echo "Installed"
+    all: echo "Shared Operation"
+    all-post: echo "Installed..."
 
 steps:
   clean:
