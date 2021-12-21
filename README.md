@@ -139,7 +139,7 @@ install:
       - echo "Installed :fire:"
 ```
 
-Or maybe for compiling a library with differents flags depending on the `OS`.
+Or maybe for compiling a library with different flags depending on the `OS`.
 
 ```yaml
 steps:
@@ -157,6 +157,22 @@ steps:
       macos: echo "Building with MacOS Compiler..."
       windows: echo "Building with Windows Compiler..."
       all: echo "Checking Compiled Library..."
+```
+
+Use `all-pre` and `all-post` to define the order of shared operations between OS.
+
+```yml
+install:
+  run:
+    all-pre: echo "Install pre-requirement"
+    linux:
+       - sudo apt update
+       - sudo apt install myprogram
+     macos:
+       - brew install myprogram
+     macos-arm:
+       - brew install myprogram-arm
+     all-post: echo "Everything was successfully installed"
 ```
 
 #### Use several lume file
