@@ -1,14 +1,9 @@
-from typing import Dict
+from meiga import Error, Result, isSuccess
 
-from meiga import Result, Error, isSuccess
-
-from lume.src.domain.services.interface_killer_service import IKillerService
+from lume.src.domain.services.killer_service import KillerService
 
 
-class FakeKillerService(IKillerService):
-    def info(self) -> Dict:
-        return {"name": self.__class__.__name__}
-
+class FakeKillerService(KillerService):
     def execute(self, process: str) -> Result[bool, Error]:
         print("executing")
         return isSuccess

@@ -2,14 +2,14 @@ import os
 from zipfile import BadZipFile
 
 import requests
+from meiga import Failure, Result, Success
 from requests.auth import HTTPBasicAuth
-from meiga import Result, Success, Failure
 
 from lume.config import DependencyConfig
-from lume.src.domain.services.interface_logger import ILogger, INFO
+from lume.src.domain.services.logger import INFO, Logger
 from lume.src.infrastructure.services.setup.setup_errors import (
-    CrendentialsEnvError,
     BadZipFileError,
+    CrendentialsEnvError,
 )
 from lume.src.infrastructure.services.setup.setup_item import SetupItem
 from lume.src.infrastructure.services.setup.setup_utils import unzip_file
@@ -17,7 +17,7 @@ from lume.src.infrastructure.services.setup.setup_utils import unzip_file
 
 class SetupItemFile(SetupItem):
     def run(
-        self, name: str, dependency_config: DependencyConfig, logger: ILogger
+        self, name: str, dependency_config: DependencyConfig, logger: Logger
     ) -> Result:
         dependency_path = os.path.join(self.base_path, name)
         if os.path.exists(dependency_path):

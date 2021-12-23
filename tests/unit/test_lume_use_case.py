@@ -2,7 +2,7 @@ import pytest
 
 from lume.config import Config
 from lume.src.application.use_cases.lume_use_case import LumeUseCase
-from lume.src.domain.services.interface_logger import WARNING, HIGHLIGHT
+from lume.src.domain.services.logger import HIGHLIGHT, WARNING
 from lume.src.infrastructure.services.executor.fake_executor_service import (
     FakeExecutorService,
 )
@@ -17,17 +17,17 @@ from lume.src.infrastructure.services.setup.fake_setup_service import FakeSetupS
 @pytest.mark.parametrize("given_command", ["install", "setup"])
 def test_should_repr_as_expected_an_error_with_message(given_command):
 
-    given_empty_config = Config()
+    config = Config()
     fake_executor_service = FakeExecutorService()
     fake_detach_executor_service = FakeExecutorService()
     fake_detach_killer_service = FakeKillerService()
     fake_logger = FakeLogger()
     fake_setup_service = FakeSetupService(
-        setup_config=given_empty_config.steps.get("setup"), logger=fake_logger
+        setup_config=config.steps.get("setup"), logger=fake_logger
     )
 
     lume_use_case = LumeUseCase(
-        config=given_empty_config,
+        config=config,
         executor_service=fake_executor_service,
         detach_executor_service=fake_detach_executor_service,
         detach_killer_service=fake_detach_killer_service,

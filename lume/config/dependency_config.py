@@ -1,13 +1,12 @@
-from dataclasses import dataclass
-from dataclasses_json import dataclass_json
+from typing import Optional
+
+from pydantic import BaseModel
 
 
-@dataclass_json
-@dataclass
-class DependencyConfig:
+class DependencyConfig(BaseModel):
     type: str
     url: str
     auth_required: bool
-    credentials_env: str
     unzip: bool
-    overwrite: bool = False
+    credentials_env: Optional[str] = None
+    overwrite: Optional[bool] = False

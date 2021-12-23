@@ -8,9 +8,9 @@ from meiga.decorators import meiga
 
 from lume.config import Config
 from lume.src.application.use_cases.messages import get_colored_command_message
-from lume.src.domain.services.interface_executor_service import IExecutorService
-from lume.src.domain.services.interface_killer_service import IKillerService
-from lume.src.domain.services.interface_logger import (
+from lume.src.domain.services.executor_service import ExecutorService
+from lume.src.domain.services.killer_service import KillerService
+from lume.src.domain.services.logger import (
     COMMAND,
     ENVAR,
     ENVAR_WARNING,
@@ -19,9 +19,9 @@ from lume.src.domain.services.interface_logger import (
     INFO,
     WAITING,
     WARNING,
-    ILogger,
+    Logger,
 )
-from lume.src.domain.services.interface_setup_service import ISetupService
+from lume.src.domain.services.setup_service import SetupService
 
 
 class EmptyConfigError(Error):
@@ -53,11 +53,11 @@ class LumeUseCase:
     def __init__(
         self,
         config: Config,
-        executor_service: IExecutorService,
-        detach_executor_service: IExecutorService,
-        detach_killer_service: IKillerService,
-        setup_service: ISetupService,
-        logger: ILogger,
+        executor_service: ExecutorService,
+        detach_executor_service: ExecutorService,
+        detach_killer_service: KillerService,
+        setup_service: SetupService,
+        logger: Logger,
     ):
         self.config = config
         self.executor_service = executor_service

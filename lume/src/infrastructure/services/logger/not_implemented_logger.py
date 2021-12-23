@@ -1,6 +1,6 @@
-from lume.src.domain.services.interface_logger import ILogger
+from lume.src.domain.services.logger import Logger
 
 
-class NotImplementedLogger(ILogger):
+class NotImplementedLogger(Logger):
     def log(self, logging_level, message):
         pass

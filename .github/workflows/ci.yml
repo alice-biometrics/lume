@@ -14,7 +14,6 @@ on:
     branches:
       - master
 
-
 jobs:
   ci:
 
@@ -22,7 +21,7 @@ jobs:
       max-parallel: 4
       matrix:
         os: [macOS-latest, ubuntu-latest]
-        python-version: [3.7, 3.8]
+        python-version: [3.7, 3.8, 3.9, 3.10]
     runs-on: ${{matrix.os}}
 
     steps:
@@ -31,39 +30,19 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - uses: actions/cache@v1
-      if: startsWith(runner.os, 'Linux')
+    - uses: actions/cache@v2
       with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/dev.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-    - uses: actions/cache@v1
-      if: startsWith(runner.os, 'macOS')
-      with:
-        path: ~/Library/Caches/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/dev.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-    - uses: actions/cache@v1
-      if: startsWith(runner.os, 'Windows')
-      with:
-        path: ~\AppData\Local\pip\Cache
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/dev.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
+        path: ${{ env.pythonLocation }}
+        key: ${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('dev-requirements.txt') }}
     - name: Install dependencies
-      run: |
-        pip install -r requirements/dev.txt
+      run: pip install -r requirements/dev-requirements.txt
     - name: Lint with flake8
       run: |
-        pip install flake8
         black .
-        flake8 .
+        flake8 lume
     - name: Test with pytest
       run: |
         pip install -e .
-        pip install pytest
         pytest
     - name: End2end test
       env:
@@ -75,7 +54,6 @@ jobs:
         LUME_CONFIG_FILENAME: examples/lume-sample-os-command-specific.yml
       run: |
         lume -install -all
-
     - name: Check Installation (--no-binary)
       run: |
         pip install wheel

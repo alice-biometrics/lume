@@ -1,14 +1,15 @@
 import emoji
-from lume.src.domain.services.interface_logger import (
-    ILogger,
-    INFO,
-    WARNING,
-    ERROR,
-    HIGHLIGHT,
+
+from lume.src.domain.services.logger import (
     COMMAND,
     ENVAR,
     ENVAR_WARNING,
+    ERROR,
+    HIGHLIGHT,
+    INFO,
     WAITING,
+    WARNING,
+    Logger,
 )
 from lume.src.infrastructure.services.logger.colors import Colors
 
@@ -24,7 +25,7 @@ LOGGING_LEVEL = {
 }
 
 
-class EmojisLogger(ILogger):
+class EmojisLogger(Logger):
     def log(self, logging_level, message):
         start, end = self.color_provider(logging_level)
         print(f"{start}{LOGGING_LEVEL[logging_level]} {message.rstrip()}{end}")

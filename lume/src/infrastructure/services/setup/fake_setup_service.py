@@ -1,24 +1,19 @@
-from typing import Dict
-
 from meiga import Success
 
 from lume.config import SetupConfig
-from lume.src.domain.services.interface_logger import ILogger, INFO, WARNING
-from lume.src.domain.services.interface_setup_service import ISetupService
+from lume.src.domain.services.logger import INFO, WARNING, Logger
+from lume.src.domain.services.setup_service import SetupService
 
 
-class FakeSetupService(ISetupService):
-    def __init__(self, setup_config: SetupConfig, logger: ILogger):
+class FakeSetupService(SetupService):
+    def __init__(self, setup_config: SetupConfig, logger: Logger):
         self.setup_config = setup_config
         self.logger = logger
-
-    def info(self) -> Dict:
-        return {"name": self.__class__.__name__}
 
     def execute(self):
 
         if not self.setup_config:
-            self.logger.log(WARNING, f"Empty config for setup")
+            self.logger.log(WARNING, "Empty config for setup")
             return Success()
 
         self.logger.log(INFO, f"setup: output: {self.setup_config.output}")

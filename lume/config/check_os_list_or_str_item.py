@@ -49,7 +49,9 @@ def check_os_list_or_str_item(kdict, key, required=False, suffix=""):
         all_pre_commands = check_list_or_str_item(kvalue, "all-pre")
         all_post_commands = check_list_or_str_item(kvalue, "all-post")
         all_commands = check_list_or_str_item(kvalue, "all")
-        value = concat_list([all_pre_commands, platform_commands, all_commands, all_post_commands])
+        value = concat_list(
+            [all_pre_commands, platform_commands, all_commands, all_post_commands]
+        )
     else:
         value = check_list_or_str_item(kdict, key)
 

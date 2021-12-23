@@ -1,8 +1,6 @@
-meiga>=1.2.12
-dataclasses>=0.7;python_version<"3.7"
-dataclasses-json>=0.3.6
-backports-datetime-fromisoformat>=1.0.0;python_version<"3.7"
-pyyaml==5.4.1
-emoji==1.4.2
-google-cloud-storage<=1.41.1,>=1.25.0
-google-api-core<=1.31.1
+meiga>=1.2.12,<2*
+pydantic>=1.8.2,<2*
+pyyaml>=5.4.1,<6*
+emoji==1.6.1,<2*
+google-cloud-storage>=1.43.0,<2*
+google-api-core>=2.3.2,<3*

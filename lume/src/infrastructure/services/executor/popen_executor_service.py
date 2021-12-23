@@ -1,17 +1,14 @@
-from subprocess import Popen, PIPE
-from typing import Dict
+from subprocess import PIPE, Popen
 
-from meiga import Result, Error, isSuccess, isFailure
-from lume.src.domain.services.interface_executor_service import IExecutorService
-from lume.src.domain.services.interface_logger import ILogger, ERROR, INFO, WARNING
+from meiga import Error, Result, isFailure, isSuccess
+
+from lume.src.domain.services.executor_service import ExecutorService
+from lume.src.domain.services.logger import ERROR, INFO, WARNING, Logger
 
 
-class PopenExecutorService(IExecutorService):
-    def __init__(self, logger: ILogger):
+class PopenExecutorService(ExecutorService):
+    def __init__(self, logger: Logger):
         self.logger = logger
-
-    def info(self) -> Dict:
-        return {"name": self.__class__.__name__}
 
     def execute(self, command: str, cwd: str) -> Result[bool, Error]:
 
