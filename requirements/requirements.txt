@@ -1,6 +1,6 @@
-meiga>=1.2.12,<2*
-pydantic>=1.8.2,<2*
-pyyaml>=5.4.1,<6*
-emoji==1.6.1,<2*
-google-cloud-storage>=1.43.0,<2*
-google-api-core>=2.3.2,<3*
+meiga<2*
+pydantic<2*
+pyyaml<6*
+emoji<2*
+google-cloud-storage<2*
+google-api-core<3*

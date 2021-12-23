@@ -22,7 +22,7 @@ setup(
     long_description_content_type="text/markdown",
     keywords=["lume"],
     url="https://github.com/alice-biometrics/lume",
-    author="ALiCE Biometrics",
+    author="Alice Biometrics",
     author_email="support@alicebiometrics.com",
     license="MIT",
     install_requires=required,

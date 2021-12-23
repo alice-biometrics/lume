@@ -79,4 +79,4 @@ target/
 
 *.idea
 .pytest_cache
-test_deps
+test-deps
