@@ -1,11 +1,10 @@
-from typing import Dict
 import os
 
-from meiga import Success, Failure
+from meiga import Failure, Success
 
 from lume.config import SetupConfig
-from lume.src.domain.services.interface_logger import ILogger, INFO, WARNING
-from lume.src.domain.services.interface_setup_service import ISetupService
+from lume.src.domain.services.logger import INFO, WARNING, Logger
+from lume.src.domain.services.setup_service import SetupService
 from lume.src.infrastructure.services.setup.setup_errors import (
     ItemTypeNotSupportedError,
 )
@@ -13,8 +12,8 @@ from lume.src.infrastructure.services.setup.setup_item_bucket import SetupItemBu
 from lume.src.infrastructure.services.setup.setup_item_file import SetupItemFile
 
 
-class SetupService(ISetupService):
-    def __init__(self, setup_config: SetupConfig, logger: ILogger):
+class BucketSetupService(SetupService):
+    def __init__(self, setup_config: SetupConfig, logger: Logger):
         if not setup_config:
             return
 
@@ -26,13 +25,10 @@ class SetupService(ISetupService):
             "bucket": SetupItemBucket(setup_config.output),
         }
 
-    def info(self) -> Dict:
-        return {"name": self.__class__.__name__}
-
     def execute(self):
 
         if not self.setup_config:
-            self.logger.log(WARNING, f"Empty config for setup")
+            self.logger.log(WARNING, "Empty config for setup")
             return
 
         self.logger.log(INFO, f"setup: output: {self.setup_config.output}")

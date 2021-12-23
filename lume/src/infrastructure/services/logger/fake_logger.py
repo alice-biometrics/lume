@@ -1,7 +1,7 @@
-from lume.src.domain.services.interface_logger import ILogger
+from lume.src.domain.services.logger import Logger
 
 
-class FakeLogger(ILogger):
+class FakeLogger(Logger):
     def __init__(self):
         self.logging_messages = []
 

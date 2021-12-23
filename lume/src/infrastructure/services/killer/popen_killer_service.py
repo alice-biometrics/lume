@@ -1,18 +1,15 @@
-from typing import Dict
 from subprocess import Popen
-from meiga import Result, Error, isSuccess
-from lume.src.domain.services.interface_killer_service import IKillerService
-from lume.src.domain.services.interface_logger import ILogger, COMMAND
+
+from meiga import Error, Result, isSuccess
 
 from lume.src.application.use_cases.messages import get_colored_command_message
+from lume.src.domain.services.killer_service import KillerService
+from lume.src.domain.services.logger import COMMAND, Logger
 
 
-class PopenKillerService(IKillerService):
-    def __init__(self, logger: ILogger):
+class PopenKillerService(KillerService):
+    def __init__(self, logger: Logger):
         self.logger = logger
-
-    def info(self) -> Dict:
-        return {"name": self.__class__.__name__}
 
     def execute(self, process) -> Result[bool, Error]:
         if process and isinstance(process, Popen):

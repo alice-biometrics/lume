@@ -1,20 +1,20 @@
 import logging
 from typing import Callable
 
-from lume.src.domain.services.interface_logger import (
-    ILogger,
-    INFO,
+from lume.src.domain.services.logger import (
+    COMMAND,
+    CRITICAL,
+    DEBUG,
     ERROR,
+    FATAL,
+    INFO,
     WARN,
     WARNING,
-    DEBUG,
-    CRITICAL,
-    FATAL,
-    COMMAND,
+    Logger,
 )
 
 
-class LoggingBasedLogger(ILogger):
+class LoggingBasedLogger(Logger):
     def __init__(
         self,
         logger_name: str,

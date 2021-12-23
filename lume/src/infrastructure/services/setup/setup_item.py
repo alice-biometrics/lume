@@ -1,9 +1,9 @@
-from abc import abstractmethod, ABCMeta
+from abc import ABCMeta, abstractmethod
 
 from meiga import Result
 
 from lume.config import DependencyConfig
-from lume.src.domain.services.interface_logger import ILogger
+from lume.src.domain.services.logger import Logger
 
 
 class SetupItem(object):
@@ -15,6 +15,6 @@ class SetupItem(object):
 
     @abstractmethod
     def run(
-        self, name: str, dependency_config: DependencyConfig, logger: ILogger
+        self, name: str, dependency_config: DependencyConfig, logger: Logger
     ) -> Result:
         raise NotImplementedError

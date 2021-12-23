@@ -1,8 +1,8 @@
 import os
-from dataclasses import dataclass
 from typing import Dict, List, Optional
 
 import yaml
+from pydantic import BaseModel
 from yaml.parser import ParserError
 
 from lume.config.check_list_or_str_item import check_list_or_str_item
@@ -20,15 +20,14 @@ def read_env_from_file(filename):
         return {}
 
 
-@dataclass
-class StepConfig:
+class StepConfig(BaseModel):
     run: List[str]
     cwd: Optional[str] = None
     envs: Optional[Dict[str, str]] = None
     setup: Optional[List[str]] = None
     teardown: Optional[List[str]] = None
     setup_detach: Optional[Dict] = None
-    wait_seconds: Optional[str] = None
+    wait_seconds: Optional[int] = None
     wait_http_200: Optional[str] = None
     overwrote_envs: Optional[List[str]] = None
 

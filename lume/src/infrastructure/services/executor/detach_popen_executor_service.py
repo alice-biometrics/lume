@@ -1,17 +1,14 @@
 from subprocess import Popen
-from typing import Dict
 
-from meiga import Result, Error, Success
-from lume.src.domain.services.interface_executor_service import IExecutorService
-from lume.src.domain.services.interface_logger import ILogger, INFO
+from meiga import Error, Result, Success
+
+from lume.src.domain.services.executor_service import ExecutorService
+from lume.src.domain.services.logger import INFO, Logger
 
 
-class DetachPopenExecutorService(IExecutorService):
-    def __init__(self, logger: ILogger):
+class DetachPopenExecutorService(ExecutorService):
+    def __init__(self, logger: Logger):
         self.logger = logger
-
-    def info(self) -> Dict:
-        return {"name": self.__class__.__name__}
 
     def execute(
         self, command: str, cwd: str, log_filename="setup_detach.log"

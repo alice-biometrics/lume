@@ -1,13 +1,13 @@
 import os
 from zipfile import BadZipFile
 
-from google.api_core.exceptions import NotFound
+from google.api_core.exceptions import Forbidden, NotFound
 from google.auth.exceptions import DefaultCredentialsError
 from google.cloud import storage
 from meiga import Failure, Result, Success
 
 from lume.config import DependencyConfig
-from lume.src.domain.services.interface_logger import INFO, ILogger
+from lume.src.domain.services.logger import INFO, Logger
 from lume.src.infrastructure.services.setup.setup_errors import (
     BadZipFileError,
     BlobNotFoundError,
@@ -19,7 +19,7 @@ from lume.src.infrastructure.services.setup.setup_utils import unzip_file
 
 class SetupItemBucket(SetupItem):
     def run(
-        self, name: str, dependency_config: DependencyConfig, logger: ILogger
+        self, name: str, dependency_config: DependencyConfig, logger: Logger
     ) -> Result:
         dependency_path = os.path.join(self.base_path, name)
         if not os.path.exists(dependency_path):
@@ -58,6 +58,8 @@ class SetupItemBucket(SetupItem):
             )
         except NotFound:
             return Failure(BlobNotFoundError(dependency_config.url))
+        except Forbidden:
+            return Failure(CrendentialsEnvError(dependency_config.credentials_env))
 
         if dependency_config.unzip:
             try:

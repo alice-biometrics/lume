@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 
 CRITICAL = 50
 FATAL = CRITICAL
@@ -15,10 +15,7 @@ NOTSET = 0
 HIGHLIGHT = 100
 
 
-class ILogger:
-
-    __metaclass__ = ABCMeta
-
+class Logger(ABC):
     @abstractmethod
     def log(self, logging_level: int, message: str):
         return NotImplementedError

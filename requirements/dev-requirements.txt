@@ -7,5 +7,3 @@ pytest-mock == 1.7.1
 pre-commit==2.13.0
 twine==1.13.0
 pytest-clarity==0.2.0a1
-google-cloud-storage<=1.41.1,>=1.25.0
-google-api-core<=1.31.1
