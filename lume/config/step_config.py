@@ -27,7 +27,7 @@ class StepConfig(BaseModel):
     setup: Optional[List[str]] = None
     teardown: Optional[List[str]] = None
     setup_detach: Optional[Dict] = None
-    wait_seconds: Optional[str] = None
+    wait_seconds: Optional[int] = None
     wait_http_200: Optional[str] = None
     overwrote_envs: Optional[List[str]] = None
 
