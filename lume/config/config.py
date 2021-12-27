@@ -35,7 +35,7 @@ class Config:
             self.steps = {}
             for step_name, step in yaml_dict["steps"].items():
                 if step_name == "setup":
-                    self.steps[step_name] = SetupConfig(deps=step)
+                    self.steps[step_name] = SetupConfig(**step)
                 else:
                     self.steps[step_name] = StepConfig.from_dict(step)
                     self.steps[step_name].add_shared_env(shared_envs)
