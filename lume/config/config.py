@@ -1,3 +1,4 @@
+import os
 from typing import Dict, List
 
 import yaml
@@ -11,6 +12,7 @@ from lume.config.step_config import StepConfig
 class Config:
     def __init__(self, yaml_dict: Dict = None):
         if yaml_dict is None:
+            self.required_env = None
             self.name = None
             self.settings = {"show_exit_code": False}
             self.install = None
@@ -22,6 +24,7 @@ class Config:
                     "show_exit_code", False
                 )
             }
+            self.required_env = yaml_dict.get("required_env")
             shared_envs = get_envs(yaml_dict)
             if yaml_dict.get("install"):
                 self.install = InstallConfig.from_dict(yaml_dict.get("install"))
@@ -38,6 +41,14 @@ class Config:
                     self.steps[step_name].add_shared_env(shared_envs)
 
             self.add_other_steps(yaml_dict, shared_envs)
+
+    def check_requirements(self):
+        if self.required_env:
+            for env, description in self.required_env.items():
+                if env not in os.environ:
+                    raise EnvironmentError(
+                        f"{env} environment variable is mandatory. {description}"
+                    )
 
     def get_steps(self) -> List[str]:
         return list(self.steps.keys())
