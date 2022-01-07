@@ -6,13 +6,13 @@ lume 🔥  [![version](https://img.shields.io/github/release/alice-biometrics/lu
 A handy Python-based automation tool. 
 `lume` helps you sort your commands, allows you to abstract from the development environment and facilitates CI and CD workflows. 
 
-## Installation :computer:
+## Installation 💻
 
 ``` bash
 pip install lume
 ```
 
-## Getting Started :chart_with_upwards_trend:	
+## Getting Started 📈	
 
 **lume** is a simple way to organize your daily software development operations (installation, setup, code compilation, test, etc..)
 
@@ -448,13 +448,13 @@ steps:
     run: echo "Done"
 ```
 
-## Acknowledgements :raised_hands:
+## Acknowledgements 🙌
 
 `bowie` inspired us! 👨‍🎤 :clap:
 
 Thanks to `bowie` development team in [Gradiant](https://github.com/Gradiant).
 
 
-## Contact :mailbox_with_mail:
+## Contact 📬
 
 support@alicebiometrics.com
