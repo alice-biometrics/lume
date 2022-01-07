@@ -1,18 +1,18 @@
-lume :fire:  [![version](https://img.shields.io/github/release/alice-biometrics/lume/all.svg)](https://github.com/alice-biometrics/lume/releases) [![ci](https://github.com/alice-biometrics/lume/workflows/ci/badge.svg)](https://github.com/alice-biometrics/lume/actions) [![pypi](https://img.shields.io/pypi/dm/lume)](https://pypi.org/project/lume/)
+lume 🔥  [![version](https://img.shields.io/github/release/alice-biometrics/lume/all.svg)](https://github.com/alice-biometrics/lume/releases) [![ci](https://github.com/alice-biometrics/lume/workflows/ci/badge.svg)](https://github.com/alice-biometrics/lume/actions) [![pypi](https://img.shields.io/pypi/dm/lume)](https://pypi.org/project/lume/)
 =====
 
-<img src="https://github.com/alice-biometrics/custom-emojis/blob/master/images/alice_header.png" width=auto>
+<img src="https://github.com/alice-biometrics/custom-emojis/blob/master/images/alice_header.png?raw=true" width=auto>
 
 A handy Python-based automation tool. 
 `lume` helps you sort your commands, allows you to abstract from the development environment and facilitates CI and CD workflows. 
 
-## Installation :computer:
+## Installation 💻
 
-~~~
+``` bash
 pip install lume
-~~~
+```
 
-## Getting Started :chart_with_upwards_trend:	
+## Getting Started 📈	
 
 **lume** is a simple way to organize your daily software development operations (installation, setup, code compilation, test, etc..)
 
@@ -175,9 +175,9 @@ install:
      all-post: echo "Everything was successfully installed"
 ```
 
-#### Use several lume file
+#### Use several lume files
 
-Imagine you have multiple steps and you want to split them in several files. 
+Imagine you have multiple steps, and you want to split them in several files. 
 You can do it using the `other_steps` option. Just add the following code to your root `lume.yml`
 
 ```yaml
@@ -242,7 +242,7 @@ steps:
 
 #### Setup Step
 
-Use `setup` step to manage to download and unzip dependencies form external resources (e.g `ftp` servers, `buckets`, etc..)
+Use `setup` step to manage downloading and unzipping dependencies form external resources (e.g `ftp` servers, `buckets`, etc..)
 
 ```yml
 steps:
@@ -303,7 +303,25 @@ steps:
 
 #### Set environment variables
 
-`lume` allows the definition of shared envs or specific envs for every step.
+`lume` helps you on environment variables management:
+* Set required environment variables
+* Define shared envs for all the steps
+* Define some envs for a specific step
+
+###### Required envs
+
+Define some required envs. This prevents failure and will raise a clear error (`EnvironmentError`).
+
+```yml
+name: lume-sample
+
+required_env:
+  MY_REQUIRED_ENV: Neccesary to install private packages # example
+  
+steps:
+  my-step:
+    run: echo ${MY_REQUIRED_ENV}
+```
 
 ###### Shared envs
 
@@ -430,13 +448,13 @@ steps:
     run: echo "Done"
 ```
 
-## Acknowledgements :raised_hands:
+## Acknowledgements 🙌
 
 `bowie` inspired us! 👨‍🎤 :clap:
 
 Thanks to `bowie` development team in [Gradiant](https://github.com/Gradiant).
 
 
-## Contact :mailbox_with_mail:
+## Contact 📬
 
 support@alicebiometrics.com

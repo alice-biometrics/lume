@@ -1,0 +1,15 @@
+name: lume-sample
+
+show_exit_code: True
+
+env:
+  MY_REQUIRED_ENV: VALUE
+
+required_env:
+  MY_REQUIRED_ENV: Neccesary to install private packages
+
+install:
+  run: echo "Installing"
+steps:
+  example:
+    run: echo "Example"
