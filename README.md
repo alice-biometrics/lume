@@ -208,7 +208,7 @@ $ lume -other:step-1
 You can setup some additional and specific env vars for these steps:
 
 ```yaml
-envs:
+env:
   MY_OTHER_ENV: MY_VALUE
 
 steps:
@@ -312,7 +312,7 @@ Define your shared environment variables with `envs`
 ```yml
 name: lume-sample
 
-envs:
+env:
    MY_ENV: MY_VALUE
 steps:
   my-step:
@@ -341,7 +341,7 @@ install:
 
 steps:
   my-step:
-    envs:
+    env:
       MY_ENV: MY_VALUE
     run: echo ${MY_ENV}
 ```
@@ -363,7 +363,7 @@ You can also define variable from external filename (e.g [examples/env.yml](exam
 ```yml
 steps:
   envs-file-example:
-    envs_file: examples/env.yml
+    env_file: examples/env.yml
     run: echo "${MY_ENV}"
 ```
 
@@ -423,7 +423,7 @@ e.g
 ```yml
 steps:
   wait-example-http:
-    envs: 
+    env: 
        LUME_WAIT_HTTP_200_NUM_MAX_ATTEMPTS: 10
        LUME_WAIT_HTTP_200_WAIT_SECONDS_RETRY: 0.5
     wait_http_200: https://www.google.com

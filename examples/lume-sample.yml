@@ -2,7 +2,7 @@ name: lume-sample
 
 show_exit_code: True
 
-envs:
+env:
   TEST: SHARED_VALUE
 
 envs_file: examples/env.yml
@@ -25,20 +25,21 @@ steps:
     run:
       - echo "This is an error" >>/dev/stderr
   envs-example:
-    envs:
+    env:
       TEST: SHARED_STEP_VALUE
       MY_MANAGER: LUME
       LUME_CONFIG_FILENAME: filename
     run:
+      - echo "${TEST}"
       - echo "${MY_MANAGER}"
       - echo "${LUME_CONFIG_FILENAME}"
   envs-file-example:
-    envs_file: examples/env.yml
+    env_file: examples/env.yml
     run:
       - echo "${MY_MANAGER}"
       - echo "${LUME_CONFIG_FILENAME}"
   setup-teardown-example:
-    envs:
+    env:
       SETUP_MSG: Setup
       TEADOWN_MSG: Teardown
       RUN_MSG: Run

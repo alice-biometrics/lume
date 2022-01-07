@@ -2,9 +2,10 @@ from typing import Dict, List
 
 import yaml
 
+from lume.config.get_envs import get_envs
 from lume.config.install_config import InstallConfig
 from lume.config.setup_config import SetupConfig
-from lume.config.step_config import StepConfig, read_env_from_file
+from lume.config.step_config import StepConfig
 
 
 class Config:
@@ -21,11 +22,7 @@ class Config:
                     "show_exit_code", False
                 )
             }
-
-            shared_envs = yaml_dict.get("envs", {})
-            envs_from_file = read_env_from_file(yaml_dict.get("envs_file"))
-            shared_envs.update(envs_from_file)
-
+            shared_envs = get_envs(yaml_dict)
             if yaml_dict.get("install"):
                 self.install = InstallConfig.from_dict(yaml_dict.get("install"))
             else:
@@ -57,9 +54,7 @@ class Config:
         for key, filename in other_steps.items():
             with open(filename) as file:
                 yaml_dict = yaml.load(file, Loader=yaml.FullLoader)
-                other_shared_envs = yaml_dict.get("envs", {})
-                envs_from_file = read_env_from_file(yaml_dict.get("envs_file"))
-                other_shared_envs.update(envs_from_file)
+                other_shared_envs = get_envs(yaml_dict)
                 shared_envs.update(other_shared_envs)
                 for step_name, step in yaml_dict["steps"].items():
                     step_name = f"{key}:{step_name}"
