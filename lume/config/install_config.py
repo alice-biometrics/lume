@@ -3,6 +3,7 @@ from typing import Dict, List, Optional
 from pydantic import BaseModel
 
 from lume.config.check_os_list_or_str_item import check_os_list_or_str_item
+from lume.config.get_envs import get_envs
 
 
 class InstallConfig(BaseModel):
@@ -18,6 +19,5 @@ class InstallConfig(BaseModel):
     @staticmethod
     def from_dict(kdict):
         run = check_os_list_or_str_item(kdict, "run")
-        return InstallConfig(
-            run=run if run else [], cwd=kdict.get("cwd"), envs=kdict.get("envs", {})
-        )
+        envs = get_envs(kdict)
+        return InstallConfig(run=run if run else [], cwd=kdict.get("cwd"), envs=envs)
