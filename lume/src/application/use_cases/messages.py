@@ -1,7 +1,7 @@
 from lume.src.infrastructure.services.logger.colors import Colors
 
 
-def get_colored_command_message(command, cwd, step, prefix=None):
+def get_colored_command_message(command, cwd, step, prefix=None) -> str:
     message = (
         f"{Colors.OKBLUE}{step}{Colors.ENDC} {Colors.BOLD}>> {command}{Colors.ENDC}"
         if not cwd

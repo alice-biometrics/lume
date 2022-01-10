@@ -16,7 +16,6 @@ from lume.src.infrastructure.services.setup.setup_service import BucketSetupServ
 class UseCaseBuilder:
     @staticmethod
     def lume(config: Config):
-
         default_logger = EmojisLogger()
         default_executor_service = PopenExecutorService(logger=default_logger)
         default_detach_executor_service = DetachPopenExecutorService(
