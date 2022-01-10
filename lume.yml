@@ -35,7 +35,7 @@ steps:
   check-requirements:
     run: safety check -r requirements/requirements.txt
   static-analysis:
-    run: mypy $PACKAGE_NAME #| true # now we can skip it
+    run: mypy $PACKAGE_NAME | true # now we can skip it
   coverage:
     run: pytest -c pytest.coverage.ini
   test:
