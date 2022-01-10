@@ -4,7 +4,7 @@ import sys
 import traceback
 
 import yaml
-from meiga import Result, Error, Success, Failure, isSuccess
+from meiga import Error, Failure, Result, Success, isSuccess
 from yaml.parser import ParserError
 
 from lume import __version__
@@ -38,7 +38,7 @@ def get_config(filename: str = r"lume.yml") -> Result[Config, Error]:
 def on_failure(config_file):
     print(f"Cannot load lume configuration from: {config_file}")
     print(
-        f"If you aren't using lume in the same directory as a lume.yml file, please use LUME_CONFIG_FILENAME env var to configure it"
+        "If you aren't using lume in the same directory as a lume.yml file, please use LUME_CONFIG_FILENAME env var to configure it"
     )
 
 

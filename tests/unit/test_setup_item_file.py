@@ -27,7 +27,7 @@ class TestSetupItemFile:
         file_setuper = SetupItemFile(base_path=TEMPORARY_FOLDER)
         dependency_config = DependencyConfig(
             type="file",
-            url="https://raw.githubusercontent.com/alice-biometrics/lume/master/README.md",
+            url="https://raw.githubusercontent.com/alice-biometrics/lume/main/README.md",
             auth_required=False,
             credentials_env=None,
             unzip=False,
@@ -37,11 +37,10 @@ class TestSetupItemFile:
         assert os.path.exists(f"{TEMPORARY_FOLDER}/test-item/README.md")
 
     def should_download_a_valid_zip_without_auth(self):
-
         file_setuper = SetupItemFile(base_path=TEMPORARY_FOLDER)
         dependency_config = DependencyConfig(
             type="file",
-            url="https://github.com/alice-biometrics/lume/archive/refs/heads/master.zip",
+            url="https://github.com/alice-biometrics/lume/archive/refs/heads/main.zip",
             auth_required=False,
             credentials_env=None,
             unzip=True,
@@ -49,7 +48,7 @@ class TestSetupItemFile:
         result = file_setuper.run("test-item", dependency_config, EmojisLogger())
         assert_success(result)
         assert len(os.listdir(f"{TEMPORARY_FOLDER}/test-item")) > 0
-        assert not os.path.exists(f"{TEMPORARY_FOLDER}/test-item/master.zip")
+        assert not os.path.exists(f"{TEMPORARY_FOLDER}/test-item/main.zip")
 
     def should_return_error_when_wrong_url_zip_file(self):
         file_setuper = SetupItemFile(base_path=TEMPORARY_FOLDER)

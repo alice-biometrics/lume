@@ -1,6 +1,6 @@
 import os
-import zipfile
 import shutil
+import zipfile
 
 
 def unzip_file(dst: str, url: str):

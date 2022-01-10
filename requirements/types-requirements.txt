@@ -1,0 +1,3 @@
+types-PyYAML
+types-emoji
+types-requests

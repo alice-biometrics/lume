@@ -7,3 +7,5 @@ pytest-mock == 1.7.1
 pre-commit==2.13.0
 twine==1.13.0
 pytest-clarity==0.2.0a1
+mypy==0.931
+safety==1.10.3

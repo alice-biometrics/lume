@@ -4,15 +4,9 @@ on:
   pull_request:
     paths-ignore:
       - '*.md'
-      - 'VERSION'
+      - 'lume/VERSION'
     branches: 
-      - master
-  push:
-    paths-ignore:
-      - '*.md'
-      - 'VERSION'
-    branches:
-      - master
+      - main
 
 jobs:
   ci:
@@ -34,16 +28,18 @@ jobs:
       with:
         path: ${{ env.pythonLocation }}
         key: ${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('dev-requirements.txt') }}
-    - name: Install dependencies
-      run: pip install -r requirements/dev-requirements.txt
-    - name: Lint with flake8
-      run: |
-        black .
-        flake8 lume
-    - name: Test with pytest
+    - name: Install
       run: |
         pip install -e .
-        pytest
+        lume -install
+    - name: Lint
+      run: lume -lint
+    - name: Static Analysis
+      run: lume -static-analysis
+    - name: Tests
+      run: lume -test
+    - name: Check Installation (--no-binary)
+      run: lume -check-no-binary-installation
     - name: End2end test
       env:
         LUME_CONFIG_FILENAME: examples/lume-sample.yml
@@ -65,9 +61,4 @@ jobs:
       env:
         LUME_CONFIG_FILENAME: examples/lume-required-env-without-env.yml
       run: lume -install -all | true
-    - name: Check Installation (--no-binary)
-      run: |
-        pip install wheel
-        python setup.py sdist
-        pip wheel --no-binary lume -w /tmp/ext dist/lume-*.tar.gz
 

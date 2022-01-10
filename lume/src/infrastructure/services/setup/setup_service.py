@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 from meiga import Failure, Success
 
@@ -13,7 +14,7 @@ from lume.src.infrastructure.services.setup.setup_item_file import SetupItemFile
 
 
 class BucketSetupService(SetupService):
-    def __init__(self, setup_config: SetupConfig, logger: Logger):
+    def __init__(self, setup_config: Optional[SetupConfig], logger: Logger):
         if not setup_config:
             return
 

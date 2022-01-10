@@ -16,7 +16,7 @@ class Config:
             self.name = None
             self.settings = {"show_exit_code": False}
             self.install = None
-            self.steps = {}
+            self.steps = dict()
         else:
             self.name = yaml_dict.get("name")
             self.settings = {
