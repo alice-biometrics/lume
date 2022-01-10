@@ -84,7 +84,7 @@ class LumeUseCase:
                     .unwrap_or_return()
                 )
                 self.setup_env(step)
-                self.config.check_requirements()
+                self.config.check_requirements().unwrap_or_return()
                 processes = (
                     self.run_setup_detach(step, cwd)
                     .handle(on_failure=self.run_teardown, failure_args=(cwd, step))

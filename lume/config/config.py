@@ -2,9 +2,11 @@ import os
 from typing import Dict, List
 
 import yaml
+from meiga import BoolResult, Failure, isSuccess
 
 from lume.config.get_envs import get_envs
 from lume.config.install_config import InstallConfig
+from lume.config.required_env_error import RequiredEnvError
 from lume.config.setup_config import SetupConfig
 from lume.config.step_config import StepConfig
 
@@ -42,13 +44,15 @@ class Config:
 
             self.add_other_steps(yaml_dict, shared_envs)
 
-    def check_requirements(self):
+    def check_requirements(self) -> BoolResult:
         if self.required_env:
+            unmeet_required_env_messages = dict()
             for env, description in self.required_env.items():
                 if env not in os.environ:
-                    raise EnvironmentError(
-                        f"{env} environment variable is mandatory. {description}"
-                    )
+                    unmeet_required_env_messages[env] = description
+            if len(unmeet_required_env_messages) > 0:
+                return Failure(RequiredEnvError(unmeet_required_env_messages))
+        return isSuccess
 
     def get_steps(self) -> List[str]:
         return list(self.steps.keys())

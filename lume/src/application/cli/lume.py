@@ -11,7 +11,9 @@ from lume import __version__
 from lume.config import Config
 from lume.config.config_file_not_found_error import ConfigFileNotFoundError
 from lume.config.config_file_not_valid_error import ConfigFileNotValidError
+from lume.config.required_env_error import RequiredEnvError
 from lume.src.application.use_cases.use_case_builder import UseCaseBuilder
+from lume.src.infrastructure.services.logger.colors import Colors
 
 
 def has_args(args):
@@ -35,11 +37,23 @@ def get_config(filename: str = r"lume.yml") -> Result[Config, Error]:
         return Failure(ConfigFileNotValidError(message))
 
 
-def on_failure(config_file):
-    print(f"Cannot load lume configuration from: {config_file}")
+def on_config_failure(config_file):
+    print(f"❌  Cannot load lume configuration from: {config_file}")
     print(
-        "If you aren't using lume in the same directory as a lume.yml file, please use LUME_CONFIG_FILENAME env var to configure it"
+        "❌  If you aren't using lume in the same directory as a lume.yml file, please use LUME_CONFIG_FILENAME env var to configure it"
     )
+
+
+def on_execution_failure(result: Result):
+    if isinstance(result.value, RequiredEnvError):
+        unmeet_required_env_messages = result.value.unmeet_required_env_messages
+        for env, description in unmeet_required_env_messages.items():
+            print(
+                f"❌  {Colors.FAIL}{env}{Colors.ENDC} environment variable is mandatory ➜ {description}"
+            )
+        print(
+            f"❌  Please, review required env variables defined in {Colors.OKGREEN}lume.yml{Colors.ENDC} ({Colors.OKBLUE}required_env{Colors.ENDC})"
+        )
 
 
 def main():
@@ -47,7 +61,7 @@ def main():
 
     config_file = os.environ.get("LUME_CONFIG_FILENAME", "lume.yml")
     config = get_config(filename=config_file).unwrap_or_else(
-        on_failure=on_failure, failure_args=(config_file,)
+        on_failure=on_config_failure, failure_args=(config_file,)
     )
 
     if config:
@@ -106,7 +120,9 @@ def main():
             selected_actions = [
                 action.replace("command_", "") for action in selected_actions
             ]
-            result = lume_use_case.execute(steps=selected_actions)
+            result = lume_use_case.execute(steps=selected_actions).handle(
+                on_failure=on_execution_failure, failure_args=(Result.__id__,)
+            )
 
     exit_code = 1
     if result.is_success:
