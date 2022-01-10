@@ -12,37 +12,37 @@ from lume.config.step_config import StepConfig
 
 
 class Config:
-    def __init__(self, yaml_dict: Dict = None):
-        if yaml_dict is None:
+    def __init__(self, lume_dict: Dict = None):
+        if lume_dict is None:
             self.required_env = None
             self.name = None
             self.settings = {"show_exit_code": False}
             self.install = None
             self.steps = dict()
         else:
-            self.name = yaml_dict.get("name")
+            self.name = lume_dict.get("name")
             self.settings = {
-                "show_exit_code": yaml_dict.get("settings", {}).get(
+                "show_exit_code": lume_dict.get("settings", {}).get(
                     "show_exit_code", False
                 )
             }
-            self.required_env = yaml_dict.get("required_env")
-            shared_envs = get_envs(yaml_dict)
-            if yaml_dict.get("install"):
-                self.install = InstallConfig.from_dict(yaml_dict.get("install"))
+            self.required_env = lume_dict.get("required_env")
+            shared_envs = get_envs(lume_dict)
+            if lume_dict.get("install"):
+                self.install = InstallConfig.from_dict(lume_dict.get("install"))
             else:
                 self.install = InstallConfig(run=[])
             self.install.add_shared_env(shared_envs)
 
             self.steps = {}
-            for step_name, step in yaml_dict["steps"].items():
+            for step_name, step in lume_dict["steps"].items():
                 if step_name == "setup":
                     self.steps[step_name] = SetupConfig(**step)
                 else:
                     self.steps[step_name] = StepConfig.from_dict(step)
                     self.steps[step_name].add_shared_env(shared_envs)
 
-            self.add_other_steps(yaml_dict, shared_envs)
+            self.add_other_steps(lume_dict, shared_envs)
 
     def check_requirements(self) -> BoolResult:
         if self.required_env:
