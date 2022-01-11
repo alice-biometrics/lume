@@ -25,6 +25,9 @@ name: lume-sample
 
 install:
   run: echo "Installing..."
+  
+uninstall:
+  run: echo "Uninstalling..."
 
 steps:
   clean:
