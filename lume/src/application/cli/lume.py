@@ -60,14 +60,13 @@ def on_execution_failure(result: Result):
 
 def main():
     start = time.time()
-
-    print(
-        f" 🔥 lume {__version__} ({platform.system()} -- Python {platform.python_version()}) ".center(
-            shutil.get_terminal_size().columns - 1, "="
-        )
-    )
-
+    header = f" 🔥 lume {__version__} ({platform.system()} -- Python {platform.python_version()}) "
+    columns = shutil.get_terminal_size().columns
+    print(header.center(columns - 10, "="))
     result = isSuccess
+    exit_code = 1
+    suffix = "(exit code 1)"
+    prefix = f"{Colors.FAIL} Failed"
 
     config_file = os.environ.get("LUME_CONFIG_FILENAME", "lume.yml")
     config = get_config(filename=config_file).unwrap_or_else(
@@ -136,24 +135,22 @@ def main():
             )
             lume_use_case.clear_env()
 
-    exit_code = 1
-    suffix = "(exit code 1)"
-    color = Colors.FAIL
-    if result.is_success:
-        exit_code = 0
-        suffix = "(exit code 0)"
-        color = Colors.OKGREEN
+        if result.is_success:
+            exit_code = 0
+            suffix = "(exit code 0)"
+            prefix = f"{Colors.OKGREEN} Succeed"
 
-    if config and not config.settings["show_exit_code"]:
+        if not config.settings["show_exit_code"]:
+            suffix = ""
+    else:
         suffix = ""
 
     end = time.time()
     elapsed_time = end - start
 
-    print(
-        f"{color} Success in {elapsed_time:.2f} seconds {suffix}{Colors.ENDC}".center(
-            shutil.get_terminal_size().columns - 1, "="
-        )
+    footer = f"{prefix} in {elapsed_time:.2f} seconds {suffix} {Colors.ENDC}".center(
+        len(header), "="
     )
+    print(footer.center(columns, "="))
 
     sys.exit(exit_code)

@@ -10,7 +10,7 @@ env_file: examples/env.yml
 install:
   run: |
     echo "Installing... ${TEST}"
-    echo "hola"
+    
 
 uninstall:
   run: echo "Uninstalling... ${TEST}"

@@ -55,7 +55,7 @@ jobs:
     - name: End2end test (Required env - external)
       env:
         LUME_CONFIG_FILENAME: examples/lume-required-env-without-env.yml
-        MY_REQUIRED_ENV: VALUE
+        MY_NON_EXPECTED_REQUIRED_ENV: VALUE
       run: lume -install -all
     - name: End2end test (Required env - fails)
       env:
