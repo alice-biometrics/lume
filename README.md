@@ -55,13 +55,14 @@ usage: lume 🔥 [-h] [-v] [-all] [-clean] [-build] [-test] [-install]
 Lume helps you with your daily dev operations and ease the CI & CD process.
 
 optional arguments:
-  -h, --help            show this help message and exit
-  -v, --version         show lume version number.
-  -all, --all-commands  run all commands
-  -clean, --clean       clean
-  -build, --build       build
-  -test, --test         test
-  -install, --install   install
+  -h, --help              show this help message and exit
+  -v, --version           show lume version number.
+  -all, --all-commands    run all commands
+  -clean, --clean         clean
+  -build, --build         build
+  -test, --test           test
+  -install, --install     install
+  -uninstall, --uninstall uniinstall
 
 ```
 
@@ -77,6 +78,12 @@ To run install:
 
 ```console
 >> lume -install
+```
+
+To run uninstall:
+
+```console
+>> lume -uninstall
 ```
 
 To run all the steps:
