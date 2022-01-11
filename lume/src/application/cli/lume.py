@@ -1,11 +1,13 @@
 import argparse
 import os
+import platform
+import shutil
 import sys
+import time
 import traceback
 
 import yaml
 from meiga import Error, Failure, Result, Success, isSuccess
-from yaml.parser import ParserError
 
 from lume import __version__
 from lume.config import Config
@@ -32,7 +34,7 @@ def get_config(filename: str = r"lume.yml") -> Result[Config, Error]:
             lume_dict = yaml.load(file, Loader=yaml.FullLoader)
             config = Config(lume_dict)
             return Success(config)
-    except ParserError as e:
+    except Exception as e:  # noqa
         message = f"Error loading {filename} file: {repr(e.__class__)} {e} | {traceback.format_exc()}"
         return Failure(ConfigFileNotValidError(message))
 
@@ -57,7 +59,14 @@ def on_execution_failure(result: Result):
 
 
 def main():
+    start = time.time()
+    header = f" 🔥 lume {__version__} ({platform.system()} -- Python {platform.python_version()}) "
+    columns = shutil.get_terminal_size().columns
+    print(header.center(columns - 10, "="))
     result = isSuccess
+    exit_code = 1
+    suffix = "(exit code 1)"
+    prefix = f"{Colors.FAIL} Failed"
 
     config_file = os.environ.get("LUME_CONFIG_FILENAME", "lume.yml")
     config = get_config(filename=config_file).unwrap_or_else(
@@ -113,7 +122,8 @@ def main():
                 all_steps_actions = [
                     action
                     for action in dict_args.keys()
-                    if "command_" in action and action != "command_install"
+                    if "command_" in action
+                    and action not in ["command_install", "command_uninstall"]
                 ]
                 selected_actions += all_steps_actions
 
@@ -121,14 +131,26 @@ def main():
                 action.replace("command_", "") for action in selected_actions
             ]
             result = lume_use_case.execute(steps=selected_actions).handle(
-                on_failure=on_execution_failure, failure_args=(Result.__id__,)
+                on_failure=on_execution_failure, failure_args=(Result.__id__)
             )
+            lume_use_case.clear_env()
 
-    exit_code = 1
-    if result.is_success:
-        exit_code = 0
+        if result.is_success:
+            exit_code = 0
+            suffix = "(exit code 0)"
+            prefix = f"{Colors.OKGREEN} Succeed"
 
-    if config and config.settings["show_exit_code"]:
-        print(f"exit_code: {exit_code}")
+        if not config.settings["show_exit_code"]:
+            suffix = ""
+    else:
+        suffix = ""
+
+    end = time.time()
+    elapsed_time = end - start
+
+    footer = f"{prefix} in {elapsed_time:.2f} seconds {suffix} {Colors.ENDC}".center(
+        len(header), "="
+    )
+    print(footer.center(columns, "="))
 
     sys.exit(exit_code)

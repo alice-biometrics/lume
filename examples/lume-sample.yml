@@ -5,16 +5,24 @@ show_exit_code: True
 env:
   TEST: SHARED_VALUE
 
-envs_file: examples/env.yml
+env_file: examples/env.yml
 
 install:
   run: |
     echo "Installing... ${TEST}"
-    echo "hola"
+    
+
+uninstall:
+  run: echo "Uninstalling... ${TEST}"
+
 steps:
   clean:
+    env:
+      eeeeee: loco
     run: echo "Cleaning..."
   build:
+    env:
+      STEP_2_NAME: burro
     run: echo "Building..."
   test:
     run:

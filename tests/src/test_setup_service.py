@@ -4,7 +4,7 @@ import shutil
 import pytest
 from meiga.assertions import assert_failure, assert_success
 
-from lume.config import Config, DependencyConfig, SetupConfig
+from lume.config import DependencyConfig, SetupConfig
 from lume.src.infrastructure.services.logger.emojis_logger import EmojisLogger
 from lume.src.infrastructure.services.logger.fake_logger import FakeLogger
 from lume.src.infrastructure.services.setup.setup_errors import (
@@ -66,8 +66,5 @@ class TestSetupService:
         assert_failure(result, value_is_instance_of=ItemTypeNotSupportedError)
 
     def should_work_fine_even_none_setup_config_is_given(self):
-        given_empty_config = Config()
         fake_logger = FakeLogger()
-        _ = BucketSetupService(
-            setup_config=given_empty_config.steps.get("config"), logger=fake_logger
-        )
+        _ = BucketSetupService(setup_config=None, logger=fake_logger)

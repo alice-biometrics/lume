@@ -1,0 +1,20 @@
+name: lume-sample
+
+show_exit_code: True
+
+install:
+  run: echo "Installing... ${TEST}"
+
+uninstall:
+  run: echo "Uninstalling... ${TEST}"
+
+steps:
+  clean:
+    run: echo "Cleaning..."
+  build:
+    run: echo "Building..."
+  test:
+    run:
+      - echo "Testing (Unit)..."
+      - echo "Testing (Integration)..."
+
