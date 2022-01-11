@@ -19,8 +19,10 @@ class StepConfig(BaseModel):
     overwrote_envs: Optional[List[str]] = None
 
     def add_shared_env(self, shared_envs: Dict[str, str]):
-        self.overwrote_envs = list(set(shared_envs.keys()).intersection(set(self.envs)))
-        self.envs = {**shared_envs, **self.envs}
+        if shared_envs and self.envs:
+            self.overwrote_envs = list(
+                set(shared_envs.keys()).intersection(set(self.envs))
+            )
 
     @staticmethod
     def from_dict(kdict):

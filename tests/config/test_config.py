@@ -2,6 +2,7 @@ import pytest
 from meiga.assertions import assert_failure, assert_success
 
 from lume.config.config_file_not_found_error import ConfigFileNotFoundError
+from lume.config.config_file_not_valid_error import ConfigFileNotValidError
 from lume.src.application.cli.lume import get_config
 
 
@@ -22,7 +23,14 @@ def test_load_config_successfully(filename):
 
 
 @pytest.mark.unit
-def test_fail_when_config_with_invalid_filename():
-    invalid_filename = "lume.invalid.yml"
-    result = get_config(invalid_filename)
+def test_fail_when_config_with_not_found_filename():
+    not_found_filename = "lume.invalid.yml"
+    result = get_config(not_found_filename)
     assert_failure(result, value_is_instance_of=ConfigFileNotFoundError)
+
+
+@pytest.mark.unit
+def test_fail_when_config_with_invalid_content_filename():
+    invalid_content_filename = "examples/lume-sample-no-valid.yml"
+    result = get_config(invalid_content_filename)
+    assert_failure(result, value_is_instance_of=ConfigFileNotValidError)

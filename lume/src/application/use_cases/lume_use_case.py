@@ -7,14 +7,14 @@ from meiga import Error, Failure, Result, Success, isFailure, isSuccess
 from meiga.decorators import meiga
 
 from lume.config import Config
+from lume.src.application.use_cases.env_manager import EnvManager
 from lume.src.application.use_cases.messages import get_colored_command_message
 from lume.src.domain.services.executor_service import ExecutorService
 from lume.src.domain.services.killer_service import KillerService
 from lume.src.domain.services.logger import (
     COMMAND,
-    ENVAR,
-    ENVAR_WARNING,
     ERROR,
+    GLOBAL,
     HIGHLIGHT,
     INFO,
     WAITING,
@@ -22,6 +22,7 @@ from lume.src.domain.services.logger import (
     Logger,
 )
 from lume.src.domain.services.setup_service import SetupService
+from lume.src.infrastructure.services.logger.colors import Colors
 
 
 class EmptyConfigError(Error):
@@ -65,11 +66,18 @@ class LumeUseCase:
         self.detach_killer_service = detach_killer_service
         self.setup_service = setup_service
         self.logger = logger
+        self.env_manager = EnvManager(self.logger)
+        self.steps = None
 
     @meiga
     def execute(self, steps: List[str]):
-
-        for step in steps:
+        self.logger.log(
+            GLOBAL, f"{Colors.OKGREEN}Set Global Environment Variables{Colors.ENDC}"
+        )
+        self.env_manager.set(self.config.shared_envs)
+        self.config.check_requirements().unwrap_or_return()
+        self.steps = steps
+        for step in self.steps:
             self.logger.log(HIGHLIGHT, f"Step: {step}")
 
             if step == "setup":
@@ -79,56 +87,65 @@ class LumeUseCase:
                 result.unwrap_or_return()
             else:
                 cwd = (
-                    self.get_cwd(step)
+                    self._get_cwd(step)
                     .handle(on_failure=on_error_with_cwd, failure_args=(self, step))
                     .unwrap_or_return()
                 )
-                self.setup_env(step)
-                self.config.check_requirements().unwrap_or_return()
+                self._set_env(step)
                 processes = (
-                    self.run_setup_detach(step, cwd)
-                    .handle(on_failure=self.run_teardown, failure_args=(cwd, step))
+                    self._run_setup_detach(step, cwd)
+                    .handle(on_failure=self._run_teardown, failure_args=(cwd, step))
                     .unwrap_or([])
                 )
-                self.run_setup(step, cwd).handle(
-                    on_failure=self.run_teardown_detach, failure_args=processes
+                self._run_setup(step, cwd).handle(
+                    on_failure=self._run_teardown_detach, failure_args=processes
                 ).handle(
-                    on_failure=self.run_teardown, failure_args=(cwd, step)
+                    on_failure=self._run_teardown, failure_args=(cwd, step)
                 ).unwrap_or_return()
-                self.run_commands(step, cwd, processes).unwrap_or_return()
-                self.run_teardown_detach(processes)
-                self.run_teardown(cwd, step)
+                self._run_commands(step, cwd, processes).unwrap_or_return()
+                self._run_teardown_detach(processes)
+                self._run_teardown(cwd, step)
+                self._unset_env(step)
+
+        self.env_manager.unset(self.config.shared_envs)
 
         return isSuccess
 
-    def setup_env(self, action):
+    def clear_env(self):
+        self.env_manager.unset(self.config.shared_envs)
+        if self.steps:
+            for step in self.steps:
+                self._unset_env(step)
+
+    def _set_env(self, action):
         if action == "install":
             step = self.config.install
+        elif action == "uninstall":
+            step = self.config.uninstall
         else:
             step = self.config.steps.get(action)
 
         if step is None or not step.envs:
             return
-        for envar, value in step.envs.items():
-            env_original_value = os.environ.get(envar)
-            os.environ[envar] = str(value)
-            if env_original_value:
-                self.logger.log(
-                    ENVAR_WARNING,
-                    f"env: overwrite {envar}={value} (Original {envar}={env_original_value})",
-                )
-            else:
-                if envar in step.overwrote_envs:
-                    self.logger.log(
-                        ENVAR_WARNING,
-                        f"env: overwrite {envar}={value} (Also available on shared envs on lume.yml)",
-                    )
-                else:
-                    self.logger.log(ENVAR, f"env: set {envar}={value}")
+
+        self.env_manager.set_step(step)
+
+    def _unset_env(self, action):
+        if action == "install":
+            step = self.config.install
+        elif action == "uninstall":
+            step = self.config.uninstall
+        else:
+            step = self.config.steps.get(action)
+
+        if step is None or not step.envs:
+            return
+
+        self.env_manager.unset_step(step)
 
     @meiga
-    def run_setup(self, step, cwd) -> Result:
-        setup_commands = self.get_setup_commands(step).unwrap_or([])
+    def _run_setup(self, step, cwd) -> Result:
+        setup_commands = self._get_setup_commands(step).unwrap_or([])
         for setup_command in setup_commands:
             message = get_colored_command_message(
                 setup_command, cwd, step, prefix="setup"
@@ -138,8 +155,8 @@ class LumeUseCase:
         return isSuccess
 
     @meiga
-    def run_setup_detach(self, step, cwd) -> Result[List, Error]:
-        setup_detach_commands, log_filename = self.get_setup_detach_commands(
+    def _run_setup_detach(self, step, cwd) -> Result[List, Error]:
+        setup_detach_commands, log_filename = self._get_setup_detach_commands(
             step
         ).unwrap_or(([], SETUP_DETACH_DEFAULT_LOG_FILENAME))
         processes = []
@@ -155,13 +172,13 @@ class LumeUseCase:
                 processes.append(process)
         return Success(processes)
 
-    def run_teardown_detach(self, processes):
+    def _run_teardown_detach(self, processes):
         if processes:
             for process in processes:
                 self.detach_killer_service.execute(process)
 
-    def wait_if_necessary(self, action):
-        if action == "install":
+    def _wait_if_necessary(self, action):
+        if action in ["install", "uninstall"]:
             return
         else:
             step = self.config.steps.get(action)
@@ -216,10 +233,10 @@ class LumeUseCase:
         return
 
     @meiga
-    def run_commands(self, step, cwd, processes) -> Result:
-        self.wait_if_necessary(step)
+    def _run_commands(self, step, cwd, processes) -> Result:
+        self._wait_if_necessary(step)
         commands = (
-            self.get_commands(step)
+            self._get_commands(step)
             .handle(on_failure=on_empty_config, failure_args=(self, step))
             .unwrap_or([])
         )
@@ -227,15 +244,15 @@ class LumeUseCase:
             message = get_colored_command_message(command, cwd, step)
             self.logger.log(COMMAND, message)
             self.executor_service.execute(command, cwd).handle(
-                on_failure=self.run_teardown_detach, failure_args=processes
+                on_failure=self._run_teardown_detach, failure_args=processes
             ).handle(
-                on_failure=self.run_teardown, failure_args=(cwd, step)
+                on_failure=self._run_teardown, failure_args=(cwd, step)
             ).unwrap_or_return()
 
         return isSuccess
 
-    def run_teardown(self, cwd, step):
-        teardown_commands = self.get_teardown_commands(step).unwrap_or([])
+    def _run_teardown(self, cwd, step):
+        teardown_commands = self._get_teardown_commands(step).unwrap_or([])
         for teardown_command in teardown_commands:
             message = get_colored_command_message(
                 teardown_command, cwd, step, prefix="teardown"
@@ -243,11 +260,15 @@ class LumeUseCase:
             self.logger.log(COMMAND, message)
             self.executor_service.execute(teardown_command, cwd)
 
-    def get_commands(self, action) -> Result[List[str], Error]:
+    def _get_commands(self, action) -> Result[List[str], Error]:
         if action == "install":
             if not self.config.install:
                 return Failure(EmptyConfigError())
             commands = self.config.install.run
+        elif action == "uninstall":
+            if not self.config.uninstall:
+                return Failure(EmptyConfigError())
+            commands = self.config.uninstall.run
         else:
             step = self.config.steps.get(action)
             if not step:
@@ -256,8 +277,8 @@ class LumeUseCase:
 
         return Success(commands)
 
-    def get_setup_commands(self, action) -> Result[List[str], Error]:
-        if action == "install":
+    def _get_setup_commands(self, action) -> Result[List[str], Error]:
+        if action in ["install", "uninstall"]:
             return isFailure
         else:
             step = self.config.steps.get(action)
@@ -269,8 +290,10 @@ class LumeUseCase:
 
         return Success(setup_commands)
 
-    def get_setup_detach_commands(self, action) -> Result[Tuple[List[str], str], Error]:
-        if action == "install":
+    def _get_setup_detach_commands(
+        self, action
+    ) -> Result[Tuple[List[str], str], Error]:
+        if action in ["install", "uninstall"]:
             return isFailure
         else:
             step = self.config.steps.get(action)
@@ -287,8 +310,8 @@ class LumeUseCase:
             )
         )
 
-    def get_teardown_commands(self, action) -> Result[List[str], Error]:
-        if action == "install":
+    def _get_teardown_commands(self, action) -> Result[List[str], Error]:
+        if action in ["install", "uninstall"]:
             return isFailure
         else:
             step = self.config.steps.get(action)
@@ -300,11 +323,18 @@ class LumeUseCase:
 
         return Success(teardown_commands)
 
-    def get_cwd(self, action) -> Result[str, Error]:
+    def _get_cwd(self, action) -> Result[str, Error]:
         if action == "install":
             if not self.config.install:
                 return Success(None)
             cwd = self.config.install.cwd
+            if cwd and not os.path.isdir(cwd):
+                return Failure(CwdIsNotADirectoryError())
+            return Success(cwd)
+        if action == "uninstall":
+            if not self.config.uninstall:
+                return Success(None)
+            cwd = self.config.uninstall.cwd
             if cwd and not os.path.isdir(cwd):
                 return Failure(CwdIsNotADirectoryError())
             return Success(cwd)

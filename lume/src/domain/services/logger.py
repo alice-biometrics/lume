@@ -13,6 +13,7 @@ INFO = 20
 DEBUG = 10
 NOTSET = 0
 HIGHLIGHT = 100
+GLOBAL = 110
 
 
 class Logger(ABC):

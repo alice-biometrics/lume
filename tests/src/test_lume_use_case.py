@@ -1,23 +1,24 @@
 import pytest
 
-from lume.config import Config
 from lume.src.application.use_cases.lume_use_case import LumeUseCase
-from lume.src.domain.services.logger import HIGHLIGHT, WARNING
+from lume.src.domain.services.logger import GLOBAL, HIGHLIGHT
 from lume.src.infrastructure.services.executor.fake_executor_service import (
     FakeExecutorService,
 )
 from lume.src.infrastructure.services.killer.fake_killer_service import (
     FakeKillerService,
 )
+from lume.src.infrastructure.services.logger.colors import Colors
 from lume.src.infrastructure.services.logger.fake_logger import FakeLogger
 from lume.src.infrastructure.services.setup.fake_setup_service import FakeSetupService
+from tests.src.mothers.config_mother import ConfigMother
 
 
 @pytest.mark.unit
-@pytest.mark.parametrize("given_command", ["install", "setup"])
+@pytest.mark.parametrize("given_command", ["install", "uninstall", "setup"])
 def test_should_repr_as_expected_an_error_with_message(given_command):
 
-    config = Config()
+    config = ConfigMother.any()
     fake_executor_service = FakeExecutorService()
     fake_detach_executor_service = FakeExecutorService()
     fake_detach_killer_service = FakeKillerService()
@@ -40,5 +41,8 @@ def test_should_repr_as_expected_an_error_with_message(given_command):
     first_logging_message = fake_logger.get_logging_messages()[0]
     second_logging_message = fake_logger.get_logging_messages()[1]
 
-    assert first_logging_message == (HIGHLIGHT, f"Step: {given_command}")
-    assert second_logging_message == (WARNING, f"Empty config for {given_command}")
+    assert first_logging_message == (
+        GLOBAL,
+        f"{Colors.OKGREEN}Set Global Environment Variables{Colors.ENDC}",
+    )
+    assert second_logging_message == (HIGHLIGHT, f"Step: {given_command}")
