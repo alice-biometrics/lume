@@ -78,7 +78,7 @@ class LumeUseCase:
             if step == "setup":
                 result = self.setup_service.execute()
                 if result.is_failure:
-                    self.logger.log(ERROR, f"Setup: {result.value}")
+                    self.logger.log(ERROR, f"Setup: {result.value.message}")
                 result.unwrap_or_return()
             else:
                 cwd = (
@@ -120,7 +120,7 @@ class LumeUseCase:
         else:
             step = self.config.steps.get(action)
 
-        if step is None or not step.envs:
+        if step is None or not (hasattr(step, "envs") and not step.envs):
             return
 
         self.env_manager.set_step(step)
@@ -133,7 +133,7 @@ class LumeUseCase:
         else:
             step = self.config.steps.get(action)
 
-        if step is None or not step.envs:
+        if step is None or not (hasattr(step, "envs") and not step.envs):
             return
 
         self.env_manager.unset_step(step)

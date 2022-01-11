@@ -1,0 +1,24 @@
+name: lume-sample
+
+install:
+  run:
+  - echo "Installing..."
+
+steps:
+  setup:
+    output: deps
+    deps:
+      code:
+        type: file
+        url: https://github.com/alice-biometrics/lume/archive/refs/heads/main.zip
+        name: images
+        unzip: true
+  clean:
+    run:
+    - echo "Cleaning..."
+  build:
+    run:
+    - echo "Building..."
+  test:
+    run:
+    - echo "Testing..."

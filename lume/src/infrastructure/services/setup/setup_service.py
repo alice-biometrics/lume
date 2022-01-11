@@ -27,7 +27,6 @@ class BucketSetupService(SetupService):
         }
 
     def execute(self):
-
         if not self.setup_config:
             self.logger.log(WARNING, "Empty config for setup")
             return
