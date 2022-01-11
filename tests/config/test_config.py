@@ -11,7 +11,7 @@ from lume.src.application.cli.lume import get_config
     "filename",
     [
         "examples/lume-sample.yml",
-        "examples/advanced-lume-sample.yml",
+        "examples/lume-sample-setup-without-auth.yml",
         "examples/lume-required-env-with-env.yml",
         "examples/lume-required-env-without-env.yml",
         "examples/lume-sample-os-command-specific.yml",

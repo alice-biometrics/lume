@@ -1,8 +1,5 @@
 name: lume-sample
 
-required_env:
-  GOOGLE_APPLICATION_CREDENTIALS: Neccessary for setup
-
 install:
   run:
   - echo "Installing..."
@@ -11,12 +8,6 @@ steps:
   setup:
     output: deps
     deps:
-      gcs:
-        type: bucket
-        url: gs://infra-slack-icons/backup.png
-        auth_required: true
-        credentials_env: GOOGLE_APPLICATION_CREDENTIALS
-        unzip: false
       code:
         type: file
         url: https://github.com/alice-biometrics/lume/archive/refs/heads/main.zip
