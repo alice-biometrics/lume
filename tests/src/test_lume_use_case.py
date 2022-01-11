@@ -1,14 +1,13 @@
 import pytest
 
 from lume.src.application.use_cases.lume_use_case import LumeUseCase
-from lume.src.domain.services.logger import GLOBAL, HIGHLIGHT
+from lume.src.domain.services.logger import HIGHLIGHT
 from lume.src.infrastructure.services.executor.fake_executor_service import (
     FakeExecutorService,
 )
 from lume.src.infrastructure.services.killer.fake_killer_service import (
     FakeKillerService,
 )
-from lume.src.infrastructure.services.logger.colors import Colors
 from lume.src.infrastructure.services.logger.fake_logger import FakeLogger
 from lume.src.infrastructure.services.setup.fake_setup_service import FakeSetupService
 from tests.src.mothers.config_mother import ConfigMother
@@ -39,10 +38,5 @@ def test_should_repr_as_expected_an_error_with_message(given_command):
     lume_use_case.execute([f"{given_command}"])
 
     first_logging_message = fake_logger.get_logging_messages()[0]
-    second_logging_message = fake_logger.get_logging_messages()[1]
 
-    assert first_logging_message == (
-        GLOBAL,
-        f"{Colors.OKGREEN}Set Global Environment Variables{Colors.ENDC}",
-    )
-    assert second_logging_message == (HIGHLIGHT, f"Step: {given_command}")
+    assert first_logging_message == (HIGHLIGHT, f"Step: {given_command}")

@@ -1,7 +1,8 @@
 import os
 from typing import Dict
 
-from lume.src.domain.services.logger import ENVAR, ENVAR_WARNING, Logger
+from lume.src.domain.services.logger import ENVAR, ENVAR_WARNING, GLOBAL, Logger
+from lume.src.infrastructure.services.logger.colors import Colors
 
 
 class EnvManager:
@@ -11,6 +12,9 @@ class EnvManager:
     def set(self, envs: Dict[str, str]) -> None:
         if not envs:
             return
+        self.logger.log(
+            GLOBAL, f"{Colors.OKGREEN}Set Global Environment Variables{Colors.ENDC}"
+        )
         for envar, value in envs.items():
             env_original_value = os.environ.get(envar)
             os.environ[envar] = str(value)

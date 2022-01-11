@@ -14,7 +14,6 @@ from lume.src.domain.services.killer_service import KillerService
 from lume.src.domain.services.logger import (
     COMMAND,
     ERROR,
-    GLOBAL,
     HIGHLIGHT,
     INFO,
     WAITING,
@@ -22,7 +21,6 @@ from lume.src.domain.services.logger import (
     Logger,
 )
 from lume.src.domain.services.setup_service import SetupService
-from lume.src.infrastructure.services.logger.colors import Colors
 
 
 class EmptyConfigError(Error):
@@ -71,9 +69,6 @@ class LumeUseCase:
 
     @meiga
     def execute(self, steps: List[str]):
-        self.logger.log(
-            GLOBAL, f"{Colors.OKGREEN}Set Global Environment Variables{Colors.ENDC}"
-        )
         self.env_manager.set(self.config.shared_envs)
         self.config.check_requirements().unwrap_or_return()
         self.steps = steps
