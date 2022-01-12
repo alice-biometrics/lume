@@ -10,9 +10,7 @@ on:
 
 jobs:
   ci:
-
     strategy:
-      max-parallel: 4
       matrix:
         os: [macOS-latest, ubuntu-latest]
         python-version: [3.7, 3.8, 3.9]
@@ -61,4 +59,8 @@ jobs:
       env:
         LUME_CONFIG_FILENAME: examples/lume-required-env-without-env.yml
       run: lume -install -all | true
+    - name: End2end test (Error syntax - fails)
+      env:
+        LUME_CONFIG_FILENAME: examples/lume-sample-with-syntax-error.yml
+      run: lume -job | true
 

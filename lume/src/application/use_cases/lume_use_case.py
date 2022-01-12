@@ -74,7 +74,6 @@ class LumeUseCase:
         self.steps = steps
         for step in self.steps:
             self.logger.log(HIGHLIGHT, f"Step: {step}")
-
             if step == "setup":
                 result = self.setup_service.execute()
                 if result.is_failure:
@@ -86,6 +85,7 @@ class LumeUseCase:
                     .handle(on_failure=on_error_with_cwd, failure_args=(self, step))
                     .unwrap_or_return()
                 )
+
                 self._set_env(step)
                 processes = (
                     self._run_setup_detach(step, cwd)
@@ -110,7 +110,8 @@ class LumeUseCase:
         self.env_manager.unset(self.config.shared_envs)
         if self.steps:
             for step in self.steps:
-                self._unset_env(step)
+                if step != "setup":
+                    self._unset_env(step)
 
     def _set_env(self, action):
         if action == "install":
@@ -119,7 +120,6 @@ class LumeUseCase:
             step = self.config.uninstall
         else:
             step = self.config.steps.get(action)
-
         self.env_manager.set_step(step)
 
     def _unset_env(self, action):
@@ -129,7 +129,6 @@ class LumeUseCase:
             step = self.config.uninstall
         else:
             step = self.config.steps.get(action)
-
         self.env_manager.unset_step(step)
 
     @meiga

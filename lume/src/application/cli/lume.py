@@ -39,11 +39,13 @@ def get_config(filename: str = r"lume.yml") -> Result[Config, Error]:
         return Failure(ConfigFileNotValidError(message))
 
 
-def on_config_failure(config_file):
+def on_config_failure(result: Result, config_file: str):
     print(f"❌  Cannot load lume configuration from: {config_file}")
     print(
         "❌  If you aren't using lume in the same directory as a lume.yml file, please use LUME_CONFIG_FILENAME env var to configure it"
     )
+    if isinstance(result.value, ConfigFileNotValidError):
+        print(f"❌  {Colors.FAIL}{result.value}{Colors.ENDC}")
 
 
 def on_execution_failure(result: Result):
@@ -70,7 +72,7 @@ def main():
 
     config_file = os.environ.get("LUME_CONFIG_FILENAME", "lume.yml")
     config = get_config(filename=config_file).unwrap_or_else(
-        on_failure=on_config_failure, failure_args=(config_file,)
+        on_failure=on_config_failure, failure_args=(Result.__id__, config_file)
     )
 
     if config:

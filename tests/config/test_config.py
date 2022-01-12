@@ -30,7 +30,10 @@ def test_fail_when_config_with_not_found_filename():
 
 
 @pytest.mark.unit
-def test_fail_when_config_with_invalid_content_filename():
-    invalid_content_filename = "examples/lume-sample-no-valid.yml"
+@pytest.mark.parametrize(
+    "invalid_content_filename",
+    ["examples/lume-sample-no-valid.yml", "examples/lume-sample-with-syntax-error.yml"],
+)
+def test_fail_when_config_with_invalid_content_filename(invalid_content_filename):
     result = get_config(invalid_content_filename)
     assert_failure(result, value_is_instance_of=ConfigFileNotValidError)
