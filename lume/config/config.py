@@ -21,7 +21,6 @@ class Config:
 
         self.required_env = lume_dict.get("required_env")
         self.shared_envs = get_envs(lume_dict)
-        shared_envs = self.shared_envs  # TODO delete
         self._set_install_step(lume_dict)
         self._set_uninstall_step(lume_dict)
 
@@ -31,7 +30,7 @@ class Config:
                 self.steps[step_name] = SetupConfig(**step)
             else:
                 self.steps[step_name] = StepConfig.from_dict(step)
-                self.steps[step_name].add_shared_env(shared_envs)
+                self.steps[step_name].add_shared_env(self.shared_envs)
 
         self.add_other_steps(lume_dict)
 

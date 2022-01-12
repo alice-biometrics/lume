@@ -61,4 +61,8 @@ jobs:
       env:
         LUME_CONFIG_FILENAME: examples/lume-required-env-without-env.yml
       run: lume -install -all | true
+    - name: End2end test (Error syntax - fails)
+      env:
+        LUME_CONFIG_FILENAME: examples/lume-sample-with-syntax-error.yml
+      run: lume -job | true
 

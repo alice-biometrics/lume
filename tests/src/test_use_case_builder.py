@@ -17,6 +17,7 @@ from lume.src.application.use_cases.use_case_builder import UseCaseBuilder
         "examples/lume-sample-setup-without-auth.yml",
         "examples/lume-required-env-with-env.yml",
         "examples/lume-sample-os-command-specific.yml",
+        "examples/lume-sample-with-syntax-error.yml",
     ],
 )
 def test_build_and_execute_lume_use_case_successfully(filename):

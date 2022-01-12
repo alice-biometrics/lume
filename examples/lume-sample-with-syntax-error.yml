@@ -1,0 +1,8 @@
+name: lume-sample
+
+steps:
+  job:
+    cwd: examples
+    run:
+      - # syntax error
+      - echo "This is an error" >>/dev/stderr

@@ -17,12 +17,8 @@ uninstall:
 
 steps:
   clean:
-    env:
-      eeeeee: loco
     run: echo "Cleaning..."
   build:
-    env:
-      STEP_2_NAME: burro
     run: echo "Building..."
   test:
     run:
