@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel
 
@@ -10,13 +10,13 @@ from lume.config.get_envs import get_envs
 class StepConfig(BaseModel):
     run: List[str]
     cwd: Optional[str] = None
-    envs: Optional[Dict[str, Any]] = None
+    envs: Dict[str, str] = dict()
     setup: Optional[List[str]] = None
     teardown: Optional[List[str]] = None
     setup_detach: Optional[Dict] = None
     wait_seconds: Optional[int] = None
     wait_http_200: Optional[str] = None
-    overwrote_envs: Optional[List[str]] = None
+    overwrote_envs: List[str] = list()
 
     def add_shared_env(self, shared_envs: Dict[str, str]):
         if shared_envs and self.envs:

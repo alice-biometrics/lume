@@ -9,8 +9,8 @@ from lume.config.get_envs import get_envs
 class UninstallConfig(BaseModel):
     run: List[str]
     cwd: Optional[str] = None
-    envs: Optional[Dict[str, str]] = None
-    overwrote_envs: Optional[List[str]] = None
+    envs: Dict[str, str] = dict()
+    overwrote_envs: List[str] = list()
 
     def add_shared_env(self, shared_envs: Dict[str, str]):
         if shared_envs and self.envs:
