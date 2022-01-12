@@ -120,7 +120,7 @@ class LumeUseCase:
         else:
             step = self.config.steps.get(action)
 
-        if step is None or not (hasattr(step, "envs") and not step.envs):
+        if step is None or not hasattr(step, "envs") or not step.envs:
             return
 
         self.env_manager.set_step(step)
