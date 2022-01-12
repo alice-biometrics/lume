@@ -29,7 +29,7 @@ def get_envs_from_dict(yaml_dict: dict):
     if not envs:
         envs = yaml_dict.get(
             "envs", dict()
-        )  # fallback to be compatible with old versions of lume-onboarding.yml
+        )  # fallback to be compatible with old versions of lume.yml
     return envs
 
 
@@ -38,5 +38,5 @@ def get_envs_from_file(yaml_dict: dict):
     if not envs:
         envs = read_env_from_file(
             yaml_dict.get("envs_file")
-        )  # fallback to be compatible with old versions of lume-onboarding.yml
+        )  # fallback to be compatible with old versions of lume.yml
     return envs

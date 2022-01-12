@@ -25,7 +25,7 @@ def has_args(args):
     return is_active
 
 
-def get_config(filename: str = r"lume-onboarding.yml") -> Result[Config, Error]:
+def get_config(filename: str = r"lume.yml") -> Result[Config, Error]:
     if not os.path.isfile(filename):
         return Failure(ConfigFileNotFoundError(filename))
 
@@ -42,7 +42,7 @@ def get_config(filename: str = r"lume-onboarding.yml") -> Result[Config, Error]:
 def on_config_failure(result: Result, config_file: str):
     print(f"❌  Cannot load lume configuration from: {config_file}")
     print(
-        "❌  If you aren't using lume in the same directory as a lume-onboarding.yml file, please use LUME_CONFIG_FILENAME env var to configure it"
+        "❌  If you aren't using lume in the same directory as a lume.yml file, please use LUME_CONFIG_FILENAME env var to configure it"
     )
     if isinstance(result.value, ConfigFileNotValidError):
         print(f"❌  {Colors.FAIL}{result.value}{Colors.ENDC}")
@@ -56,7 +56,7 @@ def on_execution_failure(result: Result):
                 f"❌  {Colors.FAIL}{env}{Colors.ENDC} environment variable is mandatory ➜ {description}"
             )
         print(
-            f"❌  Please, review required env variables defined in {Colors.OKGREEN}lume-onboarding.yml{Colors.ENDC} ({Colors.OKBLUE}required_env{Colors.ENDC})"
+            f"❌  Please, review required env variables defined in {Colors.OKGREEN}lume.yml{Colors.ENDC} ({Colors.OKBLUE}required_env{Colors.ENDC})"
         )
 
 
@@ -70,7 +70,7 @@ def main():
     suffix = "(exit code 1)"
     prefix = f"{Colors.FAIL} Failed"
 
-    config_file = os.environ.get("LUME_CONFIG_FILENAME", "lume-onboarding.yml")
+    config_file = os.environ.get("LUME_CONFIG_FILENAME", "lume.yml")
     config = get_config(filename=config_file).unwrap_or_else(
         on_failure=on_config_failure, failure_args=(Result.__id__, config_file)
     )
