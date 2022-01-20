@@ -2,7 +2,10 @@ from subprocess import Popen
 
 from meiga import Error, Result, Success
 
-from lume.src.domain.services.executor_service import ExecutorService
+from lume.src.domain.services.executor_service import (
+    DEFAULT_EXECUTOR_LOG_FILENAME,
+    ExecutorService,
+)
 from lume.src.domain.services.logger import INFO, Logger
 
 
@@ -11,7 +14,7 @@ class DetachPopenExecutorService(ExecutorService):
         self.logger = logger
 
     def execute(
-        self, command: str, cwd: str, log_filename="setup_detach.log"
+        self, command: str, cwd: str, log_filename: str = DEFAULT_EXECUTOR_LOG_FILENAME
     ) -> Result[bool, Error]:
 
         if not cwd:

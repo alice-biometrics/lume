@@ -45,7 +45,7 @@ def on_error_with_cwd(self, action):
     )
 
 
-SETUP_DETACH_DEFAULT_LOG_FILENAME = "setup_detach.log"
+SETUP_DETACH_DEFAULT_LOG_FILENAME = "lume.setup_detach.log"
 
 
 class LumeUseCase:
@@ -291,12 +291,12 @@ class LumeUseCase:
             if not setup_detach or not setup_detach.get("run"):
                 return isFailure
 
-        return Success(
-            (
-                setup_detach.get("run"),
-                setup_detach.get("log_filename", SETUP_DETACH_DEFAULT_LOG_FILENAME),
+            return Success(
+                (
+                    setup_detach.get("run"),
+                    setup_detach.get("log_filename", f"lume.{action}.setup_detach.log"),
+                )
             )
-        )
 
     def _get_teardown_commands(self, action) -> Result[List[str], Error]:
         if action in ["install", "uninstall"]:
