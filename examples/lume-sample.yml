@@ -51,7 +51,7 @@ steps:
     teardown: echo ${TEADOWN_MSG}
     run: echo ${RUN_MSG}
   setup-detach-example:
-    envs:
+    env:
       SETUP_MSG: Setup
       TEADOWN_MSG: Teardown
       RUN_MSG: Run
@@ -68,7 +68,7 @@ steps:
     wait_http_200: https://www.google.com
     run: echo "Done"
   wait-example-http-no-valid:
-    envs:
+    env:
       LUME_WAIT_HTTP_200_NUM_MAX_ATTEMPTS: 3
       LUME_WAIT_HTTP_200_WAIT_SECONDS_RETRY: 0.2
     wait_http_200: https://www.google.com/novalid
@@ -78,7 +78,7 @@ steps:
     wait_http_200: https://www.google.com
     run: echo "Done"
   wait-example-http-set:
-    envs:
+    env:
       LUME_WAIT_HTTP_200_NUM_MAX_ATTEMPTS: 2
       LUME_WAIT_HTTP_200_WAIT_SECONDS_RETRY: 0.2
     wait_http_200: https://www.google.com
