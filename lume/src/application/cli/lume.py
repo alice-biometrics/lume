@@ -98,8 +98,7 @@ def get_parser(config):
 
 def check_command_availability(args, not_known, parser, config_file) -> Result:
     if len(not_known) > 0:
-        not_supported_commands = " ".join(not_known)
-        not_supported_message = f"lume 🔥: Given commands are not supported ({not_supported_commands}). Please, check your lume file ({config_file})"
+        not_supported_message = f"lume 🔥: Given commands are not supported ({not_known}). Please, check your lume file ({config_file})"
 
         if args.no_strict:
             print(not_supported_message)
