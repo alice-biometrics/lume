@@ -10,9 +10,10 @@ class EnvManager:
         self.logger = logger
 
     def set(self, envs: Dict[str, str]) -> None:
-        self.logger.log(
-            GLOBAL, f"{Colors.OKGREEN}Set Global Environment Variables{Colors.ENDC}"
-        )
+        if envs:
+            self.logger.log(
+                GLOBAL, f"{Colors.OKGREEN}Set Global Environment Variables{Colors.ENDC}"
+            )
         for envar, value in envs.items():
             env_original_value = os.environ.get(envar)
             os.environ[envar] = str(value)

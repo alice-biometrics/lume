@@ -2,7 +2,10 @@ from subprocess import PIPE, Popen
 
 from meiga import Error, Result, isFailure, isSuccess
 
-from lume.src.domain.services.executor_service import ExecutorService
+from lume.src.domain.services.executor_service import (
+    DEFAULT_EXECUTOR_LOG_FILENAME,
+    ExecutorService,
+)
 from lume.src.domain.services.logger import ERROR, INFO, WARNING, Logger
 
 
@@ -10,7 +13,9 @@ class PopenExecutorService(ExecutorService):
     def __init__(self, logger: Logger):
         self.logger = logger
 
-    def execute(self, command: str, cwd: str) -> Result[bool, Error]:
+    def execute(
+        self, command: str, cwd: str, log_filename: str = DEFAULT_EXECUTOR_LOG_FILENAME
+    ) -> Result[bool, Error]:
 
         if not cwd:
             cwd = "."

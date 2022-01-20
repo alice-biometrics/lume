@@ -1,7 +1,7 @@
 import pytest
 
 from lume.src.application.use_cases.lume_use_case import LumeUseCase
-from lume.src.domain.services.logger import GLOBAL, HIGHLIGHT
+from lume.src.domain.services.logger import GLOBAL
 from lume.src.infrastructure.services.executor.fake_executor_service import (
     FakeExecutorService,
 )
@@ -14,11 +14,24 @@ from lume.src.infrastructure.services.setup.fake_setup_service import FakeSetupS
 from tests.src.mothers.config_mother import ConfigMother
 
 
-@pytest.mark.unit
-@pytest.mark.parametrize("given_command", ["install", "uninstall", "setup"])
-def test_should_repr_as_expected_an_error_with_message(given_command):
+def assert_logging_messages(logging_messages: list, with_global_envs: bool):
+    first_logging_message = logging_messages[0]
+    if with_global_envs:
+        assert first_logging_message == (
+            GLOBAL,
+            f"{Colors.OKGREEN}Set Global Environment Variables{Colors.ENDC}",
+        )
 
-    config = ConfigMother.any()
+
+@pytest.mark.unit
+@pytest.mark.parametrize(
+    "config,logging_messages_with_global_envs",
+    [(ConfigMother.any(), False), (ConfigMother.with_global_env(), True)],
+)
+def test_should_repr_as_expected_an_error_with_message(
+    config, logging_messages_with_global_envs
+):
+
     fake_executor_service = FakeExecutorService()
     fake_detach_executor_service = FakeExecutorService()
     fake_detach_killer_service = FakeKillerService()
@@ -36,13 +49,7 @@ def test_should_repr_as_expected_an_error_with_message(given_command):
         logger=fake_logger,
     )
 
-    lume_use_case.execute([f"{given_command}"])
-
-    first_logging_message = fake_logger.get_logging_messages()[0]
-    second_logging_message = fake_logger.get_logging_messages()[1]
-
-    assert first_logging_message == (
-        GLOBAL,
-        f"{Colors.OKGREEN}Set Global Environment Variables{Colors.ENDC}",
+    lume_use_case.execute(config.get_commands())
+    assert_logging_messages(
+        fake_logger.get_logging_messages(), logging_messages_with_global_envs
     )
-    assert second_logging_message == (HIGHLIGHT, f"Step: {given_command}")
