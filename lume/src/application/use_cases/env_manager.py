@@ -47,5 +47,7 @@ class EnvManager:
                     self.logger.log(ENVAR, f"env: set {envar}={value}")
 
     def unset_step(self, step):
+        if not step:
+            return
         for envar in step.envs.keys():
             os.unsetenv(envar)

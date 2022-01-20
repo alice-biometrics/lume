@@ -7,7 +7,7 @@ import time
 import traceback
 
 import yaml
-from meiga import Error, Failure, Result, Success, isSuccess
+from meiga import Error, Failure, Result, Success, isFailure, isSuccess
 
 from lume import __version__
 from lume.config import Config
@@ -21,6 +21,8 @@ from lume.src.infrastructure.services.logger.colors import Colors
 def has_args(args):
     is_active = False
     for arg in vars(args):
+        if arg == "no_strict":
+            continue
         is_active = is_active or getattr(args, arg)
     return is_active
 
@@ -60,12 +62,64 @@ def on_execution_failure(result: Result):
         )
 
 
+def get_parser(config):
+    parser = argparse.ArgumentParser(
+        prog="lume 🔥",
+        description="Lume helps you with your daily dev operations and ease the CI & CD process.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        exit_on_error=False,
+    )
+
+    parser.add_argument(
+        "-v", "--version", action="store_true", help="show lume version number."
+    )
+    parser.add_argument(
+        "-all",
+        "--all-commands",
+        action="store_true",
+        dest="all_commands",
+        help="run all commands",
+    )
+    for command in config.get_commands():
+        parser.add_argument(
+            f"-{command}",
+            f"--{command}",
+            action="store_true",
+            dest=f"command_{command}",
+            help=f"{command}",
+        )
+    parser.add_argument(
+        "--no-strict",
+        action="store_true",
+        dest="no_strict",
+        help="No fails if not exist",
+    )
+    return parser
+
+
+def check_command_availability(args, not_known, parser, config_file) -> Result:
+    if len(not_known) > 0:
+        not_supported_commands = " ".join(not_known)
+        not_supported_message = f"lume 🔥: Given commands are not supported ({not_supported_commands}). Please, check your lume file ({config_file})"
+
+        if args.no_strict:
+            print(not_supported_message)
+            print(
+                "lume 🌈: As you define the '--no-strict' option everything is ok and return code is 0"
+            )
+            return isSuccess
+        else:
+            parser.print_help()
+            print(f"\n{not_supported_message}")
+            return isFailure
+
+
 def main():
     start = time.time()
     header = f" 🔥 lume {__version__} ({platform.system()} -- Python {platform.python_version()}) "
     columns = shutil.get_terminal_size().columns
     print(header.center(columns - 10, "="))
-    result = isSuccess
+    result = isFailure
     exit_code = 1
     suffix = "(exit code 1)"
     prefix = f"{Colors.FAIL} Failed"
@@ -78,36 +132,11 @@ def main():
     if config:
         lume_use_case = UseCaseBuilder.lume(config=config)
 
-        parser = argparse.ArgumentParser(
-            prog="lume 🔥",
-            description="Lume helps you with your daily dev operations and ease the CI & CD process.",
-            formatter_class=argparse.RawDescriptionHelpFormatter,
-        )
-
-        parser.add_argument(
-            "-v", "--version", action="store_true", help="show lume version number."
-        )
-        parser.add_argument(
-            "-all",
-            "--all-commands",
-            action="store_true",
-            dest="all_commands",
-            help="run all commands",
-        )
-
-        for command in config.get_commands():
-            parser.add_argument(
-                f"-{command}",
-                f"--{command}",
-                action="store_true",
-                dest=f"command_{command}",
-                help=f"{command}",
-            )
-
-        args = parser.parse_args()
+        parser = get_parser(config)
+        args, not_known = parser.parse_known_args()
 
         if not has_args(args):
-            parser.print_help()
+            result = check_command_availability(args, not_known, parser, config_file)
         else:
             dict_args = vars(args)
 
@@ -119,7 +148,9 @@ def main():
                 action
                 for action, selected in dict_args.items()
                 if selected and action != "all_commands"
+                if selected and action != "no_strict"
             ]
+
             if args.all_commands:
                 all_steps_actions = [
                     action

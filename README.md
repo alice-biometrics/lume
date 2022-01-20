@@ -458,6 +458,16 @@ steps:
     run: echo "Done"
 ```
 
+#### `--no-strict` mode
+
+If you use lume with a command (step) that is not available on the `lume.yml`, this will fail and return an exit code 1.
+
+However, if you use `--no-strict` mode, lume will warn you but the execution will be a success returning 0 as exit code.
+
+*Use Case*: This feature could be very useful if you are generalizing a continuous integration workflow. Imagine that you
+have projects where you need a setup process and in others you do not. Use `lume -setup --no-strict` to avoid conflicts
+in your workflow.
+
 ## Acknowledgements 🙌
 
 `bowie` inspired us! 👨‍🎤 :clap:

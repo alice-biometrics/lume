@@ -1,9 +1,9 @@
-envs:
+env:
   TEST: SHARED_OTHER_VALUE
   STEP_1_NAME: Step 1
   STEP_2_NAME: Step 2
 
-envs_file: examples/other.env.yml
+env_file: examples/other.env.yml
 
 steps:
   step-1:
