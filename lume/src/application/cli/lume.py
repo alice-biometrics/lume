@@ -67,7 +67,6 @@ def get_parser(config):
         prog="lume 🔥",
         description="Lume helps you with your daily dev operations and ease the CI & CD process.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        exit_on_error=False,
     )
 
     parser.add_argument(
