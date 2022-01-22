@@ -1,4 +1,4 @@
-from platform import processor
+from platform import machine
 from sys import platform
 
 from lume.config.check_list_or_str_item import check_list_or_str_item
@@ -8,7 +8,7 @@ def get_platform():
     if platform == "linux" or platform == "linux2":
         return "linux"
     elif platform == "darwin":
-        if processor() == "arm":
+        if machine() == "arm64":
             return "macos-arm"
         return "macos"
     elif platform == "win32":
