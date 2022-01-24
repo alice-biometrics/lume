@@ -23,7 +23,7 @@ class Config:
         self.shared_envs = get_envs(lume_dict)
         self._set_install_step(lume_dict)
         self._set_uninstall_step(lume_dict)
-
+        self.strict_mode = True
         self.steps = {}
         for step_name, step in lume_dict["steps"].items():
             if step_name == "setup":
@@ -33,6 +33,9 @@ class Config:
                 self.steps[step_name].add_shared_env(self.shared_envs)
 
         self.add_other_steps(lume_dict)
+
+    def update_strict_mode(self, strict_mode: bool):
+        self.strict_mode = strict_mode
 
     def _set_install_step(self, yaml_dict: dict):
         if yaml_dict.get("install"):
@@ -49,7 +52,7 @@ class Config:
         self.uninstall.add_shared_env(self.shared_envs)
 
     def check_requirements(self) -> BoolResult:
-        if self.required_env:
+        if self.required_env and self.strict_mode:
             unmeet_required_env_messages = dict()
             for env, description in self.required_env.items():
                 if env not in os.environ:

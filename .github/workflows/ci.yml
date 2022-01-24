@@ -50,6 +50,11 @@ jobs:
       env:
         LUME_CONFIG_FILENAME: examples/lume-sample.yml
       run: lume -unavailable-command --no-strict
+    - name: End2end test (call unavailable command with no strict env var)
+      env:
+        LUME_CONFIG_FILENAME: examples/lume-sample.yml
+        LUME_NO_STRICT: true
+      run: lume -unavailable-command
     - name: End2end test (OS-Specific Commands)
       env:
         LUME_CONFIG_FILENAME: examples/lume-sample-os-command-specific.yml
@@ -67,6 +72,15 @@ jobs:
       env:
         LUME_CONFIG_FILENAME: examples/lume-required-env-without-env.yml
       run: lume -install -all | true
+    - name: End2end test (Required env not found but use --no-strict mode)
+      env:
+        LUME_CONFIG_FILENAME: examples/lume-required-env-without-env.yml
+      run: lume -install -all --no-strict
+    - name: End2end test (Required env not found but use --no-strict mode with env)
+      env:
+        LUME_CONFIG_FILENAME: examples/lume-required-env-without-env.yml
+        LUME_NO_STRICT: true
+      run: lume -install -all
     - name: End2end test (Error syntax - fails)
       env:
         LUME_CONFIG_FILENAME: examples/lume-sample-with-syntax-error.yml
