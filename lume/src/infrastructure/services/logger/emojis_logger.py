@@ -1,5 +1,3 @@
-import emoji
-
 from lume.src.domain.services.logger import (
     COMMAND,
     ENVAR,
@@ -15,15 +13,15 @@ from lume.src.domain.services.logger import (
 from lume.src.infrastructure.services.logger.colors import Colors
 
 LOGGING_LEVEL = {
-    HIGHLIGHT: emoji.emojize("🟩"),
-    COMMAND: emoji.emojize("💻"),
-    GLOBAL: emoji.emojize("🌐"),
+    HIGHLIGHT: "🟩",
+    COMMAND: "💻",
+    GLOBAL: "🌐",
     INFO: "",
-    ERROR: emoji.emojize("💩"),
-    WARNING: emoji.emojize("⚠️"),
-    ENVAR: emoji.emojize("  🔸"),
-    ENVAR_WARNING: emoji.emojize("  🔸"),
-    WAITING: emoji.emojize("⏱ "),
+    ERROR: "💩",
+    WARNING: "⚠️",
+    ENVAR: "  🔸",
+    ENVAR_WARNING: "  🔸",
+    WAITING: "⏱ ",
 }
 
 
