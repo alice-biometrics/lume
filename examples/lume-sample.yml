@@ -2,9 +2,6 @@ name: lume-sample
 
 show_exit_code: True
 
-required_env:
-  VAITE: Burro
-
 env:
   TEST: SHARED_VALUE
 
