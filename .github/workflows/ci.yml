@@ -50,6 +50,11 @@ jobs:
       env:
         LUME_CONFIG_FILENAME: examples/lume-sample.yml
       run: lume -unavailable-command --no-strict
+    - name: End2end test (call unavailable command with no strict env var)
+      env:
+        LUME_CONFIG_FILENAME: examples/lume-sample.yml
+        LUME_NO_STRICT: true
+      run: lume -unavailable-command
     - name: End2end test (OS-Specific Commands)
       env:
         LUME_CONFIG_FILENAME: examples/lume-sample-os-command-specific.yml

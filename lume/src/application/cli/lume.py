@@ -96,14 +96,36 @@ def get_parser(config):
     return parser
 
 
-def check_command_availability(args, not_known, parser, config_file) -> Result:
+def str2bool(value: str) -> bool:
+    return value.lower() in [
+        "true",
+        "1",
+        "t",
+        "y",
+        "yes",
+        "yeah",
+        "yup",
+        "certainly",
+        "uh-huh",
+    ]
+
+
+def get_strict_mode(args):
+    no_strict_mode = str2bool(os.getenv("LUME_NO_STRICT", "false"))
+    if args.no_strict or no_strict_mode:
+        return False
+    else:
+        return True
+
+
+def check_command_availability(strict_mode, not_known, parser, config_file) -> Result:
     if len(not_known) > 0:
         not_supported_message = f"lume 🔥: Given commands are not supported ({not_known}). Please, check your lume file ({config_file})"
 
-        if args.no_strict:
+        if not strict_mode:
             print(not_supported_message)
             print(
-                "lume 🌈: As you define the '--no-strict' option everything is ok and return code is 0"
+                "lume 🌈: As you define the '--no-strict' (or use `LUME_NO_STRICT` envvar) option everything is ok and return code is 0"
             )
             return isSuccess
         else:
@@ -128,13 +150,16 @@ def main():
     )
 
     if config:
-        lume_use_case = UseCaseBuilder.lume(config=config)
-
         parser = get_parser(config)
         args, not_known = parser.parse_known_args()
+        strict_mode = get_strict_mode(args)
+        config.update_strict_mode(strict_mode)
+        lume_use_case = UseCaseBuilder.lume(config=config)
 
         if not has_args(args):
-            result = check_command_availability(args, not_known, parser, config_file)
+            result = check_command_availability(
+                strict_mode, not_known, parser, config_file
+            )
         else:
             dict_args = vars(args)
 
