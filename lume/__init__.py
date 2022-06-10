@@ -2,4 +2,5 @@ import os
 
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 
-__version__ = open(f"{ROOT_PATH}/VERSION", "r").read().replace("v", "")
+with open(f"{ROOT_PATH}/VERSION", "r") as f:
+    __version__ = f.read().rstrip()
