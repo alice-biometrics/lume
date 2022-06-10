@@ -185,6 +185,13 @@ install:
      all-post: echo "Everything was successfully installed"
 ```
 
+
+> **Note**
+>  When execute a cli lume command, first line will prompt something like `🔥 lume <lume-version> (<your-platform> -- Python <python-version>)`.
+>  So, you can check which os-related commands are going to be executed
+>  If you get `🔥 lume 0.8.8 (macos-arm -- Python 3.9.6)`, in addition to the common commands, will be executed `brew install myprogram-arm`
+
+
 #### Use several lume files
 
 Imagine you have multiple steps, and you want to split them in several files. 
