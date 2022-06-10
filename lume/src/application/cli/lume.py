@@ -11,6 +11,7 @@ from meiga import Error, Failure, Result, Success, isFailure, isSuccess
 
 from lume import __version__
 from lume.config import Config
+from lume.config.check_os_list_or_str_item import get_platform
 from lume.config.config_file_not_found_error import ConfigFileNotFoundError
 from lume.config.config_file_not_valid_error import ConfigFileNotValidError
 from lume.config.required_env_error import RequiredEnvError
@@ -136,7 +137,7 @@ def check_command_availability(strict_mode, not_known, parser, config_file) -> R
 
 def main():
     start = time.time()
-    header = f" 🔥 lume {__version__} ({platform.system()} -- Python {platform.python_version()}) "
+    header = f" 🔥 lume {__version__} ({get_platform()} -- Python {platform.python_version()}) "
     columns = shutil.get_terminal_size().columns
     print(header.center(columns - 10, "="))
     result = isFailure
