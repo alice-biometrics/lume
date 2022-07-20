@@ -58,6 +58,8 @@ optional arguments:
   -h, --help              show this help message and exit
   -v, --version           show lume version number.
   -all, --all-commands    run all commands
+  -check CHECK, --check   CHECK
+                          check if lume command is available or not
   -clean, --clean         clean
   -build, --build         build
   -test, --test           test
@@ -128,6 +130,16 @@ Here is an example of the log output that would have lume using several commands
 ```
 
 ## Features
+
+#### Check if a command is available 
+
+You can check if a command exist use `lume -check <COMMAND-TO-CHECK>`
+
+Example
+
+````console
+lume -check test
+````
 
 #### OS-specific commands
 
