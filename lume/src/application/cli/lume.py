@@ -153,6 +153,8 @@ def check_given_command(given_command: str, config: Config):
 
 def main():
     start = time.time()
+    header = f" 🔥 lume {__version__} ({get_platform()} -- Python {platform.python_version()}) "
+    columns = shutil.get_terminal_size().columns
     result = isFailure
     exit_code = 1
     suffix = "(exit code 1)"
@@ -184,8 +186,6 @@ def main():
             if args.check:
                 return check_given_command(args.check, config)
 
-            header = f" 🔥 lume {__version__} ({get_platform()} -- Python {platform.python_version()}) "
-            columns = shutil.get_terminal_size().columns
             print(header.center(columns - 10, "="))
 
             selected_actions = [
