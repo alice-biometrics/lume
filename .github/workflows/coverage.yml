@@ -12,8 +12,8 @@ jobs:
   coverage:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v3
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
         cache: pip
@@ -24,7 +24,7 @@ jobs:
         lume -install
     - name: Coverage
       run: lume -coverage
-    - uses: codecov/codecov-action@v2
+    - uses: codecov/codecov-action@v3
       with:
         files: output/coverage/cobertura_coverage.xml
         name: lume
