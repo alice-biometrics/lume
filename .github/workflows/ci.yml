@@ -43,6 +43,14 @@ jobs:
       env:
         LUME_CONFIG_FILENAME: examples/lume-sample.yml
       run: lume -unavailable-command | true
+    - name: End2end test (check commands)
+      env:
+        LUME_CONFIG_FILENAME: examples/lume-sample.yml
+      run: |
+         lume -check test
+         lume -check other:step-1
+         lume -check other:step-2
+         lume -check notexistcommand | true
     - name: End2end test (call unavailable command `--no-strict` mode)
       env:
         LUME_CONFIG_FILENAME: examples/lume-sample.yml

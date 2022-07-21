@@ -71,7 +71,11 @@ def get_parser(config):
     )
 
     parser.add_argument(
-        "-v", "--version", action="store_true", help="show lume version number."
+        "-v",
+        "-version",
+        "--version",
+        action="store_true",
+        help="show lume version number.",
     )
     parser.add_argument(
         "-all",
@@ -79,6 +83,9 @@ def get_parser(config):
         action="store_true",
         dest="all_commands",
         help="run all commands",
+    )
+    parser.add_argument(
+        "-check", "--check", type=str, help="check if lume command is available or not"
     )
     for command in config.get_commands():
         parser.add_argument(
@@ -135,11 +142,19 @@ def check_command_availability(strict_mode, not_known, parser, config_file) -> R
             return isFailure
 
 
+def check_given_command(given_command: str, config: Config):
+    if given_command not in config.get_commands():
+        print(f"lume 🔥 => `{given_command}` is not available command ❌ ")
+        return 1
+    else:
+        print(f"lume 🔥 => `{given_command}` is an available command ✅ ")
+        return 0
+
+
 def main():
     start = time.time()
     header = f" 🔥 lume {__version__} ({get_platform()} -- Python {platform.python_version()}) "
     columns = shutil.get_terminal_size().columns
-    print(header.center(columns - 10, "="))
     result = isFailure
     exit_code = 1
     suffix = "(exit code 1)"
@@ -166,7 +181,12 @@ def main():
 
             if args.version:
                 print(f"lume 🔥 => {__version__}")
-                return
+                return 0
+
+            if args.check:
+                return check_given_command(args.check, config)
+
+            print(header.center(columns - 10, "="))
 
             selected_actions = [
                 action
