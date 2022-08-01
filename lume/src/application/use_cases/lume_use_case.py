@@ -133,7 +133,7 @@ class LumeUseCase:
 
     @meiga
     def _run_setup(self, step, cwd) -> Result:
-        setup_commands: list[str] = self._get_setup_commands(step).unwrap_or([])
+        setup_commands: List[str] = self._get_setup_commands(step).unwrap_or([])
         for setup_command in setup_commands:
             message = get_colored_command_message(
                 setup_command, cwd, step, prefix="setup"
@@ -223,7 +223,7 @@ class LumeUseCase:
     @meiga
     def _run_commands(self, step, cwd, processes) -> Result:
         self._wait_if_necessary(step)
-        commands: list[str] = (
+        commands: List[str] = (
             self._get_commands(step)
             .handle(on_failure=on_empty_config, failure_args=(self, step))
             .unwrap_or([])
