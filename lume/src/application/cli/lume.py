@@ -148,6 +148,7 @@ def check_command_availability(strict_mode, not_known, parser, config_file) -> R
             parser.print_help()
             print(f"\n{not_supported_message}")
             return isFailure
+    return isSuccess
 
 
 def check_given_command(given_command: str, config: Config):

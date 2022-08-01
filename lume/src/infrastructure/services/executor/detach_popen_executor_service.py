@@ -1,4 +1,5 @@
 from subprocess import Popen
+from typing import Optional
 
 from meiga import Error, Result, Success
 
@@ -14,13 +15,16 @@ class DetachPopenExecutorService(ExecutorService):
         self.logger = logger
 
     def execute(
-        self, command: str, cwd: str, log_filename: str = DEFAULT_EXECUTOR_LOG_FILENAME
+        self,
+        command: str,
+        cwd: str,
+        log_filename: Optional[str] = DEFAULT_EXECUTOR_LOG_FILENAME,
     ) -> Result[bool, Error]:
 
         if not cwd:
             cwd = "."
 
-        log = open(log_filename, "w")
+        log = open(log_filename, "w")  # type: ignore
         process = Popen("exec " + command, stdout=log, stderr=log, cwd=cwd, shell=True)
 
         self.logger.log(INFO, f"Open process (pid={process.pid}) >> {log_filename}")

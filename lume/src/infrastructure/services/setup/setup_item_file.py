@@ -30,7 +30,7 @@ class SetupItemFile(SetupItem):
         if not dependency_config.auth_required:
             auth = None
         else:
-            credentials_var = os.environ.get(dependency_config.credentials_env)
+            credentials_var = os.environ.get(dependency_config.credentials_env)  # type: ignore
             if credentials_var is None:
                 return Failure(CrendentialsEnvError(dependency_config.credentials_env))
             username, password = credentials_var.split(":")

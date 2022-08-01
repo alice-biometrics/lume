@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 
 from meiga import Result
 
@@ -6,9 +6,8 @@ from lume.config import DependencyConfig
 from lume.src.domain.services.logger import Logger
 
 
-class SetupItem(object):
-    __metaclass__ = ABCMeta
-    base_path = None
+class SetupItem(ABC):
+    base_path: str
 
     def __init__(self, base_path: str):
         self.base_path = base_path

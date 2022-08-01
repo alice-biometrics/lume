@@ -5,7 +5,7 @@ env:
 
 install:
   run:
-    - pip install -U -r requirements/dev-requirements.txt -r requirements/requirements.txt
+    - pip install -U -r requirements/dev-requirements.txt -r requirements/requirements.txt -r requirements/types-requirements.txt
     - pip install -e .
     - pre-commit install
 
@@ -32,7 +32,7 @@ steps:
   check-requirements:
     run: safety check -r requirements/requirements.txt
   static-analysis:
-    run: mypy $PACKAGE_NAME | true # now we can skip it
+    run: mypy $PACKAGE_NAME
   coverage:
     run: pytest -c pytest.coverage.ini
   test:
