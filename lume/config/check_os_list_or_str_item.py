@@ -1,5 +1,6 @@
 from platform import machine
 from sys import platform
+from typing import Union
 
 from lume.config.check_list_or_str_item import check_list_or_str_item
 
@@ -15,7 +16,7 @@ def get_platform():
         return "windows"
 
 
-def concat_list(list_of_lists_of_commands: list) -> list:
+def concat_list(list_of_lists_of_commands: list) -> Union[list, None]:
     if all(v is None for v in list_of_lists_of_commands):
         return None
 

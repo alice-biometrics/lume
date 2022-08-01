@@ -1,6 +1,6 @@
 import os
 import time
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import requests
 from meiga import Error, Failure, Result, Success, isFailure, isSuccess
@@ -65,7 +65,7 @@ class LumeUseCase:
         self.setup_service = setup_service
         self.logger = logger
         self.env_manager = EnvManager(self.logger)
-        self.steps = None
+        self.steps: Union[List[str], None] = None
 
     @meiga
     def execute(self, steps: List[str]):
@@ -133,7 +133,7 @@ class LumeUseCase:
 
     @meiga
     def _run_setup(self, step, cwd) -> Result:
-        setup_commands = self._get_setup_commands(step).unwrap_or([])
+        setup_commands: List[str] = self._get_setup_commands(step).unwrap_or([])
         for setup_command in setup_commands:
             message = get_colored_command_message(
                 setup_command, cwd, step, prefix="setup"
@@ -223,7 +223,7 @@ class LumeUseCase:
     @meiga
     def _run_commands(self, step, cwd, processes) -> Result:
         self._wait_if_necessary(step)
-        commands = (
+        commands: List[str] = (
             self._get_commands(step)
             .handle(on_failure=on_empty_config, failure_args=(self, step))
             .unwrap_or([])
@@ -261,7 +261,7 @@ class LumeUseCase:
             step = self.config.steps.get(action)
             if not step:
                 return Failure(EmptyConfigError())
-            commands = step.run
+            commands = step.run  # type: ignore
 
         return Success(commands)
 
@@ -272,7 +272,7 @@ class LumeUseCase:
             step = self.config.steps.get(action)
             if not step:
                 return Failure(EmptyConfigError())
-            setup_commands = step.setup
+            setup_commands = step.setup  # type: ignore
             if not setup_commands:
                 return isFailure
 
@@ -287,7 +287,7 @@ class LumeUseCase:
             step = self.config.steps.get(action)
             if not step:
                 return Failure(EmptyConfigError())
-            setup_detach = step.setup_detach
+            setup_detach = step.setup_detach  # type: ignore
             if not setup_detach or not setup_detach.get("run"):
                 return isFailure
 
@@ -305,7 +305,7 @@ class LumeUseCase:
             step = self.config.steps.get(action)
             if not step:
                 return Failure(EmptyConfigError())
-            teardown_commands = step.teardown
+            teardown_commands = step.teardown  # type: ignore
             if not teardown_commands:
                 return isFailure
 
@@ -331,7 +331,7 @@ class LumeUseCase:
                 return Success(None)
             step = self.config.steps.get(action)
             if step:
-                cwd = step.cwd
+                cwd = step.cwd  # type: ignore
                 if cwd and not os.path.isdir(cwd):
                     return Failure(CwdIsNotADirectoryError())
                 return Success(cwd)

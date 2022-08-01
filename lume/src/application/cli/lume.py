@@ -7,7 +7,15 @@ import time
 import traceback
 
 import yaml
-from meiga import Error, Failure, Result, Success, isFailure, isSuccess
+from meiga import (
+    Error,
+    Failure,
+    OnFailureHandler,
+    Result,
+    Success,
+    isFailure,
+    isSuccess,
+)
 
 from lume import __version__
 from lume.config import Config
@@ -140,6 +148,7 @@ def check_command_availability(strict_mode, not_known, parser, config_file) -> R
             parser.print_help()
             print(f"\n{not_supported_message}")
             return isFailure
+    return isSuccess
 
 
 def check_given_command(given_command: str, config: Config):
@@ -162,7 +171,9 @@ def main():
 
     config_file = os.environ.get("LUME_CONFIG_FILENAME", "lume.yml")
     config = get_config(filename=config_file).unwrap_or_else(
-        on_failure=on_config_failure, failure_args=(Result.__id__, config_file)
+        on_failure_handler=OnFailureHandler(
+            func=on_config_failure, args=(Result.__id__, config_file)
+        )
     )
 
     if config:
@@ -208,7 +219,9 @@ def main():
                 action.replace("command_", "") for action in selected_actions
             ]
             result = lume_use_case.execute(steps=selected_actions).handle(
-                on_failure=on_execution_failure, failure_args=(Result.__id__)
+                on_failure_handler=OnFailureHandler(
+                    func=on_execution_failure, args=(Result.__id__,)
+                )
             )
             lume_use_case.clear_env()
 

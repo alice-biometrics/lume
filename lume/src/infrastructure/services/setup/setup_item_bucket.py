@@ -37,7 +37,7 @@ class SetupItemBucket(SetupItem):
             return Success()
 
         if dependency_config.auth_required:
-            credentials_path = os.environ.get(dependency_config.credentials_env)
+            credentials_path = os.environ.get(dependency_config.credentials_env)  # type: ignore
             if credentials_path is None or not os.path.exists(credentials_path):
                 try:
                     storage_client = storage.Client()
