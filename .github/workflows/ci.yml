@@ -95,7 +95,7 @@ jobs:
         LUME_CONFIG_FILENAME: examples/lume-sample.yml
       run: |
         pip uninstall meiga -y
-        pip install "meiga<1.5.0"
+        pip install "meiga<1.5.0" # force lower version of meiga
         lume -install -all
-        pip install -U meiga
+        pip install -U meiga # force curent version of meiga (we don't want to corrupt the following steps)
 
