@@ -7,17 +7,15 @@ import time
 import traceback
 
 import yaml
-from meiga import (
-    Error,
-    Failure,
-    OnFailureHandler,
-    Result,
-    Success,
-    isFailure,
-    isSuccess,
-)
+from meiga import Error, Failure, Result, Success
+from meiga import __version__ as meiga_version
+from meiga import isFailure, isSuccess
 
 from lume import __version__
+
+if meiga_version >= "1.5.0":
+    from meiga import OnFailureHandler
+
 from lume.config import Config
 from lume.config.check_os_list_or_str_item import get_platform
 from lume.config.config_file_not_found_error import ConfigFileNotFoundError
@@ -170,11 +168,17 @@ def main():
     prefix = f"{Colors.FAIL} Failed"
 
     config_file = os.environ.get("LUME_CONFIG_FILENAME", "lume.yml")
-    config = get_config(filename=config_file).unwrap_or_else(
-        on_failure_handler=OnFailureHandler(
-            func=on_config_failure, args=(Result.__id__, config_file)
+
+    if meiga_version >= "1.5.0":
+        config = get_config(filename=config_file).unwrap_or_else(
+            on_failure_handler=OnFailureHandler(
+                func=on_config_failure, args=(Result.__id__, config_file)
+            )
         )
-    )
+    else:
+        config = get_config(filename=config_file).unwrap_or_else(
+            on_failure=on_config_failure, failure_args=(Result.__id__, config_file)
+        )
 
     if config:
         parser = get_parser(config)
@@ -218,11 +222,18 @@ def main():
             selected_actions = [
                 action.replace("command_", "") for action in selected_actions
             ]
-            result = lume_use_case.execute(steps=selected_actions).handle(
-                on_failure_handler=OnFailureHandler(
-                    func=on_execution_failure, args=(Result.__id__,)
+
+            if meiga_version >= "1.5.0":
+                result = lume_use_case.execute(steps=selected_actions).handle(
+                    on_failure_handler=OnFailureHandler(
+                        func=on_execution_failure, args=(Result.__id__,)
+                    )
                 )
-            )
+            else:
+                result = lume_use_case.execute(steps=selected_actions).handle(
+                    on_failure=on_execution_failure, failure_args=(Result.__id__,)
+                )
+
             lume_use_case.clear_env()
 
         if result.is_success:
