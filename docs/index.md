@@ -16,5 +16,4 @@ A handy Python-based automation tool. It can be thought of as a vitaminized `Mak
 ## How could lume help me?
 
 `lume` helps you sort your commands, allows you to abstract from the development environment and facilitates CI and CD workflows.
-Use the `lume.yml` to 
-
+Use the `lume.yml` to define all your daily project commands. 

@@ -15,7 +15,7 @@ A handy Python-based automation tool. It can be thought of as a vitaminized `Mak
 ## How could lume help me?
 
 `lume` helps you sort your commands, allows you to abstract from the development environment and facilitates CI and CD workflows.
-Use the `lume.yml` to 
+Use the `lume.yml` to define all your daily project commands. 
 
 ## Installation 💻
 
@@ -36,7 +36,8 @@ For more information, check our [documentation](https://alice-biometrics.github.
 ## Acknowledgements 🙌
 
 `bowie` inspired us! 👨‍🎤 👏👏👏👏👏
-Thanks to `bowie` development team in [Gradiant](https://github.com/Gradiant).
+We started with this idea of creating a tool to standardize all the commands of the different projects in the [Gradiant](https://github.com/Gradiant) research center, through the development of the wonderful `bowie` package.
+We know that the project is still active in several projects, so long live bowie and thanks to the Gradiant team for the initial impulse.
 
 ## Contact 📬
 
