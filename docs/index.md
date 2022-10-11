@@ -1,4 +1,5 @@
 # lume 🔥  
+
 [![version](https://img.shields.io/github/release/alice-biometrics/lume/all.svg)](https://github.com/alice-biometrics/lume/releases) 
 [![ci](https://github.com/alice-biometrics/lume/workflows/ci/badge.svg)](https://github.com/alice-biometrics/lume/actions)
 [![pypi](https://img.shields.io/pypi/dm/lume)](https://pypi.org/project/lume/) 
@@ -17,27 +18,3 @@ A handy Python-based automation tool. It can be thought of as a vitaminized `Mak
 `lume` helps you sort your commands, allows you to abstract from the development environment and facilitates CI and CD workflows.
 Use the `lume.yml` to 
 
-## Installation 💻
-
-``` bash
-pip install lume
-```
-
-## Documentation
-
-Please, check out our [documentation](https://alice-biometrics.github.io/lume/) 
-
-## Contribute 
-
-We'd love you to contribute to *lume* 🥳🥳🥳🥳🥳🥳️️!
-
-For more information, check our [documentation](https://alice-biometrics.github.io/lume/contributing/)
-
-## Acknowledgements 🙌
-
-`bowie` inspired us! 👨‍🎤 👏👏👏👏👏
-Thanks to `bowie` development team in [Gradiant](https://github.com/Gradiant).
-
-## Contact 📬
-
-support@alicebiometrics.com

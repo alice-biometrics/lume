@@ -1,0 +1,106 @@
+name: Feature Request
+description: Suggest an idea or ask for a feature that you would like to have in lume.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The `lume 🔥` community is glad to see you here. Your help is greatly appreciated.
+        
+        Please follow these instructions, fill every question, and do every step. 🙏
+        
+        This will help lume 🔥` community to add new features, fix bug, review pull requests, etc.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: First Check
+      description: Please confirm and check all the following options.
+      options:
+        - label: I added a very descriptive title to this issue.
+          required: true
+        - label: I used the GitHub search to find a similar issue and didn't find it.
+          required: true
+        - label: I already read and followed all the [documentation](https://alice-biometrics.github.io/lume/) and didn't find an answer.
+          required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: |
+        What is your feature request?
+
+        Write a short description telling me what you are trying to solve and what you are currently doing.
+      placeholder: |
+        * I would like to define env variables using ....
+    validations:
+      required: true
+  - type: textarea
+    id: wanted-solution
+    attributes:
+      label: Wanted Solution
+      description: |
+        Tell us what's the solution you would like.
+      placeholder: |
+        I want new pre-build step to...
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: |
+        Tell me about alternatives you've considered.
+      placeholder: |
+        Define a whatever that help on your feature request.
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      description: What operating system are you on?
+      multiple: true
+      options:
+        - Linux
+        - Windows
+        - macOS
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: os-details
+    attributes:
+      label: Operating System Details
+      description: You can add more details about your operating system here, in particular if you chose "Other".
+  - type: input
+    id: lume-version
+    attributes:
+      label: lume Version
+      description: |
+        What lume version are you using?
+
+        You can find the lume version with:
+
+        ```bash
+        >> lume --version
+        ```
+    validations:
+      required: true
+  - type: input
+    id: python-version
+    attributes:
+      label: Python Version
+      description: |
+        What Python version are you using?
+
+        You can find the Python version with:
+
+        ```bash
+        python --version
+        ```
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Add any additional context information or screenshots you think are useful.
