@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import time
 from typing import List, Tuple, Union
@@ -311,7 +313,7 @@ class LumeUseCase:
 
         return Success(teardown_commands)
 
-    def _get_cwd(self, action) -> Result[str, Error]:
+    def _get_cwd(self, action) -> Result[str | None, Error]:
         if action == "install":
             if not self.config.install:
                 return Success(None)
