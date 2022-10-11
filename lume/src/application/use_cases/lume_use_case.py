@@ -87,7 +87,7 @@ class LumeUseCase:
                 )
 
                 self._set_env(step)
-                processes = (
+                processes: List = (
                     self._run_setup_detach(step, cwd)
                     .handle(on_failure=self._run_teardown, failure_args=(cwd, step))
                     .unwrap_or([])
