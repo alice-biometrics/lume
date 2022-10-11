@@ -1,5 +1,5 @@
 from subprocess import Popen
-from typing import Optional
+from typing import Any, Optional
 
 from meiga import Error, Result, Success
 
@@ -19,7 +19,7 @@ class DetachPopenExecutorService(ExecutorService):
         command: str,
         cwd: str,
         log_filename: Optional[str] = DEFAULT_EXECUTOR_LOG_FILENAME,
-    ) -> Result[bool, Error]:
+    ) -> Result[Any, Error]:
 
         if not cwd:
             cwd = "."

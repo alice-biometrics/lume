@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import time
 from typing import List, Tuple, Union
@@ -87,7 +89,7 @@ class LumeUseCase:
                 )
 
                 self._set_env(step)
-                processes = (
+                processes: List = (
                     self._run_setup_detach(step, cwd)
                     .handle(on_failure=self._run_teardown, failure_args=(cwd, step))
                     .unwrap_or([])
@@ -311,7 +313,7 @@ class LumeUseCase:
 
         return Success(teardown_commands)
 
-    def _get_cwd(self, action) -> Result[str, Error]:
+    def _get_cwd(self, action) -> Result[str | None, Error]:
         if action == "install":
             if not self.config.install:
                 return Success(None)

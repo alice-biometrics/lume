@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Any, Optional
 
 from meiga import Error, NotImplementedMethodError, Result
 
@@ -10,5 +10,5 @@ class ExecutorService(ABC):
     @abstractmethod
     def execute(
         self, command: str, cwd: str, log_filename: Optional[str] = None
-    ) -> Result[bool, Error]:
+    ) -> Result[Any, Error]:
         return NotImplementedMethodError
