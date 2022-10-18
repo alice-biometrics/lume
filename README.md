@@ -9,6 +9,14 @@
 
 <img src="https://github.com/alice-biometrics/custom-emojis/blob/master/images/alice_header.png?raw=true" width=auto>
 
+---
+
+**Documentation**: <a href="https://alice-biometrics.github.io/lume/" target="_blank">https://alice-biometrics.github.io/lume/</a>
+
+**Source Code**: <a href="https://github.com/alice-biometrics/lume" target="_blank">https://github.com/alice-biometrics/lume</a>
+
+---
+
 ## What is lume?
 
 A handy Python-based automation tool. It can be thought of as a vitaminized `Makefile`. 
@@ -23,10 +31,6 @@ Use the `lume.yml` to define all your daily project commands.
 ``` bash
 pip install lume
 ```
-
-## Documentation
-
-Please, check out our [documentation](https://alice-biometrics.github.io/lume/) 
 
 ## Contribute 
 

@@ -31,11 +31,15 @@ repo_url: https://github.com/alice-biometrics/lume
 edit_uri: edit/main/docs/
 
 extra_css:
-- 'extra/terminal.css'
-- 'extra/tweaks.css'
+- 'css/terminal.css'
+- 'css/tweaks.css'
+- 'css/termynal.css'
+- 'css/custom.css'
 extra_javascript:
-- 'extra/redirects.js'
-- 'extra/ad.js'
+- 'js/redirects.js'
+- 'js/ad.js'
+- 'js/termynal.js'
+- 'js/custom.js'
 
 nav:
 - Overview: index.md
@@ -48,15 +52,18 @@ nav:
 - acknowledgements.md
 
 markdown_extensions:
-- tables
-- markdown_include.include:
-    base_path: docs
-- toc:
-    permalink: true
-- admonition
-- pymdownx.highlight
-- pymdownx.extra
-- mdx_truly_sane_lists
+  - tables
+  - markdown_include.include:
+      base_path: docs
+  - toc:
+      permalink: true
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - mdx_truly_sane_lists
 
 plugins:
 - search
@@ -65,3 +72,12 @@ plugins:
     - _build/*
     - build/*
     - requirements/*
+
+extra:
+  social:
+  - icon: fontawesome/brands/github-alt
+    link: https://github.com/alice-biometrics/lume
+  - icon: fontawesome/brands/twitter
+    link: https://twitter.com/alicebiometrics
+  - icon: fontawesome/brands/linkedin
+    link: https://www.linkedin.com/company/alicebiometrics

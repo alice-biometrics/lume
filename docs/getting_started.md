@@ -31,8 +31,10 @@ settings:
 
 Use `help` to know `lume` available commands. `lume` is dynamic, so the steps we are defining will be shown here automatically.
 
+<div class="termy">
+
 ```console
->> lume -h
+$ lume --help
 usage: lume 🔥 [-h] [-v] [-all] [-clean] [-build] [-test] [-install]
 
 Lume helps you with your daily dev operations and ease the CI & CD process.
@@ -50,50 +52,66 @@ optional arguments:
   -uninstall, --uninstall uniinstall
 
 ```
+</div>
 
 !!! note 
     In case you want to change the name of the lume configuration file or just store in another folder, please use `LUME_CONFIG_FILENAME` environment variable.
     
+    <div class="termy">
+
     ```console
-    >> export LUME_CONFIG_FILENAME=examples/lume-sample.yml; lume -h
+    $ export LUME_CONFIG_FILENAME=examples/lume-sample.yml
+    $ lume --help
     ```
+    </div>
 
 ## Run Defined Steps
 
 To run install:
 
+<div class="termy">
 ```console
->> lume -install
+$ lume -install
 ```
+</div>
 
 To run uninstall:
 
+<div class="termy">
 ```console
->> lume -uninstall
+$ lume -uninstall
 ```
+</div>
 
 To run all the steps:
 
+<div class="termy">
 ```console
->> lume -all
+$ lume -all
 ```
+</div>
 
 Of course, you can run every step individually:
 
+<div class="termy">
 ```console
->> lume -clean
+$ lume -clean
 ```
+</div>
 
 Or several steps:
 
+<div class="termy">
 ```console
->> lume -build -test
+$ lume -build -test
 ```
+</div>
 
 Here is an example of the log output that would have lume using several commands defined previously on [Configuration File](#configuration-file):
 
+<div class="termy">
 ```console
->> lume -install -all
+$ lume -install -all
 🔥 Step: install
 💻 install >> echo "Installing..."
  Installing...
@@ -112,3 +130,4 @@ Here is an example of the log output that would have lume using several commands
 💻 error [cwd=examples] >> echo "This is an error" >>/dev/stderr
 🧐 This is an error
 ```
+</div>

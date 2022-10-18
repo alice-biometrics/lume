@@ -2,11 +2,22 @@
 
 You can check if a command exist use `lume -check <COMMAND-TO-CHECK>`
 
-Example
+Example when check existent command (in `lume.yml`):
+<div class="termy">
+```console
+$ lume -check test
+lume 🔥 => `test` is an available command ✅ 
+```
+</div>
 
-````console
-lume -check test
-````
+Otherwise, if command is not available:
+<div class="termy">
+```console
+$ lume -check not-available-command
+lume 🔥 => `not-available-command` is not available command ❌ 
+```
+</div>
+
 
 ## OS-specific commands
 
@@ -65,10 +76,11 @@ install:
 ```
 
 
-> **Note**
->  When execute a cli lume command, first line will prompt something like `🔥 lume <lume-version> (<your-platform> -- Python <python-version>)`.
->  So, you can check which os-related commands are going to be executed
->  If you get `🔥 lume 0.8.8 (macos-arm -- Python 3.9.6)`, in addition to the common commands, will be executed `brew install myprogram-arm`
+!!! note
+
+    When execute a cli lume command, first line will prompt something like `🔥 lume <lume-version> (<your-platform> -- Python <python-version>)`.
+    So, you can check which os-related commands are going to be executed
+    If you get `🔥 lume 0.8.8 (macos-arm -- Python 3.9.6)`, in addition to the common commands, will be executed `brew install myprogram-arm`
 
 
 ## Use several lume files
@@ -97,9 +109,11 @@ steps:
 
 To call use the name (in this case `other`) plus the step name (e.g `step-1`)
 
-```bash
+<div class="termy">
+```console
 $ lume -other:step-1
 ```
+</div>
 
 You can setup some additional and specific env vars for these steps:
 
@@ -263,13 +277,15 @@ steps:
 
 The output for this step will be something like the following:
 
+<div class="termy">
 ```console
->> lume -my-step
+$ lume -my-step
 🔥 Step: my-step
 🔸 env: set MY_ENV=MY_VALUE
 💻 my-step >> echo ${MY_ENV}
     MY_VALUE
 ```
+</div>
 
 Note that if you previously defined an *env*, it will be overwrote during the step.
 
