@@ -13,13 +13,13 @@ steps:
     deps:
       gcs_1:
         type: bucket
-        url: gs://infra-slack-icons/backup.png
+        url: gs://lume-tests/file.txt
         auth_required: true
         credentials_env: GOOGLE_APPLICATION_CREDENTIALS
         unzip: false
       gcs_2:
         type: bucket
-        url: gs://infra-slack-icons/backup.png
+        url: gs://lume-tests/sample_folder/file_in_folder.txt
         auth_required: true
         credentials_env: GOOGLE_APPLICATION_CREDENTIALS
         unzip: false
