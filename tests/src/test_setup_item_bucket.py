@@ -13,7 +13,8 @@ from lume.src.infrastructure.services.setup.setup_errors import (
 from lume.src.infrastructure.services.setup.setup_item_bucket import SetupItemBucket
 
 TEMPORARY_FOLDER = "test-deps"
-VALID_FILE_FROM_BUCKET = "gs://aliceonboarding/-AmBH6e1JnNcFPej9Bcvp5EJRCI=.jpg"
+VALID_FILE_FROM_BUCKET = "gs://lume-tests/file.txt"
+VALID_FILE_FROM_BUCKET_FOLDER = "gs://lume-tests/sample_folder/file_in_folder.txt"
 
 
 @pytest.mark.skipif(
@@ -36,17 +37,32 @@ class TestSetupItemBucket:
         )
         result = file_setuper.run("test-item", dependency_config, EmojisLogger())
         assert_success(result)
-        assert os.path.exists(
-            f"{TEMPORARY_FOLDER}/test-item/-AmBH6e1JnNcFPej9Bcvp5EJRCI=.jpg"
-        )
+        assert os.path.exists(f"{TEMPORARY_FOLDER}/test-item/file.txt")
 
         # now downloads the file overwriting the previous one
         dependency_config.overwrite = True
         result = file_setuper.run("test-item", dependency_config, EmojisLogger())
         assert_success(result)
-        assert os.path.exists(
-            f"{TEMPORARY_FOLDER}/test-item/-AmBH6e1JnNcFPej9Bcvp5EJRCI=.jpg"
+        assert os.path.exists(f"{TEMPORARY_FOLDER}/test-item/file.txt")
+
+    def should_download_a_valid_file_in_bucket_folder_with_auth(self):
+        file_setuper = SetupItemBucket(base_path=TEMPORARY_FOLDER)
+        dependency_config = DependencyConfig(
+            type="bucket",
+            url=VALID_FILE_FROM_BUCKET_FOLDER,
+            auth_required=True,
+            credentials_env="GOOGLE_APPLICATION_CREDENTIALS",
+            unzip=False,
         )
+        result = file_setuper.run("test-item", dependency_config, EmojisLogger())
+        assert_success(result)
+        assert os.path.exists(f"{TEMPORARY_FOLDER}/test-item/file_in_folder.txt")
+
+        # now downloads the file overwriting the previous one
+        dependency_config.overwrite = True
+        result = file_setuper.run("test-item", dependency_config, EmojisLogger())
+        assert_success(result)
+        assert os.path.exists(f"{TEMPORARY_FOLDER}/test-item/file_in_folder.txt")
 
     def should_return_error_when_wrong_bucket_name(self):
         file_setuper = SetupItemBucket(base_path=TEMPORARY_FOLDER)

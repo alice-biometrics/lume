@@ -71,9 +71,10 @@ class SetupItemBucket(SetupItem):
 
     @staticmethod
     def __download_bucket(storage_client: storage.Client, dst: str, url: str):
-        filepath_parts = url.split("/")
+        filepath_parts = url.replace("gs://", "").split("/")
         filename = filepath_parts[-1]
-        bucket_name = "/".join(filepath_parts[2:-1])
+        bucket_name = filepath_parts[0]
+        bucket_filepath = "/".join(filepath_parts[1:])
         bucket = storage_client.bucket(bucket_name)
-        blob = bucket.blob(filename)
+        blob = bucket.blob(bucket_filepath)
         blob.download_to_filename(os.path.join(dst, filename))
