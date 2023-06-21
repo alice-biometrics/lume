@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
 
@@ -10,7 +10,7 @@ from lume.config.get_envs import get_envs
 class StepConfig(BaseModel):
     run: List[str]
     cwd: Optional[str] = None
-    envs: Dict[str, str] = dict()
+    envs: Dict[str, Any] = dict()
     setup: Optional[List[str]] = None
     teardown: Optional[List[str]] = None
     setup_detach: Optional[Dict] = None

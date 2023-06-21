@@ -1,16 +1,16 @@
-from typing import Dict, List, Optional
+from typing import Dict, List, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from lume.config.check_os_list_or_str_item import check_os_list_or_str_item
 from lume.config.get_envs import get_envs
 
 
 class InstallConfig(BaseModel):
-    run: List[str]
-    cwd: Optional[str] = None
-    envs: Dict[str, str] = dict()
-    overwrote_envs: List[str] = list()
+    run: List[str] = Field()
+    cwd: Union[str, None] = Field(default=None)
+    envs: Dict[str, str] = Field(default=dict())
+    overwrote_envs: List[str] = Field(default=list())
 
     def add_shared_env(self, shared_envs: Dict[str, str]):
         if shared_envs and self.envs:

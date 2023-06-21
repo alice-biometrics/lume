@@ -5,7 +5,15 @@ import time
 from typing import List, Tuple, Union
 
 import requests
-from meiga import Error, Failure, Result, Success, isFailure, isSuccess
+from meiga import (
+    Error,
+    Failure,
+    OnFailureHandler,
+    Result,
+    Success,
+    isFailure,
+    isSuccess,
+)
 from meiga.decorators import meiga
 
 from lume.config import Config
@@ -84,20 +92,32 @@ class LumeUseCase:
             else:
                 cwd = (
                     self._get_cwd(step)
-                    .handle(on_failure=on_error_with_cwd, failure_args=(self, step))
+                    .handle(
+                        on_failure_handler=OnFailureHandler(
+                            func=on_error_with_cwd, args=(self, step)
+                        )
+                    )
                     .unwrap_or_return()
                 )
 
                 self._set_env(step)
                 processes: List = (
                     self._run_setup_detach(step, cwd)
-                    .handle(on_failure=self._run_teardown, failure_args=(cwd, step))
+                    .handle(
+                        on_failure_handler=OnFailureHandler(
+                            func=self._run_teardown, args=(cwd, step)
+                        )
+                    )
                     .unwrap_or([])
                 )
                 self._run_setup(step, cwd).handle(
-                    on_failure=self._run_teardown_detach, failure_args=processes
+                    on_failure_handler=OnFailureHandler(
+                        func=self._run_teardown_detach, args=processes
+                    )
                 ).handle(
-                    on_failure=self._run_teardown, failure_args=(cwd, step)
+                    on_failure_handler=OnFailureHandler(
+                        func=self._run_teardown, args=(cwd, step)
+                    )
                 ).unwrap_or_return()
                 self._run_commands(step, cwd, processes).unwrap_or_return()
                 self._run_teardown_detach(processes)
@@ -227,16 +247,24 @@ class LumeUseCase:
         self._wait_if_necessary(step)
         commands: List[str] = (
             self._get_commands(step)
-            .handle(on_failure=on_empty_config, failure_args=(self, step))
+            .handle(
+                on_failure_handler=OnFailureHandler(
+                    func=on_empty_config, args=(self, step)
+                )
+            )
             .unwrap_or([])
         )
         for command in commands:
             message = get_colored_command_message(command, cwd, step)
             self.logger.log(COMMAND, message)
             self.executor_service.execute(command, cwd).handle(
-                on_failure=self._run_teardown_detach, failure_args=processes
+                on_failure_handler=OnFailureHandler(
+                    func=self._run_teardown_detach, args=processes
+                )
             ).handle(
-                on_failure=self._run_teardown, failure_args=(cwd, step)
+                on_failure_handler=OnFailureHandler(
+                    func=self._run_teardown, args=(cwd, step)
+                )
             ).unwrap_or_return()
 
         return isSuccess

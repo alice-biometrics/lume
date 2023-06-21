@@ -1,4 +1,5 @@
 import os
+from typing import Union
 from zipfile import BadZipFile
 
 import requests
@@ -47,7 +48,7 @@ class SetupItemFile(SetupItem):
         return Success()
 
     @staticmethod
-    def __download_file(dst: str, url: str, auth: HTTPBasicAuth = None):
+    def __download_file(dst: str, url: str, auth: Union[HTTPBasicAuth, None] = None):
         r = requests.get(url, auth=auth, stream=True)
         dst_filename = os.path.split(url)[-1]
         with open(os.path.join(dst, dst_filename), "wb") as f:
