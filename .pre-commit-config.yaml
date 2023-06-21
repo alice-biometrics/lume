@@ -3,7 +3,7 @@ repos:
       hooks:
           - id: black
             name: black
-            entry: black .
+            entry: black lume tests
             language: system
             types: [ python ]
 
@@ -15,6 +15,6 @@ repos:
 
           - id: isort
             name: isort
-            entry: isort .
+            entry: isort lume tests
             language: system
             types: [ python ]

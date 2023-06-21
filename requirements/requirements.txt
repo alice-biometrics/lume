@@ -1,5 +1,5 @@
 meiga<2
-pydantic<2
+pydantic==2.0b3
 pyyaml<7
 google-cloud-storage>= 1.32.0, < 3.0.0dev
 google-api-core<3
