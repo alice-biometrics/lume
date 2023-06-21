@@ -9,8 +9,8 @@ from lume.config.get_envs import get_envs
 class InstallConfig(BaseModel):
     run: List[str] = Field()
     cwd: Union[str, None] = Field(default=None)
-    envs: dict[str, str] = Field(default=dict())
-    overwrote_envs: list[str] = Field(default=list())
+    envs: Dict[str, str] = Field(default=dict())
+    overwrote_envs: List[str] = Field(default=list())
 
     def add_shared_env(self, shared_envs: Dict[str, str]):
         if shared_envs and self.envs:
