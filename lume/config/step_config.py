@@ -15,7 +15,7 @@ class StepConfig(BaseModel):
     teardown: Optional[List[str]] = None
     setup_detach: Optional[Dict] = None
     wait_seconds: Optional[int] = None
-    wait_http_200: Optional[str] = None
+    wait_http_200: Optional[List[str]] = None
     overwrote_envs: List[str] = list()
 
     def add_shared_env(self, shared_envs: Dict[str, str]):
@@ -35,6 +35,9 @@ class StepConfig(BaseModel):
                 setup_detach, "run", required=True, suffix=" (setup_detach)"
             )
         envs = get_envs(kdict)
+
+        wait_http_200 = check_list_or_str_item(kdict, key="wait_http_200")
+
         return StepConfig(
             run=run,
             cwd=kdict.get("cwd"),
@@ -43,5 +46,5 @@ class StepConfig(BaseModel):
             teardown=teardown,
             setup_detach=setup_detach,
             wait_seconds=kdict.get("wait_seconds"),
-            wait_http_200=kdict.get("wait_http_200"),
+            wait_http_200=wait_http_200,
         )

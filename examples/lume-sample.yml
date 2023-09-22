@@ -77,6 +77,12 @@ steps:
   wait-example-http:
     wait_http_200: https://www.google.com
     run: echo "Done"
+  wait-example-several-http:
+    wait_http_200:
+      - https://www.google.com
+      - https://www.elastic.co
+      - https://grafana.com
+    run: echo "Done"
   wait-example-http-no-valid:
     env:
       LUME_WAIT_HTTP_200_NUM_MAX_ATTEMPTS: 3
