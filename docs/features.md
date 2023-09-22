@@ -365,6 +365,18 @@ steps:
     run: echo "Done"
 ```
 
+Also, you can wait for a list of urls:
+```yaml
+steps:
+  wait-example-http:
+    wait_http_200: 
+      - https://www.google.com
+      - https://www.elastic.co
+      - https://grafana.com
+    run: echo "Done"
+```
+
+
 ## `--no-strict` mode
 
 If you use lume with a command (step) that is not available on the `lume.yml`, this will fail and return an exit code 1.
