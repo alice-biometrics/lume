@@ -1,9 +1,15 @@
+from typing import Union
+
 from meiga import Error
 
 
 class CrendentialsEnvError(Error):
-    def __init__(self, env_name):
-        self.message = f"Environment variable ({env_name}) is not defined properly"
+    def __init__(self, env_name, info: Union[str, None] = None):
+        self.message = (
+            f"Environment variable (credential_env={env_name}) is not defined properly"
+        )
+        if info:
+            self.message += f"\n{info}"
 
 
 class BadZipFileError(Error):

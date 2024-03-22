@@ -41,9 +41,11 @@ class SetupItemBucket(SetupItem):
             if credentials_path is None or not os.path.exists(credentials_path):
                 try:
                     storage_client = storage.Client()
-                except DefaultCredentialsError:
+                except DefaultCredentialsError as exc:
                     return Failure(
-                        CrendentialsEnvError(dependency_config.credentials_env)
+                        CrendentialsEnvError(
+                            dependency_config.credentials_env, info=str(exc)
+                        )
                     )
             else:
                 storage_client = storage.Client.from_service_account_json(
@@ -51,15 +53,16 @@ class SetupItemBucket(SetupItem):
                 )
         else:
             storage_client = storage.Client()
-
         try:
             self.__download_bucket(
                 storage_client, dependency_path, dependency_config.url
             )
         except NotFound:
             return Failure(BlobNotFoundError(dependency_config.url))
-        except Forbidden:
-            return Failure(CrendentialsEnvError(dependency_config.credentials_env))
+        except Forbidden as exc:
+            return Failure(
+                CrendentialsEnvError(dependency_config.credentials_env, info=str(exc))
+            )
 
         if dependency_config.unzip:
             try:
