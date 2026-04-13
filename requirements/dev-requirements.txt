@@ -4,7 +4,7 @@ isort[colors]==5.13.2
 mypy==1.9.0
 pre-commit==2.19.0
 safety==1.10.3
-pytest==8.1.1
+pytest==9.0.3
 pytest-cov==4.1.0
 pytest-mock==3.14.0
 pytest-env==1.1.3
